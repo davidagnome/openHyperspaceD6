@@ -1,0 +1,14 @@
+/Volumes/Data/Dev/terminalHyperspace/obj/Debug/net10.0/TerminalHyperspace.GeneratedMSBuildEditorConfig.editorconfig
+/Volumes/Data/Dev/terminalHyperspace/obj/Debug/net10.0/TerminalHyperspace.AssemblyInfoInputs.cache
+/Volumes/Data/Dev/terminalHyperspace/obj/Debug/net10.0/TerminalHyperspace.AssemblyInfo.cs
+/Volumes/Data/Dev/terminalHyperspace/obj/Debug/net10.0/TerminalHyperspace.csproj.CoreCompileInputs.cache
+/Volumes/Data/Dev/terminalHyperspace/bin/Debug/net10.0/TerminalHyperspace
+/Volumes/Data/Dev/terminalHyperspace/bin/Debug/net10.0/TerminalHyperspace.deps.json
+/Volumes/Data/Dev/terminalHyperspace/bin/Debug/net10.0/TerminalHyperspace.runtimeconfig.json
+/Volumes/Data/Dev/terminalHyperspace/bin/Debug/net10.0/TerminalHyperspace.dll
+/Volumes/Data/Dev/terminalHyperspace/bin/Debug/net10.0/TerminalHyperspace.pdb
+/Volumes/Data/Dev/terminalHyperspace/obj/Debug/net10.0/TerminalHyperspace.dll
+/Volumes/Data/Dev/terminalHyperspace/obj/Debug/net10.0/refint/TerminalHyperspace.dll
+/Volumes/Data/Dev/terminalHyperspace/obj/Debug/net10.0/TerminalHyperspace.pdb
+/Volumes/Data/Dev/terminalHyperspace/obj/Debug/net10.0/TerminalHyperspace.genruntimeconfig.cache
+/Volumes/Data/Dev/terminalHyperspace/obj/Debug/net10.0/ref/TerminalHyperspace.dll

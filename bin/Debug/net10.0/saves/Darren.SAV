@@ -1,0 +1,34 @@
+[CHARACTER]
+Name=Darren
+Species=Human
+Role=Soldier
+CurrentResolve=9
+[ATTRIBUTES]
+Dexterity=2,2
+Knowledge=2,0
+Mechanical=2,0
+Perception=2,0
+Strength=2,1
+Technical=2,0
+Force=1,0
+[SKILLS]
+Persuade=0,1
+Willpower=0,1
+Blasters=1,0
+Tactics=0,2
+Melee=0,1
+Stamina=0,1
+[INVENTORY]
+Item=Blaster Pistol|Standard-issue sidearm. Reliable and common across the galaxy.|True|3,0|Blasters|30
+Item=Medpack|Restores some Resolve when used. Requires a Medicine check.|False|0,0||0
+EquippedWeapon=Blaster Pistol
+[VEHICLES]
+InVehicle=False
+InSpaceVehicle=False
+[GAMESTATE]
+Location=cantina
+TurnCount=0
+Credits=100
+EnemiesDefeated=0
+Visited=cantina
+Cleared=
