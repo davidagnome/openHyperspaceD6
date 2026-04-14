@@ -1,11 +1,10 @@
 # terminalHyperspace
 
-terminalHyperspace is a single-player, multi-user dungeon-like (or MUD-like). It's inspired by the West End Games d6 system and the world's most popular Space Fantasy movie series, using the Hyperspace d6 rules created by Matthew Click.
+terminalHyperspace is a single-player, multi-user dungeon-like (or MUD-like). 
 
 ## System Requirements
 - **Platform Neutral**. The game use .NET 10 to deliver a completely text-based experience through your terminal or command console.
 - **.NET Based**. The dotnet runtime is required to build and/or run the app. A precompiled version is in the /bin folder.
-
 
 ## Current Features
 - **Conflict resolution** using D6 + pip pools, i.e. 1D, 1D+1, 1D+2, 2D, etc.
@@ -15,8 +14,8 @@ terminalHyperspace is a single-player, multi-user dungeon-like (or MUD-like). It
 - **Vendors** for both equipment and vehicles, with the ability to sell at a percentile of the original value based on Persuade Skill
 - **Save and Load system** using TXT files stored as .SAV extension 
 
-## Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International
-his is a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International game due to these reasons, see https://creativecommons.org/licenses/by-nc-sa/4.0/ for full details.
+## Credits & License
+It's inspired by the West End Games d6 system and the world's most popular Space Fantasy movie series, using the Hyperspace d6 rules created by Matthew Click. This is a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International game due to these reasons, see https://creativecommons.org/licenses/by-nc-sa/4.0/ for full details.
 
 ### You are free to:
 - Share — copy and redistribute the material in any medium or format
