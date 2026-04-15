@@ -25,6 +25,8 @@ public class Location
     public string SectorName { get; set; } = "";
     
     public string TerritoryName { get; set; } = "";
+
+    public Climate Climate { get; set; } = Climate.Normal;
 }
 
 public static class LocationData
@@ -52,7 +54,8 @@ public static class LocationData
             PlanetName = "Tatooine",
             StarSystemName = "Tatoo System",
             SectorName = "Arkanis Sector",
-            TerritoryName = "Outer Rim Territories"
+            TerritoryName = "Outer Rim Territories",
+            Climate = Climate.Normal
         };
 
         world["market"] = new Location
@@ -74,7 +77,8 @@ public static class LocationData
             PlanetName = "Tatooine",
             StarSystemName = "Tatoo System",
             SectorName = "Arkanis Sector",
-            TerritoryName = "Outer Rim Territories"
+            TerritoryName = "Outer Rim Territories",
+            Climate = Climate.Normal
         };
 
         world["docking_bay"] = new Location
@@ -96,7 +100,8 @@ public static class LocationData
             PlanetName = "Tatooine",
             StarSystemName = "Tatoo System",
             SectorName = "Arkanis Sector",
-            TerritoryName = "Outer Rim Territories"
+            TerritoryName = "Outer Rim Territories",
+            Climate = Climate.Normal
         };
 
         world["alley"] = new Location
@@ -117,7 +122,8 @@ public static class LocationData
             PlanetName = "Tatooine",
             StarSystemName = "Tatoo System",
             SectorName = "Arkanis Sector",
-            TerritoryName = "Outer Rim Territories"
+            TerritoryName = "Outer Rim Territories",
+            Climate = Climate.Normal
         };
 
         world["tunnels"] = new Location
@@ -138,7 +144,8 @@ public static class LocationData
             PlanetName = "Tatooine",
             StarSystemName = "Tatoo System",
             SectorName = "Arkanis Sector",
-            TerritoryName = "Outer Rim Territories"
+            TerritoryName = "Outer Rim Territories",
+            Climate = Climate.Normal
         };
 
         world["reactor"] = new Location
@@ -159,7 +166,8 @@ public static class LocationData
             PlanetName = "Tatooine",
             StarSystemName = "Tatoo System",
             SectorName = "Arkanis Sector",
-            TerritoryName = "Outer Rim Territories"
+            TerritoryName = "Outer Rim Territories",
+            Climate = Climate.Normal
         };
 
         world["hangar"] = new Location
@@ -180,7 +188,8 @@ public static class LocationData
             PlanetName = "Tatooine",
             StarSystemName = "Tatoo System",
             SectorName = "Arkanis Sector",
-            TerritoryName = "Outer Rim Territories"
+            TerritoryName = "Outer Rim Territories",
+            Climate = Climate.Normal
         };
 
         world["upper_district"] = new Location
@@ -202,7 +211,8 @@ public static class LocationData
             PlanetName = "Tatooine",
             StarSystemName = "Tatoo System",
             SectorName = "Arkanis Sector",
-            TerritoryName = "Outer Rim Territories"
+            TerritoryName = "Outer Rim Territories",
+            Climate = Climate.Normal
         };
 
         world["command"] = new Location
@@ -222,7 +232,8 @@ public static class LocationData
             PlanetName = "Tatooine",
             StarSystemName = "Tatoo System",
             SectorName = "Arkanis Sector",
-            TerritoryName = "Outer Rim Territories"
+            TerritoryName = "Outer Rim Territories",
+            Climate = Climate.Normal
         };
 
         world["orbit"] = new Location
@@ -245,7 +256,8 @@ public static class LocationData
             PlanetName = "Tatooine System Space",
             StarSystemName = "Tatoo System",
             SectorName = "Arkanis Sector",
-            TerritoryName = "Outer Rim Territories"
+            TerritoryName = "Outer Rim Territories",
+            Climate = Climate.Normal
         };
 
         world["deep_space"] = new Location
@@ -269,7 +281,8 @@ public static class LocationData
             PlanetName = "Deep Space near Tatooine",
             StarSystemName = "Tatoo System",
             SectorName = "Arkanis Sector",
-            TerritoryName = "Outer Rim Territories"
+            TerritoryName = "Outer Rim Territories",
+            Climate = Climate.Normal
         };
 
         world["derelict"] = new Location
@@ -289,6 +302,7 @@ public static class LocationData
                 "A faint power signature emanates from deep within. Someone—or something—is still here.",
                 "Debris from the station forms a halo of wreckage around it.",
             },
+            Climate = Climate.Normal
         };
 
         world["derelict_interior"] = new Location
@@ -306,6 +320,7 @@ public static class LocationData
                 "The Force roils here like a storm. Something dark lingers in these walls.",
                 "A distant metallic clang echoes through the corridors. You are not alone.",
             },
+            Climate = Climate.Normal
         };
 
         // Initialize NPC resolve for encounters

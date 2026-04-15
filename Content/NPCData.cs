@@ -10,18 +10,48 @@ public static class NPCData
         IsPlayer = false,
         Attributes = new()
         {
-            [AttributeType.Dexterity] = new DiceCode(2),
-            [AttributeType.Knowledge] = new DiceCode(1, 2),
-            [AttributeType.Mechanical] = new DiceCode(1, 2),
-            [AttributeType.Perception] = new DiceCode(1, 2),
+            [AttributeType.Dexterity] = new DiceCode(3),
+            [AttributeType.Knowledge] = new DiceCode(2),
+            [AttributeType.Mechanical] = new DiceCode(2),
+            [AttributeType.Perception] = new DiceCode(2),
             [AttributeType.Strength] = new DiceCode(2),
-            [AttributeType.Technical] = new DiceCode(1, 2),
+            [AttributeType.Technical] = new DiceCode(2),
             [AttributeType.Force] = new DiceCode(0),
         },
         SkillBonuses = new()
         {
-            [SkillType.Blasters] = new DiceCode(0, 2),
-            [SkillType.Brawl] = new DiceCode(0, 1),
+            // Bonuses are added to parent attribute. Intended totals: Blasters 4D, Brawl 3D
+            [SkillType.Blasters] = new DiceCode(1), // Dex 3D + 1D = 4D
+            [SkillType.Brawl] = new DiceCode(1),    // Str 2D + 1D = 3D
+        },
+        Inventory = new() { ItemData.BlasterRifle },
+        EquippedWeapon = ItemData.BlasterRifle,
+        EquippedArmor = ArmorData.MediumArmor,
+    };
+
+    public static Character Snowtrooper() => new()
+    {
+        Name = "Snowtrooper",
+        IsPlayer = false,
+        Attributes = new()
+        {
+            [AttributeType.Dexterity] = new DiceCode(2),
+            [AttributeType.Knowledge] = new DiceCode(2),
+            [AttributeType.Mechanical] = new DiceCode(2),
+            [AttributeType.Perception] = new DiceCode(2),
+            [AttributeType.Strength] = new DiceCode(2),
+            [AttributeType.Technical] = new DiceCode(2),
+            [AttributeType.Force] = new DiceCode(0),
+        },
+        SkillBonuses = new()
+        {
+            // Bonuses are added to parent attribute. Intended totals: Blasters 5D,
+            // Armament 4D, Brawl 4D, Search 3D+1, Survival 4D (all attrs are 2D)
+            [SkillType.Blasters] = new DiceCode(3),    // Dex 2D + 3D = 5D
+            [SkillType.Armament] = new DiceCode(2),    // Tech 2D + 2D = 4D
+            [SkillType.Brawl] = new DiceCode(2),       // Str 2D + 2D = 4D
+            [SkillType.Search] = new DiceCode(1, 1),   // Per 2D + 1D+1 = 3D+1
+            [SkillType.Survival] = new DiceCode(2),    // Know 2D + 2D = 4D
         },
         Inventory = new() { ItemData.BlasterRifle },
         EquippedWeapon = ItemData.BlasterRifle,
@@ -88,10 +118,10 @@ public static class NPCData
         {
             [AttributeType.Dexterity] = new DiceCode(2),
             [AttributeType.Knowledge] = new DiceCode(3),
-            [AttributeType.Mechanical] = new DiceCode(2, 1),
+            [AttributeType.Mechanical] = new DiceCode(2),
             [AttributeType.Perception] = new DiceCode(3),
             [AttributeType.Strength] = new DiceCode(2),
-            [AttributeType.Technical] = new DiceCode(2, 1),
+            [AttributeType.Technical] = new DiceCode(2),
             [AttributeType.Force] = new DiceCode(0),
         },
         SkillBonuses = new()
@@ -99,7 +129,7 @@ public static class NPCData
             [SkillType.Tactics] = new DiceCode(1),
             [SkillType.Willpower] = new DiceCode(0, 2),
             [SkillType.Persuade] = new DiceCode(0, 1),
-            [SkillType.Blasters] = new DiceCode(0, 1),
+            [SkillType.Blasters] = new DiceCode(0, 2),
         },
         Inventory = new() { ItemData.BlasterPistol },
         EquippedWeapon = ItemData.BlasterPistol,

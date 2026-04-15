@@ -58,10 +58,10 @@ public static class SpaceEncounterData
             Attributes = new()
             {
                 [AttributeType.Dexterity] = new DiceCode(2),
-                [AttributeType.Knowledge] = new DiceCode(2),
+                [AttributeType.Knowledge] = new DiceCode(1),
                 [AttributeType.Mechanical] = new DiceCode(3),
-                [AttributeType.Perception] = new DiceCode(2, 1),
-                [AttributeType.Strength] = new DiceCode(2),
+                [AttributeType.Perception] = new DiceCode(2),
+                [AttributeType.Strength] = new DiceCode(1),
                 [AttributeType.Technical] = new DiceCode(2),
                 [AttributeType.Force] = new DiceCode(0),
             },

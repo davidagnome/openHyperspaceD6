@@ -198,8 +198,22 @@ public class CommandParser
             return;
         }
 
+        var finalDest = _state.World[finalDestId];
+
+        // Aquatic climate gate: need a land vehicle OR armor tagged Aquatic
+        if (finalDest.Climate == Climate.Aquatic)
+        {
+            bool inLandVehicle = _state.Player.InVehicle && !_state.Player.InSpaceVehicle;
+            bool hasAquaticArmor = _state.Player.EquippedArmor?.Climate == Climate.Aquatic;
+            if (!inLandVehicle && !hasAquaticArmor)
+            {
+                _term.Error("The waters are impassable without a land vehicle or Aquatic-rated armor.");
+                return;
+            }
+        }
+
         // Auto-disembark when entering a non-space location from space
-        if (_state.Player.InSpaceVehicle && !_state.World[finalDestId].IsSpace)
+        if (_state.Player.InSpaceVehicle && !finalDest.IsSpace)
         {
             _state.Player.InVehicle = false;
             _state.Player.InSpaceVehicle = false;
@@ -212,12 +226,56 @@ public class CommandParser
 
         Look();
         ShowAmbient();
+        ApplyClimateEffects();
 
         // Space encounters take priority in IsSpace locations when player is in a ship
         if (_state.CurrentLocation.IsSpace && _state.Player.InSpaceVehicle)
             CheckSpaceEncounter();
 
         CheckEncounter();
+    }
+
+    /// <summary>
+    /// Warns the player about hostile climates and applies per-turn Hot/Cold damage
+    /// when the player lacks a vehicle or matching environmental armor.
+    /// </summary>
+    private void ApplyClimateEffects()
+    {
+        var loc = _state.CurrentLocation;
+        if (loc.Climate == Climate.Normal) return;
+
+        bool inVehicle = _state.Player.InVehicle;
+        bool armorMatches = _state.Player.EquippedArmor?.Climate == loc.Climate;
+        bool protected_ = inVehicle || armorMatches;
+
+        switch (loc.Climate)
+        {
+            case Climate.Hot:
+                _term.Mechanic("[CLIMATE: HOT] Blistering heat saps your strength. You need a vehicle or Thermal-rated armor to traverse safely.");
+                if (!protected_)
+                {
+                    var damage = DiceRoller.Roll(new DiceCode(1));
+                    _term.Combat($"The heat drains {damage.Total} Resolve (1D: [{string.Join(", ", damage.Rolls)}]).");
+                    _state.Player.CurrentResolve -= damage.Total;
+                    if (_state.Player.CurrentResolve <= 0)
+                        _term.Combat("You collapse from heatstroke...");
+                }
+                break;
+            case Climate.Cold:
+                _term.Mechanic("[CLIMATE: COLD] Freezing winds cut to the bone. You need a vehicle or Insulated-rated armor to traverse safely.");
+                if (!protected_)
+                {
+                    var damage = DiceRoller.Roll(new DiceCode(1));
+                    _term.Combat($"The cold drains {damage.Total} Resolve (1D: [{string.Join(", ", damage.Rolls)}]).");
+                    _state.Player.CurrentResolve -= damage.Total;
+                    if (_state.Player.CurrentResolve <= 0)
+                        _term.Combat("You succumb to hypothermia...");
+                }
+                break;
+            case Climate.Aquatic:
+                _term.Mechanic("[CLIMATE: AQUATIC] Deep waters surround you. Only a land vehicle or Aquatic-rated armor will carry you further.");
+                break;
+        }
     }
 
     private void ShowAmbient()

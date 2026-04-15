@@ -59,6 +59,14 @@ public static class ItemData
         IsWeapon = true, Damage = new DiceCode(5, 2), AttackSkill = SkillType.Throw, Range = 15,
         Price = 300
     };
+    
+    public static Item ConcussionGrenades => new()
+    {
+        Name = "Concussion Grenades",
+        Description = "Crowd-control device leaving targets stunned.",
+        IsWeapon = true, Damage = new DiceCode(5), AttackSkill = SkillType.Throw, Range = 15,
+        Price = 300
+    };
 
     public static Item Medpack => new()
     {

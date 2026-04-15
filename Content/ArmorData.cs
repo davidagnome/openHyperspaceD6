@@ -34,14 +34,31 @@ public static class ArmorData
         Name = "Battle Armor", DiceCode = new DiceCode(5), Price = 2000
     };
 
+    public static readonly Armor ThermalSuit = new()
+    {
+        Name = "Thermal Suit", DiceCode = new DiceCode(1), Price = 250, Climate = Climate.Hot
+    };
+
+    public static readonly Armor InsulatedSuit = new()
+    {
+        Name = "Insulated Suit", DiceCode = new DiceCode(1), Price = 250, Climate = Climate.Cold
+    };
+
+    public static readonly Armor AquaticSuit = new()
+    {
+        Name = "Aquatic Suit", DiceCode = new DiceCode(1), Price = 300, Climate = Climate.Aquatic
+    };
+
     public static List<Armor> All => new()
     {
-        Unarmored, PaddedFlightSuit, LightArmor, MediumArmor, HeavyArmor, BattleArmor
+        Unarmored, PaddedFlightSuit, LightArmor, MediumArmor, HeavyArmor, BattleArmor,
+        ThermalSuit, InsulatedSuit, AquaticSuit
     };
 
     public static List<Armor> Purchasable => new()
     {
-        PaddedFlightSuit, LightArmor, MediumArmor, HeavyArmor, BattleArmor
+        PaddedFlightSuit, LightArmor, MediumArmor, HeavyArmor, BattleArmor,
+        ThermalSuit, InsulatedSuit, AquaticSuit
     };
 
     public static Armor FindByName(string name)
