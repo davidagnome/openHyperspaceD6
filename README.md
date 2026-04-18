@@ -9,11 +9,13 @@ terminalHyperspace is a single-player, multi-user dungeon-like (or MUD-like).
 ## Current Features
 - **Conflict resolution** using D6 + pip pools, i.e. 1D, 1D+1, 1D+2, 2D, etc.
 - **Attribute and Skill systems**, including Skill checks based on select locations or talk with NPCs, themed and flavored.
+- **Inventory** including consumables, items, and armors.
 - **Combat and Non-Combat Encounters** in land and space
 - **Locations** with random encounter tables and percentile odds of encounter
 - **Vendors** for both equipment and vehicles, with the ability to sell at a percentile of the original value based on Persuade Skill
 - **Save and Load system** using TXT files stored as .SAV extension 
-
+- **Vehicles** including land and space vehicles
+- **Hyperspace** Jump to systems, using a numerical menu, sorted by Territory and Sector
 
 ## Screenshots
 ![Screenshot - Main Screen](screenshots/terminalHyperspace_IntroScreen.png) ![Screenshot - Character Sheet](screenshots/terminalHyperspace_NewCharacterSheet.png) ![Screenshot - Combat](screenshots/terminalHyperspace_Combat.png) ![Screenshot - Space Combat and Jump to Hyperspace](screenshots/terminalHyperspace_SpaceCombat_JumpToHyperspace.png)
