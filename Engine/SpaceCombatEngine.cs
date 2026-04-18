@@ -11,15 +11,17 @@ public class SpaceCombatEngine
     private readonly Character _enemyPilot;
     private readonly Vehicle _enemyShip;
     private readonly Terminal _term;
+    private readonly GameState _state;
 
     public SpaceCombatEngine(Character player, Vehicle playerShip,
-        Character enemyPilot, Vehicle enemyShip, Terminal term)
+        Character enemyPilot, Vehicle enemyShip, Terminal term, GameState state)
     {
         _player = player;
         _playerShip = playerShip;
         _enemyPilot = enemyPilot;
         _enemyShip = enemyShip;
         _term = term;
+        _state = state;
         _enemyShip.InitializeResolve();
     }
 
@@ -153,11 +155,13 @@ public class SpaceCombatEngine
         var equipBonus = _playerShip.GetSkillBonus(SkillType.Gunnery);
         var totalAttack = gunneryCode + equipBonus;
 
+        bool fpDouble = ForceRoller.PromptForcePointDouble(_state, _term);
         var attackRoll = DiceRoller.Roll(totalAttack);
         if (equipBonus.Dice > 0 || equipBonus.Pips > 0)
             _term.DiceRoll($"Gunnery ({gunneryCode} + {equipBonus} equipment) with {selectedWeapon.Name}: {attackRoll}");
         else
             _term.DiceRoll($"Gunnery ({gunneryCode}) with {selectedWeapon.Name}: {attackRoll}");
+        int attackTotal = ForceRoller.ApplyForcePointDouble(attackRoll.Total, fpDouble, _term);
 
         // Defense: enemy Pilot skill + ship Maneuverability
         var enemyPilotCode = _enemyPilot.GetBestFor(SkillType.Pilot);
@@ -166,7 +170,7 @@ public class SpaceCombatEngine
         var defenseRoll = DiceRoller.Roll(enemyDefenseCode);
         _term.DiceRoll($"{_enemyPilot.Name} evades (Pilot {enemyPilotCode} + Maneuver {_enemyShip.Maneuverability}): {defenseRoll}");
 
-        if (attackRoll.Total >= defenseRoll.Total)
+        if (attackTotal >= defenseRoll.Total)
         {
             var damageRoll = DiceRoller.Roll(selectedWeapon.Damage);
             _term.DiceRoll($"Weapon damage ({selectedWeapon.Name}): {damageRoll}");

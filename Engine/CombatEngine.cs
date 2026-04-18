@@ -8,12 +8,14 @@ public class CombatEngine
     private readonly Character _player;
     private readonly Character _enemy;
     private readonly Terminal _term;
+    private readonly GameState _state;
 
-    public CombatEngine(Character player, Character enemy, Terminal term)
+    public CombatEngine(Character player, Character enemy, Terminal term, GameState state)
     {
         _player = player;
         _enemy = enemy;
         _term = term;
+        _state = state;
         _enemy.InitializeResolve();
     }
 
@@ -112,13 +114,15 @@ public class CombatEngine
         {
             // Unarmed brawl
             var atkCode = _player.GetBestFor(SkillType.Brawl);
+            bool fpDouble = ForceRoller.PromptForcePointDouble(_state, _term);
             var atkRoll = DiceRoller.Roll(atkCode);
             _term.DiceRoll($"Brawl attack: {atkRoll}");
+            int atkTotal = ForceRoller.ApplyForcePointDouble(atkRoll.Total, fpDouble, _term);
 
             int defense = _enemy.Defense;
             _term.Mechanic($"vs {_enemy.Name}'s Defense: {defense}");
 
-            if (atkRoll.Total >= defense)
+            if (atkTotal >= defense)
             {
                 var dmg = DiceRoller.Roll(new DiceCode(_player.GetAttribute(AttributeType.Strength).Dice));
                 _term.DiceRoll($"Unarmed damage: {dmg}");
@@ -135,13 +139,15 @@ public class CombatEngine
 
         var skill = weapon.AttackSkill ?? SkillType.Blasters;
         var attackCode = _player.GetBestFor(skill);
+        bool fpDoubleWeapon = ForceRoller.PromptForcePointDouble(_state, _term);
         var attackRoll = DiceRoller.Roll(attackCode);
         _term.DiceRoll($"{skill} attack with {weapon.Name}: {attackRoll}");
+        int attackTotal = ForceRoller.ApplyForcePointDouble(attackRoll.Total, fpDoubleWeapon, _term);
 
         int def = _enemy.Defense;
         _term.Mechanic($"vs {_enemy.Name}'s Defense: {def}");
 
-        if (attackRoll.Total >= def)
+        if (attackTotal >= def)
         {
             var damageRoll = DiceRoller.Roll(weapon.Damage);
             _term.DiceRoll($"Damage ({weapon.Name}): {damageRoll}");
@@ -186,13 +192,15 @@ public class CombatEngine
         }
 
         var attackCode = attacker.GetBestFor(selectedWeapon.AttackSkill);
+        bool fpDouble = attacker == _player && ForceRoller.PromptForcePointDouble(_state, _term);
         var attackRoll = DiceRoller.Roll(attackCode);
         _term.DiceRoll($"{selectedWeapon.AttackSkill} with {selectedWeapon.Name}: {attackRoll}");
+        int attackTotal = ForceRoller.ApplyForcePointDouble(attackRoll.Total, fpDouble, _term);
 
         int def = target.Defense;
         _term.Mechanic($"vs {target.Name}'s Defense: {def}");
 
-        if (attackRoll.Total >= def)
+        if (attackTotal >= def)
         {
             var damageRoll = DiceRoller.Roll(selectedWeapon.Damage);
             _term.DiceRoll($"Vehicle weapon damage: {damageRoll}");
@@ -245,11 +253,13 @@ public class CombatEngine
 
     private bool AttemptFlee()
     {
+        bool fpDouble = ForceRoller.PromptForcePointDouble(_state, _term);
         var playerRoll = DiceRoller.Roll(_player.GetBestFor(SkillType.Agility));
         var enemyRoll = DiceRoller.Roll(_enemy.GetBestFor(SkillType.Agility));
         _term.DiceRoll($"Flee attempt — You: {playerRoll} vs {_enemy.Name}: {enemyRoll}");
+        int playerTotal = ForceRoller.ApplyForcePointDouble(playerRoll.Total, fpDouble, _term);
 
-        if (playerRoll.Total >= enemyRoll.Total)
+        if (playerTotal >= enemyRoll.Total)
         {
             _term.Narrative("You disengage and escape!");
             return false; // false = exited combat loop via flee

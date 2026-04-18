@@ -318,7 +318,7 @@ public class CommandParser
 
         if (choice != "n")
         {
-            var combat = new CombatEngine(_state.Player, enemy, _term);
+            var combat = new CombatEngine(_state.Player, enemy, _term, _state);
             bool survived = combat.RunCombat();
             if (!survived)
             {
@@ -345,7 +345,7 @@ public class CommandParser
             else
             {
                 _term.Narrative("You're spotted! No choice but to fight!");
-                var combat = new CombatEngine(_state.Player, enemy, _term);
+                var combat = new CombatEngine(_state.Player, enemy, _term, _state);
                 bool survived = combat.RunCombat();
                 if (!survived)
                 {
@@ -388,7 +388,7 @@ public class CommandParser
         {
             var combat = new SpaceCombatEngine(
                 _state.Player, _state.Player.SpaceVehicle!,
-                encounter.Pilot, encounter.Ship, _term);
+                encounter.Pilot, encounter.Ship, _term, _state);
             bool survived = combat.RunCombat();
             _state.CreditsBalance += combat.SalvageCredits;
             if (encounter.Ship.IsDestroyed)
@@ -412,11 +412,13 @@ public class CommandParser
             var playerShip = _state.Player.SpaceVehicle!;
             var evadeCode = _state.Player.GetBestFor(SkillType.Pilot) + playerShip.Maneuverability;
             var detectCode = encounter.Pilot.GetBestFor(SkillType.Sensors) + encounter.Ship.GetSkillBonus(SkillType.Sensors);
+            bool fpDouble = ForceRoller.PromptForcePointDouble(_state, _term);
             var evadeRoll = DiceRoller.Roll(evadeCode);
             var detectRoll = DiceRoller.Roll(detectCode);
             _term.DiceRoll($"Evasion (Pilot + Maneuver): {evadeRoll} vs Sensors: {detectRoll}");
+            int evadeTotal = ForceRoller.ApplyForcePointDouble(evadeRoll.Total, fpDouble, _term);
 
-            if (evadeRoll.Total >= detectRoll.Total)
+            if (evadeTotal >= detectRoll.Total)
             {
                 _term.Narrative("You slip into the sensor shadow and evade detection!");
             }
@@ -425,7 +427,7 @@ public class CommandParser
                 _term.Narrative("They've locked on — no escape! Engaging!");
                 var combat = new SpaceCombatEngine(
                     _state.Player, playerShip,
-                    encounter.Pilot, encounter.Ship, _term);
+                    encounter.Pilot, encounter.Ship, _term, _state);
                 bool survived = combat.RunCombat();
                 _state.CreditsBalance += combat.SalvageCredits;
                 if (encounter.Ship.IsDestroyed)
@@ -1098,6 +1100,7 @@ public class CommandParser
         }
 
         var skillCode = _state.Player.GetBestFor(check.Skill);
+        bool fpDouble = ForceRoller.PromptForcePointDouble(_state, _term);
         var roll = DiceRoller.Roll(skillCode);
         _term.DiceRoll($"{check.Skill} check ({skillCode}): {roll}");
 
@@ -1124,6 +1127,9 @@ public class CommandParser
             }
             _term.Blank();
         }
+
+        // Force Point doubling applies after any wild die bonus
+        finalTotal = ForceRoller.ApplyForcePointDouble(finalTotal, fpDouble, _term);
 
         _term.Mechanic($"vs Target Number: {check.TargetNumber}");
 
