@@ -57,22 +57,22 @@ public static class ItemData
         Name = "Thermal Detonator",
         Description = "A devastating explosive device. Handle with extreme caution.",
         IsWeapon = true, Damage = new DiceCode(5, 2), AttackSkill = SkillType.Throw, Range = 15,
-        Price = 300
+        Price = 300, IsConsumable = true
     };
-    
+
     public static Item ConcussionGrenades => new()
     {
-        Name = "Concussion Grenades",
+        Name = "Concussion Grenade",
         Description = "Crowd-control device leaving targets stunned.",
         IsWeapon = true, Damage = new DiceCode(5), AttackSkill = SkillType.Throw, Range = 15,
-        Price = 300
+        Price = 300, IsConsumable = true
     };
 
     public static Item Medpack => new()
     {
         Name = "Medpack",
         Description = "Restores some Resolve when used. Requires a Medicine check.",
-        IsWeapon = false, Price = 30
+        IsWeapon = false, Price = 30, IsConsumable = true
     };
 
     public static Item DataPad => new()
@@ -93,12 +93,12 @@ public static class ItemData
 
     public static List<Item> AllWeapons => new()
     {
-        BlasterPistol, HeavyBlaster, BlasterRifle, Vibroblade, VibroAxe, ForcePike, ThermalDetonator
+        BlasterPistol, HeavyBlaster, BlasterRifle, Vibroblade, VibroAxe, ForcePike, ThermalDetonator, ConcussionGrenades
     };
 
     public static List<Item> AllItems => new()
     {
         BlasterPistol, HeavyBlaster, BlasterRifle, Vibroblade, VibroAxe, ForcePike,
-        ThermalDetonator, Medpack, DataPad, Macrobinoculars
+        ThermalDetonator, Medpack, DataPad, Macrobinoculars, ConcussionGrenades
     };
 }

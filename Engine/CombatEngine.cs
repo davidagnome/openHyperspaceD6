@@ -159,6 +159,15 @@ public class CombatEngine
         {
             _term.Narrative("Your shot goes wide!");
         }
+
+        // Consumable weapons (grenades, detonators) are spent whether they hit or miss.
+        if (weapon.IsConsumable)
+        {
+            _player.Inventory.Remove(weapon);
+            if (_player.EquippedWeapon == weapon)
+                _player.EquippedWeapon = null;
+            _term.Mechanic($"{weapon.Name} consumed. ({_player.Inventory.Count(i => i.Name == weapon.Name)} remaining)");
+        }
     }
 
     private void VehicleAttack(Vehicle vehicle, Character attacker, Character target)
