@@ -238,9 +238,9 @@ public static class NPCData
         EquippedArmor = ArmorData.PaddedFlightSuit,
     };
 
-    public static Character CreatureLarge() => new()
+    public static Character Diagnoga() => new()
     {
-        Name = "Rift Stalker",
+        Name = "Diagnoga",
         IsPlayer = false,
         Attributes = new()
         {

@@ -142,7 +142,7 @@ public static class LocationData
             Name = "Maintenance Tunnels",
             Description = "A labyrinth of service tunnels running through the station's infrastructure. The air is stale and warm. Pipes hiss with steam and the distant rumble of machinery never stops.",
             Exits = new() { ["west"] = "alley", ["down"] = "reactor" },
-            PossibleEncounters = new() { NPCData.CreatureSmall, NPCData.CreatureSmall, NPCData.CreatureLarge },
+            PossibleEncounters = new() { NPCData.CreatureSmall, NPCData.CreatureSmall, NPCData.Diagnoga },
             EncounterChance = 0.5,
             AmbientMessages = new()
             {
@@ -302,7 +302,7 @@ public static class LocationData
         world["derelict"] = new Location
         {
             Id = "derelict",
-            Name = "Derelict Station Omega",
+            Name = "Derelict Station Omega - Exterior",
             Description = "An abandoned research station drifts in the Rift, its hull scarred by weapons fire and micrometeorites. Emergency lights cast a blood-red glow through shattered viewports. Something went very wrong here.",
             IsSpace = true,
             Exits = new() { ["leave"] = "deep_space", ["board"] = "derelict_interior" },
@@ -316,16 +316,20 @@ public static class LocationData
                 "A faint power signature emanates from deep within. Someone—or something—is still here.",
                 "Debris from the station forms a halo of wreckage around it.",
             },
-            Climate = Climate.Normal
+            Climate = Climate.Normal,
+            PlanetName = "Tatooine Orbit",
+            StarSystemName = "Tatoo System",
+            SectorName = "Arkanis Sector",
+            TerritoryName = "Outer Rim Territories",
         };
 
         world["derelict_interior"] = new Location
         {
             Id = "derelict_interior",
             Name = "Derelict Station Omega — Interior",
-            Description = "The interior is a tomb. Frozen atmosphere crystals drift in zero-G pockets. Consoles flicker with corrupted data. The walls are scored with something that looks disturbingly like claw marks—but far too large for any creature you know.",
+            Description = "The interior is a tomb. The walls are scored with something that looks disturbingly like claw marks—but far too large for any creature you know.",
             Exits = new() { ["airlock"] = "derelict" },
-            PossibleEncounters = new() { NPCData.DarkAdept, NPCData.CreatureLarge },
+            PossibleEncounters = new() { NPCData.DarkAdept },
             EncounterChance = 0.55,
             AmbientMessages = new()
             {
@@ -334,7 +338,11 @@ public static class LocationData
                 "The Force roils here like a storm. Something dark lingers in these walls.",
                 "A distant metallic clang echoes through the corridors. You are not alone.",
             },
-            Climate = Climate.Normal
+            Climate = Climate.Normal,
+            PlanetName = "Tatooine Orbit",
+            StarSystemName = "Tatoo System",
+            SectorName = "Arkanis Sector",
+            TerritoryName = "Outer Rim Territories",
         };
 
         world["mos_entha"] = new Location
@@ -391,7 +399,7 @@ public static class LocationData
             Name = "Beggar's Canyon Entrance",
             Description = "The legendary canyon cuts a jagged scar through the Tatooine badlands east of Mos Espa. Towering sandstone walls streaked rust and amber, riddled with overhangs and narrow chicanes that racers call the 'Stone Needle Run.' The air currents here are treacherous; updrafts appear without warning and the canyon floor is littered with the wreckage of vehicles whose pilots misjudged a turn.",
             Exits = new() { ["west"] = "tatooine_hangar" },
-            PossibleEncounters = new() { NPCData.TuskenRaider, NPCData.TuskenRaider, NPCData.CreatureSmall, NPCData.CreatureLarge },
+            PossibleEncounters = new() { NPCData.TuskenRaider, NPCData.TuskenRaider, NPCData.CreatureSmall, NPCData.Diagnoga },
             EncounterChance = 0.4,
             RequiresVehicle = true,
             AmbientMessages = new()
@@ -415,7 +423,7 @@ public static class LocationData
             Name = "Mospic High Range",
             Description = "The Mospic High Range looms above the desert floor in broken tiers of wind-carved red-rock plateaus and deep shadowed canyons. Ancient Tusken burial cairns mark every ridge line; the Raiders consider these highlands sacred ground and defend them without mercy. There are no roads here—only goat trails worn by Banthas and the patient footsteps of Sand People who have called this wilderness home for ten thousand years.",
             Exits = new() { ["northwest"] = "mos_entha" },
-            PossibleEncounters = new() { NPCData.TuskenRaider, NPCData.TuskenRaider, NPCData.TuskenRaider, NPCData.CreatureLarge },
+            PossibleEncounters = new() { NPCData.TuskenRaider, NPCData.TuskenRaider, NPCData.TuskenRaider, NPCData.Diagnoga },
             EncounterChance = 0.55,
             AmbientMessages = new()
             {
@@ -456,6 +464,58 @@ public static class LocationData
             Climate = Climate.Normal,
             IsSystemSpace = true,
             HyperspaceCoordinates = [18, 16]
+        };
+        
+        world["nar_shadaa_orbit"] = new Location
+        {
+            Id = "nar_shadaa_orbit",
+            Name = "Orbit",
+            Description = "Neon lights flicker across the surface of the Smuggler Moon.",
+            IsSpace = true,
+            Exits = new() { ["rodia_dock"] = "rodia_docking_bay", ["rodia_land"] = "rodia_hangar", ["jump"] = "deep_space" },
+            PossibleEncounters = new() { NPCData.BountyHunter },
+            EncounterChance = 0.2,
+            AmbientMessages = new()
+            {
+                "The lights flicker across the surface of the Smuggler Moon.",
+                "An illicit transaction is described over open communications channel before a hurried buzz cuts it short.",
+                "Nar Shadaa glistens neon across its space lanes and vertical buildings.",
+            },
+            SpaceEncounters = new() { SpaceEncounterData.ImperialPatrol, SpaceEncounterData.SmugglerFreighter },
+            SpaceEncounterChance = 0.25,
+            PlanetName = "Nar Shadaa",
+            StarSystemName = "Tyrius System",
+            SectorName = "Savareen Sector",
+            TerritoryName = "Outer Rim Territories",
+            Climate = Climate.Normal,
+            IsSystemSpace = true,
+            HyperspaceCoordinates = [18, 16]
+        };
+        
+        world["coruscant_orbit"] = new Location
+        {
+            Id = "coruscant_orbit",
+            Name = "Orbit",
+            Description = "Jewel of the Core Worlds the city-planet descends into layers of ruthless Imperial control.",
+            IsSpace = true,
+            Exits = new() { ["rodia_dock"] = "rodia_docking_bay", ["rodia_land"] = "rodia_hangar", ["jump"] = "deep_space" },
+            PossibleEncounters = new() { NPCData.BountyHunter },
+            EncounterChance = 0.2,
+            AmbientMessages = new()
+            {
+                "The amber lights of Coruscant's surface resemble a pattern of dense roots.",
+                "Imperial checkpoints line the dense and orderly space lanes. No one is getting through -- not with a fleet of Imperial Star Destroyers.",
+                "Coruscant: Heart of a Heartless Empire.",
+            },
+            SpaceEncounters = new() { SpaceEncounterData.ImperialPatrol, SpaceEncounterData.SmugglerFreighter },
+            SpaceEncounterChance = 0.25,
+            PlanetName = "Coruscant",
+            StarSystemName = "Coruscant System",
+            SectorName = "Corusca Sector",
+            TerritoryName = "Core Territories",
+            Climate = Climate.Normal,
+            IsSystemSpace = true,
+            HyperspaceCoordinates = [19, 12]
         };
 
         // Note: deep_space uses a numeric `jump` menu (handled in CommandParser)
