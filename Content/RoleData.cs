@@ -2,10 +2,16 @@ using TerminalHyperspace.Models;
 
 namespace TerminalHyperspace.Content;
 
-public static class RoleData
+public static partial class RoleData
 {
-    public static List<Role> All => new()
+    static partial void RegisterImported(List<Role> list);
+
+    public static List<Role> All
     {
+        get
+        {
+            var list = new List<Role>
+            {
         new Role
         {
             Name = "Soldier",
@@ -148,5 +154,9 @@ public static class RoleData
                 [SkillType.Computers] = new DiceCode(0, 1),
             }
         },
-    };
+            };
+            RegisterImported(list);
+            return list;
+        }
+    }
 }

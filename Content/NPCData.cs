@@ -2,7 +2,7 @@ using TerminalHyperspace.Models;
 
 namespace TerminalHyperspace.Content;
 
-public static class NPCData
+public static partial class NPCData
 {
     public static Character Stormtrooper() => new()
     {
@@ -231,6 +231,44 @@ public static class NPCData
             [SkillType.Melee] = new DiceCode(1, 2),      // Dex 2D+1 + 1D+2 = 4D
             [SkillType.Hide] = new DiceCode(1),           // Per 2D+2 + 1D = 3D+2
             [SkillType.Survival] = new DiceCode(2),      // Know 1D + 2D = 3D
+            [SkillType.Search] = new DiceCode(0, 2),     // Per 2D+2 + 0D+2 = 3D+1
+        },
+        Inventory = new() { ItemData.BlasterRifle, ItemData.Vibroblade },
+        EquippedWeapon = ItemData.BlasterRifle,
+        EquippedArmor = ArmorData.PaddedFlightSuit,
+    };
+    
+    public static Character BobaFett() => new()
+    {
+        Name = "Boba Fett",
+        IsPlayer = false,
+        Attributes = new()
+        {
+            [AttributeType.Dexterity] = new DiceCode(4),
+            [AttributeType.Knowledge] = new DiceCode(2,2),
+            [AttributeType.Mechanical] = new DiceCode(2,2),
+            [AttributeType.Perception] = new DiceCode(3),
+            [AttributeType.Strength] = new DiceCode(3, 2),
+            [AttributeType.Technical] = new DiceCode(2),
+            [AttributeType.Force] = new DiceCode(0),
+        },
+        SkillBonuses = new()
+        {
+            // Intended totals: Blasters 4D, Melee 4D, Hide 3D+2, Survival 3D, Search 3D+1
+            [SkillType.Blasters] = new DiceCode(5),   // Dex 4D + 5D = 9D
+            [SkillType.Melee] = new DiceCode(2),      // Dex 4D + 2D = 6D
+            [SkillType.Agility] = new DiceCode(2),  // Dex 4D + 2D = 6D
+            [SkillType.Throw] = new DiceCode(3),  // Dex 4D + 3D = 7D
+            [SkillType.Xenology] = new DiceCode(2,1),  // Kno 2D+2 + 2D+1 = 6D
+            [SkillType.Galaxy] = new DiceCode(2,1),  // Kno 2D+2 + 2D+1 = 6D
+            [SkillType.Streetwise] = new DiceCode(2,1),  // Kno 2D+2 + 2D+1 = 6D
+            [SkillType.Survival] = new DiceCode(2,1),  // Kno 2D+2 + 2D+1 = 6D
+            [SkillType.Astrogation] = new DiceCode(2,2),           // Mec 2D+2  + 2D+2 = 6D+1
+            [SkillType.Pilot] = new DiceCode(4,1),           // Mec 2D+2  + 4D+1 = 7D
+            [SkillType.Gunnery] = new DiceCode(5,1),           // Mec 2D+2  + 5D+1 = 8D
+            [SkillType.Sensors] = new DiceCode(3,2),           // Mec 2D+2  + 3D+2 = 6D+1
+            [SkillType.Drive] = new DiceCode(2,1),           // Mec 2D+2  + 2D+1 = 5D
+            [SkillType.Hide] = new DiceCode(3),           // Per 3D  + 3D = 6D
             [SkillType.Search] = new DiceCode(0, 2),     // Per 2D+2 + 0D+2 = 3D+1
         },
         Inventory = new() { ItemData.BlasterRifle, ItemData.Vibroblade },

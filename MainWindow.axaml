@@ -1,0 +1,77 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="TerminalHyperspace.MainWindow"
+        Title="Terminal Hyperspace"
+        Width="1180" Height="760"
+        Background="#06060C"
+        Icon="avares://TerminalHyperspace/Assets/logo.png">
+  <Grid Name="RootGrid" ColumnDefinitions="*,0,240" RowDefinitions="*,Auto">
+
+    <Border Grid.Row="0" Grid.Column="0" Padding="10" Background="#000010" BorderBrush="#1F1F33" BorderThickness="0,0,1,0">
+      <ScrollViewer Name="OutputScroller" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+        <SelectableTextBlock Name="OutputBlock"
+                             FontFamily="avares://TerminalHyperspace/Fonts/DejaVuSansMono.ttf#DejaVu Sans Mono"
+                             FontSize="13"
+                             TextWrapping="Wrap"
+                             Foreground="#DDDDDD"/>
+      </ScrollViewer>
+    </Border>
+
+    <Border Grid.Row="0" Grid.Column="1" Padding="0" Background="#22171B"
+            BorderBrush="#1F1F33" BorderThickness="1,0">
+      <DockPanel>
+        <Grid DockPanel.Dock="Top" ColumnDefinitions="*,Auto" Background="#22171B">
+          <TextBlock Grid.Column="0" Name="MapTitle" Text="Map" Margin="10,6"
+                     Foreground="#BF9C5E" FontSize="14" FontWeight="Bold"
+                     FontFamily="avares://TerminalHyperspace/Fonts/DejaVuSansMono.ttf#DejaVu Sans Mono"/>
+          <Button Grid.Column="1" Content="✕" Padding="8,2" Margin="4"
+                  Background="Transparent" BorderThickness="0" Foreground="#AAAAAA"
+                  Click="OnCloseMapClick"/>
+        </Grid>
+        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+          <Canvas Name="MapCanvas" Background="#22171B" Width="600" Height="600"/>
+        </ScrollViewer>
+      </DockPanel>
+    </Border>
+
+    <Border Grid.Row="0" Grid.Column="2" Padding="6" Background="#171D22">
+      <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Name="CommandPanel" Spacing="3"/>
+      </ScrollViewer>
+    </Border>
+
+    <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"
+          ColumnDefinitions="Auto,*,Auto"
+          Background="#0A0A14">
+      <TextBlock Grid.Column="0"
+                 Text=" &gt; "
+                 VerticalAlignment="Center"
+                 Foreground="#55FF55"
+                 FontFamily="avares://TerminalHyperspace/Fonts/DejaVuSansMono.ttf#DejaVu Sans Mono"
+                 FontSize="14"/>
+      <TextBox Grid.Column="1"
+               Name="InputBox"
+               Background="Transparent"
+               BorderThickness="1"
+               BorderBrush="#666666"
+               Foreground="#EEEEEE"
+               CaretBrush="#55FF55"
+               FontFamily="avares://TerminalHyperspace/Fonts/DejaVuSansMono.ttf#DejaVu Sans Mono"
+               FontSize="14"
+               KeyDown="OnInputKeyDown">
+        <TextBox.Styles>
+          <Style Selector="TextBox:focus /template/ Border#PART_BorderElement">
+            <Setter Property="BorderBrush" Value="#666666"/>
+          </Style>
+          <Style Selector="TextBox:pointerover /template/ Border#PART_BorderElement">
+            <Setter Property="BorderBrush" Value="#55FF55"/>
+          </Style>
+        </TextBox.Styles>
+      </TextBox>
+      <Button Grid.Column="2"
+              Content="Send"
+              Margin="6,4"
+              Click="OnSendClick"/>
+    </Grid>
+  </Grid>
+</Window>

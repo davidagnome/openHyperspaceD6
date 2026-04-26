@@ -23,7 +23,7 @@ public class Terminal
     }
 
     public void DiceRoll(string text)
-        => WriteColored($"  🎲 {text}", ConsoleColor.Magenta);
+        => WriteColored($"  (roll) {text}", ConsoleColor.Magenta);
 
     public void Combat(string text)
         => WriteColored(text, ConsoleColor.Red);
@@ -42,7 +42,7 @@ public class Terminal
 
     public void Header(string text)
     {
-        Console.WriteLine();
+        WriteRawLine();
         WriteColored(new string('═', Math.Min(text.Length + 4, 60)), ConsoleColor.Blue);
         WriteColored($"  {text}", ConsoleColor.Blue);
         WriteColored(new string('═', Math.Min(text.Length + 4, 60)), ConsoleColor.Blue);
@@ -54,17 +54,17 @@ public class Terminal
     public void Divider()
         => WriteColored(new string('─', 50), ConsoleColor.DarkGray);
 
-    public void Blank() => Console.WriteLine();
+    public void Blank() => WriteRawLine();
 
     public void LocationHeader(string name)
     {
-        Console.WriteLine();
+        WriteRawLine();
         WriteColored($"┌─ {name} ─┐", ConsoleColor.Blue);
     }
-    
+
     public void LocatorFooter(string name)
     {
-        Console.WriteLine();
+        WriteRawLine();
         WriteColored($"-- {name} --", ConsoleColor.Blue);
     }
 
@@ -100,9 +100,15 @@ public class Terminal
         }
 
         SubHeader("Derived Values");
-        WriteColored($"  Defense:    {c.Defense}", ConsoleColor.White);
-        WriteColored($"  Initiative: {c.Initiative}", ConsoleColor.White);
-        WriteColored($"  Resolve:    {c.Resolve}  (Current: {c.CurrentResolve})", ConsoleColor.White);
+        var dex = c.GetAttribute(Models.AttributeType.Dexterity).Dice;
+        var per = c.GetAttribute(Models.AttributeType.Perception).Dice;
+        var str = c.GetAttribute(Models.AttributeType.Strength).Dice;
+        int AgilityPips = c.SkillBonuses.TryGetValue(Models.SkillType.Agility, out var ab) ? ab.Dice * 3 + ab.Pips : 0;
+        int TacticsPips = c.SkillBonuses.TryGetValue(Models.SkillType.Tactics, out var tb) ? tb.Dice * 3 + tb.Pips : 0;
+        int StaminaPips = c.SkillBonuses.TryGetValue(Models.SkillType.Stamina, out var sb) ? sb.Dice * 3 + sb.Pips : 0;
+        WriteColored($"  Defense:    {c.Defense}  (6 + Dex {dex} + Agility pips {AgilityPips})", ConsoleColor.White);
+        WriteColored($"  Initiative: {c.Initiative}  (6 + Per {per} + Tactics pips {TacticsPips})", ConsoleColor.White);
+        WriteColored($"  Resolve:    {c.Resolve}  (Current: {c.CurrentResolve})  (6 + Str {str} + Stamina pips {StaminaPips})", ConsoleColor.White);
 
         SubHeader("Equipment");
         if (c.EquippedWeapon != null)
@@ -136,6 +142,13 @@ public class Terminal
 
     public string ReadInput()
     {
+        var bridge = GuiBridge.Instance;
+        if (bridge != null)
+        {
+            bridge.Write("> ", ConsoleColor.Green, newLine: false);
+            return bridge.ReadLine();
+        }
+
         var prev = Console.ForegroundColor;
         Console.ForegroundColor = ConsoleColor.Green;
         Console.Write("> ");
@@ -156,6 +169,13 @@ public class Terminal
 
     private void WriteColored(string text, ConsoleColor color, bool newLine = true)
     {
+        var bridge = GuiBridge.Instance;
+        if (bridge != null)
+        {
+            bridge.Write(text, color, newLine);
+            return;
+        }
+
         var prev = Console.ForegroundColor;
         Console.ForegroundColor = color;
         if (newLine)
@@ -165,8 +185,39 @@ public class Terminal
         Console.ForegroundColor = prev;
     }
 
+    private void WriteRawLine()
+    {
+        var bridge = GuiBridge.Instance;
+        if (bridge != null)
+        {
+            bridge.Write("", ConsoleColor.Gray, newLine: true);
+            return;
+        }
+        Console.WriteLine();
+    }
+
     public void Splash()
     {
+        var bridge = GuiBridge.Instance;
+        if (bridge != null)
+        {
+            bridge.Clear();
+            WriteColored(@"
+░▀█▀░█▀▀░█▀▄░█▄█░▀█▀░█▀█░█▀█░█░░░░░█░█░█░█░█▀█░█▀▀░█▀▄░█▀▀░█▀█░█▀█░█▀▀░█▀▀░░░█▀▄░▄▀▀
+░░█░░█▀▀░█▀▄░█░█░░█░░█░█░█▀█░█░░░░░█▀█░░█░░█▀▀░█▀▀░█▀▄░▀▀█░█▀▀░█▀█░█░░░█▀▀░░░█░█░█▀▄
+░░▀░░▀▀▀░▀░▀░▀░▀░▀▀▀░▀░▀░▀░▀░▀▀▀░░░▀░▀░░▀░░▀░░░▀▀▀░▀░▀░▀▀▀░▀░░░▀░▀░▀▀▀░▀▀▀░░░▀▀░░░▀░
+==== Based on the classic Space Fantasy d6 rules and Hyperspace d6 design by Matt Click ", ConsoleColor.Cyan);
+            WriteColored(@"
+    In a galaxy far and away, the Empire tightens its grip on the
+    planets. On Tatooine, a backwater waypoint for smugglers,
+    bounty hunters, and those with looking to keep a low profile,
+    your destiny begins...", ConsoleColor.DarkCyan);
+            WriteRawLine();
+            WriteColored("    Press ENTER to begin...", ConsoleColor.DarkGray);
+            bridge.ReadLine();
+            return;
+        }
+
         Console.Clear();
         Console.ForegroundColor = ConsoleColor.Cyan;
         Console.WriteLine(@"

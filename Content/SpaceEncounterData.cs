@@ -8,7 +8,7 @@ public class SpaceEncounter
     public Vehicle Ship { get; set; } = new();
 }
 
-public static class SpaceEncounterData
+public static partial class SpaceEncounterData
 {
     public static SpaceEncounter PirateInterceptor() => new()
     {

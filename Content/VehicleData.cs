@@ -2,7 +2,7 @@ using TerminalHyperspace.Models;
 
 namespace TerminalHyperspace.Content;
 
-public static class VehicleData
+public static partial class VehicleData
 {
     public static Vehicle LightFreighter => new()
     {

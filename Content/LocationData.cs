@@ -39,18 +39,20 @@ public class Location
     public int[] HyperspaceCoordinates { get; set; } = new[] { 0, 0 };
 }
 
-public static class LocationData
+public static partial class LocationData
 {
+    static partial void RegisterImported(Dictionary<string, Location> world);
+
     public static Dictionary<string, Location> BuildWorld()
     {
         var world = new Dictionary<string, Location>();
 
-        world["cantina"] = new Location
+        world["tatooine_espa_cantina"] = new Location
         {
-            Id = "cantina",
-            Name = "Bucket of Bolts Cantina",
+            Id = "tatooine_espa_cantina",
+            Name = "Mos Espa - Bucket of Bolts Cantina",
             Description = "A dim, seedy cantina on the edge of Mos Espa. The air is thick with smoke from a dozen alien imbibing pipes and drinks. A rodian band plays jizz music -- and not well.",
-            Exits = new() { ["north"] = "market", ["east"] = "tatooine_docking_bay", ["south"] = "alley" },
+            Exits = new() { ["north"] = "tatooine_espa_market", ["east"] = "tatooine_espa_docking_bay", ["south"] = "tatooine_espa_alley" },
             PossibleEncounters = new() { NPCData.PirateThugs, NPCData.BountyHunter },
             EncounterChance = 0.2,
             AmbientMessages = new()
@@ -59,6 +61,11 @@ public static class LocationData
                 "The bartender, a spider-droid, pours six drinks simultaneously. Pot-marked blaster fire riddles their chassis.",
                 "A freighter pilot in the corner booth cleans a blaster under the table.",
                 "The holonews broadcast hums: '...Imperial victory seems imminent over terror cells linked to Saw...'",
+                "A drunk Duros argues loudly with a serving droid about the definition of 'top shelf'.",
+                "Someone in a hooded cloak stares at you too long from the far booth. You look back and they're gone.",
+                "A sabacc dealer deals a round of cards, shuffling with three hands.",
+                "Two mercenaries compare blaster burn scars and laugh like old friends.",
+                "The house band lurches into a Twi'lek love ballad. Three patrons groan audibly.",
             },
             FriendlyNPCs = new() { NPCData.Merchant },
             PlanetName = "Tatooine",
@@ -68,12 +75,12 @@ public static class LocationData
             Climate = Climate.Normal
         };
 
-        world["market"] = new Location
+        world["tatooine_espa_market"] = new Location
         {
-            Id = "market",
+            Id = "tatooine_espa_market",
             Name = "Mos Espa Market District",
             Description = "A bustling open-air bazaar crammed between durasteel bulkheads. Vendors hawk everything from reprocessed ration packs to suspiciously pristine military hardware. Holographic signs flicker in a dozen languages.",
-            Exits = new() { ["south"] = "cantina", ["east"] = "tatooine_hangar", ["north"] = "upper_district" },
+            Exits = new() { ["south"] = "tatooine_espa_cantina", ["east"] = "tatooine_espa_hangar", ["north"] = "tatooine_espa_upper_district" },
             PossibleEncounters = new() { NPCData.PirateThugs },
             EncounterChance = 0.15,
             HasShop = true,
@@ -83,6 +90,11 @@ public static class LocationData
                 "Two droids argue about the fair market value of a motivator unit.",
                 "A child darts between stalls, pocketing something shiny.",
                 "The scent of roasting meat mixes with ozone and engine grease.",
+                "A Jawa auction heats up over a dented but functional protocol droid head.",
+                "An Imperial patrol drone buzzes through at head height, scanning faces.",
+                "A spice merchant lowers his voice and makes eye contact with anyone slowing down.",
+                "Two Aqualish shopkeepers shout at each other over a boundary of a shared awning.",
+                "A Gamorrean haggles badly over the price of a used rifle.",
             },
             PlanetName = "Tatooine",
             StarSystemName = "Tatoo System",
@@ -91,21 +103,25 @@ public static class LocationData
             Climate = Climate.Normal
         };
 
-        world["tatooine_docking_bay"] = new Location
+        world["tatooine_espa_docking_bay"] = new Location
         {
-            Id = "tatooine_docking_bay",
-            Name = "Docking Bay 7",
+            Id = "tatooine_espa_docking_bay",
+            Name = "Mos Espa Docking Bay 7",
             Description = "A cavernous docking bay where ships of all sizes rest on scarred landing pads. Fuel lines snake across the floor like mechanical vines. Maintenance droids whir and beep as they tend to battered hulls.",
-            Exits = new() { ["west"] = "cantina", ["north"] = "tatooine_hangar", ["up"] = "tatooine_orbit" },
+            Exits = new() { ["west"] = "tatooine_espa_cantina", ["north"] = "tatooine_espa_hangar", ["up"] = "tatooine_orbit" },
             PossibleEncounters = new() { NPCData.Stormtrooper, NPCData.BountyHunter },
             EncounterChance = 0.25,
             HasVehicleShop = true,
             AmbientMessages = new()
             {
-                "A freighter's engines cough to life, filling the bay with a deafening roar.",
-                "An Imperial customs droid scans cargo containers near pad 3.",
-                "Sparks rain down from a welder working on a ship's belly high above.",
+                "A freighter's engines sputter to life, filling the bay with a deafening roar and thick, black exhaust.",
+                "An Imperial customs droid scans cargo containers near Docking Bay 3.",
+                "Sparks rain down from a welder working on a ship's communications array high above.",
                 "A pilot kicks their ship's landing strut and swears in a language you don't recognize.",
+                "A loading crew hustles a strapped-down mystery crate into a Corellian freighter.",
+                "Pad 5's repulsor grid hiccups; a ship bobs six meters before the grid catches.",
+                "A dockmaster yells into a comlink: 'I don't CARE whose cousin owns the Cantina!'",
+                "A refueling droid hisses steam and refuses to connect to a non-standard fuel port. It swats at an eager repair bot.",
             },
             PlanetName = "Tatooine",
             StarSystemName = "Tatoo System",
@@ -114,20 +130,25 @@ public static class LocationData
             Climate = Climate.Normal
         };
 
-        world["alley"] = new Location
+        world["tatooine_espa_alley"] = new Location
         {
-            Id = "alley",
-            Name = "Underbelly Alley",
-            Description = "A narrow, trash-strewn corridor beneath the station's main level. Flickering lights cast long shadows between dripping pipes. This is where deals go wrong and people go missing.",
-            Exits = new() { ["north"] = "cantina", ["east"] = "tunnels", ["southeast"] = "mos_entha" },
+            Id = "tatooine_espa_alley",
+            Name = "Mos Espa - Underbelly Alley",
+            Description = "A narrow, trash-strewn corridor beneath the Mos Espa main level. Flickering lights cast long shadows between dripping pipes. This is where deals go wrong and people go missing.",
+            Exits = new() { ["north"] = "tatooine_espa_cantina", ["east"] = "tatooine_espa_tunnels", ["southeast"] = "tatooine_mos_entha" },
             PossibleEncounters = new() { NPCData.PirateThugs, NPCData.PirateThugs, NPCData.BountyHunter },
             EncounterChance = 0.45,
             AmbientMessages = new()
             {
                 "Something skitters in the darkness ahead. Probably just a rat. Probably.",
-                "Graffiti on the wall reads: 'THE EMPIRE SEES ALL' — someone crossed out 'EMPIRE' and wrote 'NOTHING'.",
-                "A broken surveillance droid sparks feebly in a puddle of coolant.",
+                "A propaganda poster on the wall reads: 'THE EMPIRE SEES ALL' — someone crossed out 'ALL' and wrote 'NOTHING'.",
+                "A broken security droid sparks feebly in a puddle of coolant.",
                 "You hear muffled shouting from behind a sealed blast door.",
+                "A bloodstain on the floor hasn't quite dried. You step around it.",
+                "Someone's jury-rigged a comm relay to the ceiling using data cables and desperation.",
+                "A glow-rod flickers, casting manic shadows that seem to move on their own.",
+                "You pass a torn-open credit pouch. Whoever owned it is nowhere to be seen.",
+                "A narrow set of eyes watches you from behind a vent grate. You feel something pass by your foot.",
             },
             PlanetName = "Tatooine",
             StarSystemName = "Tatoo System",
@@ -136,20 +157,25 @@ public static class LocationData
             Climate = Climate.Normal
         };
 
-        world["tunnels"] = new Location
+        world["tatooine_espa_tunnels"] = new Location
         {
-            Id = "tunnels",
-            Name = "Maintenance Tunnels",
+            Id = "tatooine_espa_tunnels",
+            Name = "Mos Espa - Maintenance Tunnels",
             Description = "A labyrinth of service tunnels running through the station's infrastructure. The air is stale and warm. Pipes hiss with steam and the distant rumble of machinery never stops.",
-            Exits = new() { ["west"] = "alley", ["down"] = "reactor" },
+            Exits = new() { ["west"] = "tatooine_espa_alley", ["down"] = "tatooine_espa_reactor" },
             PossibleEncounters = new() { NPCData.CreatureSmall, NPCData.CreatureSmall, NPCData.Diagnoga },
             EncounterChance = 0.5,
             AmbientMessages = new()
             {
-                "The floor vibrates rhythmically—the station's reactor pulse.",
+                "The floor vibrates as the central exhaust from homes dumps hot air into the tunnel.",
                 "A burst pipe sends a jet of steam across the corridor.",
                 "Claw marks score the metal walls. Something lives down here.",
                 "Your footsteps echo endlessly in the cramped passages.",
+                "A faded warning sign hangs crooked: CAUTION — LEVEL 4 BREACH RISK.",
+                "Condensation drips from the ceiling in a steady, maddening beat.",
+                "A colony of mycellium spores glows faintly blue along one wall.",
+                "Distant machinery squeals and then shudders to silence.",
+                "You find a rotted ration bar wrapper from Siennar Space Industries. It's *not* half bad... it's *all* bad.",
             },
             PlanetName = "Tatooine",
             StarSystemName = "Tatoo System",
@@ -158,12 +184,12 @@ public static class LocationData
             Climate = Climate.Normal
         };
 
-        world["reactor"] = new Location
+        world["tatooine_espa_reactor"] = new Location
         {
-            Id = "reactor",
-            Name = "Reactor Core Access",
+            Id = "tatooine_espa_reactor",
+            Name = "Mos Espa - Reactor Core Access",
             Description = "The massive reactor core of Mos Espa hums with terrifying power behind reinforced transparisteel barriers. Warning signs in every language plaster the walls. The air crackles with residual energy.",
-            Exits = new() { ["up"] = "tunnels" },
+            Exits = new() { ["up"] = "tatooine_espa_tunnels" },
             PossibleEncounters = new() { NPCData.DarkAdept, NPCData.Stormtrooper },
             EncounterChance = 0.6,
             AmbientMessages = new()
@@ -172,6 +198,11 @@ public static class LocationData
                 "Your hair stands on end from the ambient static charge.",
                 "A warning klaxon sounds briefly, then stops. Probably routine.",
                 "The Force feels... turbulent here. Like standing in a river's current.",
+                "Coolant lines hiss in a harmonic chord that unsettles your teeth.",
+                "Technicians in shielded suits move silently past, ignoring you entirely.",
+                "Your datapad momentarily displays static before resetting.",
+                "A containment field shudders visibly for a heartbeat — then steadies.",
+                "The air tastes faintly of ozone and something metallic you can't name.",
             },
             PlanetName = "Tatooine",
             StarSystemName = "Tatoo System",
@@ -180,12 +211,12 @@ public static class LocationData
             Climate = Climate.Normal
         };
 
-        world["tatooine_hangar"] = new Location
+        world["tatooine_espa_hangar"] = new Location
         {
-            Id = "tatooine_hangar",
-            Name = "Mos Espa Private Hangar Bay",
+            Id = "tatooine_espa_hangar",
+            Name = "Mos Espa - Private Hangar Bay",
             Description = "A smaller, more exclusive hangar reserved for those with credits or connections. Ships here are sleeker, better maintained. Armed guards watch the entrances.",
-            Exits = new() { ["south"] = "tatooine_docking_bay", ["west"] = "market", ["up"] = "tatooine_orbit", ["east"] = "beggars_canyon" },
+            Exits = new() { ["south"] = "tatooine_espa_docking_bay", ["west"] = "tatooine_espa_market", ["up"] = "tatooine_orbit", ["east"] = "beggars_canyon" },
             PossibleEncounters = new() { NPCData.ImperialOfficer, NPCData.BountyHunter },
             EncounterChance = 0.2,
             HasVehicleShop = true,
@@ -193,7 +224,12 @@ public static class LocationData
             {
                 "A sleek yacht powers down its engines, its hull still glowing from atmospheric entry.",
                 "A pair of guards check credentials at the main entrance.",
-                "A protocol droid fusses over cargo loading arrangements.",
+                "A protocol droid preens over cargo loading arrangements.",
+                "A private security squad in matching armor runs a drill in the far bay.",
+                "A mechanic fine-tunes a modified swoop engine, the whine rising and falling.",
+                "A cargo manifest argument ends with a datapad shattered against the floor.",
+                "Overhead, a crane lowers a sleek starfighter onto a polished landing pad.",
+                "A bounty hunter in Beskar pauldrons leans against their ship and watches the crowd.",
             },
             PlanetName = "Tatooine",
             StarSystemName = "Tatoo System",
@@ -202,12 +238,12 @@ public static class LocationData
             Climate = Climate.Normal
         };
 
-        world["upper_district"] = new Location
+        world["tatooine_espa_upper_district"] = new Location
         {
-            Id = "upper_district",
+            Id = "tatooine_espa_upper_district",
             Name = "Mos Espa Upper District",
             Description = "The polished upper level of Mos Espa, where the wealthy and powerful conduct their affairs. Clean corridors, functioning lights, and the faint scent of something almost floral. The contrast with below is stark.",
-            Exits = new() { ["south"] = "market", ["east"] = "command" },
+            Exits = new() { ["south"] = "tatooine_espa_market", ["east"] = "tatooine_espa_command" },
             PossibleEncounters = new() { NPCData.ImperialOfficer },
             EncounterChance = 0.15,
             AmbientMessages = new()
@@ -215,6 +251,12 @@ public static class LocationData
                 "Well-dressed beings stride purposefully past, datapads in hand.",
                 "A holographic fountain projects cascading water in the central atrium.",
                 "Security cameras track your movement. You don't quite fit in up here.",
+                "A string quartet of droids plays chamber music in a gilded alcove.",
+                "Imperial officers in dress uniforms pass a bottle of aged Corellian brandy.",
+                "A protocol droid politely but firmly asks you to step off the carpeted walkway.",
+                "A noble's perfume drifts past — it probably cost more than your ship.",
+                "Two diplomats argue in measured tones about trade tariffs. Their bodyguards look bored.",
+                "Two kids talk about the upcoming pod-race. The adults have money on Sebulba's big comeback.",
             },
             FriendlyNPCs = new() { NPCData.Merchant },
             HasShop = true,
@@ -225,12 +267,12 @@ public static class LocationData
             Climate = Climate.Normal
         };
 
-        world["command"] = new Location
+        world["tatooine_espa_command"] = new Location
         {
-            Id = "command",
+            Id = "tatooine_espa_command",
             Name = "Mos Espa Imperial Station Command Center",
             Description = "The nerve center of the Imperial Regiment at Mos Espa. Massive viewscreens display system-wide sensor data, shipping routes, and Imperial patrol patterns. Officers and technicians bustle between consoles.",
-            Exits = new() { ["west"] = "upper_district" },
+            Exits = new() { ["west"] = "tatooine_espa_upper_district" },
             PossibleEncounters = new() { NPCData.ImperialOfficer, NPCData.Stormtrooper, NPCData.Stormtrooper },
             EncounterChance = 0.35,
             AmbientMessages = new()
@@ -238,6 +280,11 @@ public static class LocationData
                 "An officer barks orders at a subordinate about docking clearances.",
                 "Sensor data scrolls across a wall-sized display—dozens of ships in the sector.",
                 "A priority transmission chimes. Everyone tenses for a moment.",
+                "A comms technician mutters 'That's not a rebel channel, that's just interference' for the third time.",
+                "Two Stormtroopers stand at perfect parade rest by the entrance.",
+                "A holographic system map with fluorescent green contours rotates slowly, highlighting patrol routes in red.",
+                "A droid server rolls past with hot caf for the officers on duty.",
+                "A garrison commander reviews a datapad, frowning deeply.",
             },
             PlanetName = "Tatooine",
             StarSystemName = "Tatoo System",
@@ -252,14 +299,19 @@ public static class LocationData
             Name = "Tatooine Orbit",
             Description = "The cold void of space stretches endlessly around you. Tatooine, a glittering web of lights against the dark planet surface. Ships drift in and out of traffic lanes. The nearest star paints everything in pale gold.",
             IsSpace = true,
-            Exits = new() { ["dock"] = "tatooine_docking_bay", ["land"] = "tatooine_hangar", ["jump"] = "deep_space" },
+            Exits = new() { ["dock"] = "tatooine_espa_docking_bay", ["land"] = "tatooine_espa_hangar", ["jump"] = "deep_space" },
             PossibleEncounters = new() { NPCData.BountyHunter },
             EncounterChance = 0.2,
             AmbientMessages = new()
             {
-                "A patrol frigate glides past, its running lights blinking methodically.",
-                "A burst of static on the comm—someone's distress signal, quickly silenced.",
-                "The station's defense turrets track a passing freighter, then stand down.",
+                "A patrol frigate glides past -- its half kilometer of running lights blinking methodically.",
+                "A distress signal cuts in then is quickly silenced.",
+                "There are no space stations in Tatooine's direct orbit. They like to keep bribery and spice-running on the ground floor.",
+                "Debris from an old engagement drifts past your viewport — pitted, unpainted durasteel. The word Tantive is barely legible.",
+                "A mass of traffic blooms on your sensors as several freighter drops out of hyperspace nearby.",
+                "Tatooine's twin suns frame the horizon in a sheet of rust-gold glare.",
+                "A patrol TIE pair screams past your cockpit in formation.",
+                "The comm crackles with the fragment of an illegal broadcast before blaster fire. Static remains.",
             },
             SpaceEncounters = new() { SpaceEncounterData.ImperialPatrol, SpaceEncounterData.SmugglerFreighter },
             SpaceEncounterChance = 0.25,
@@ -275,8 +327,8 @@ public static class LocationData
         world["deep_space"] = new Location
         {
             Id = "deep_space",
-            Name = "Deep Space — The Rift Expanse",
-            Description = "You've jumped to the edge of the Rift Expanse, a treacherous region of space filled with asteroid fields and navigational hazards. Sensors flicker with ghost readings. Out here, you're on your own.",
+            Name = "Deep Space — Tatoo Asteroid Belt",
+            Description = "You've jumped to the edge of Tatoo's asteroid belt, a treacherous region of space filled with asteroid fields and navigational hazards. Sensors flicker with ghost readings. Out here, you're on your own.",
             IsSpace = true,
             // `jump` is a sentinel — CommandParser intercepts it here and shows a
             // numeric menu of in-system space destinations (IsSpace && IsSystemSpace).
@@ -291,6 +343,11 @@ public static class LocationData
                 "Your sensors ping something metallic in the debris field ahead.",
                 "The hyperlane beacon here is damaged—its signal stutters and fades.",
                 "Silence. The oppressive, crushing silence of deep space.",
+                "A distant supernova remnant colors half the viewport a bruised purple.",
+                "Your power cells cycle — an extraneous draw you can't quite trace.",
+                "Something large glides past at extreme range. Your sensors can't identify it.",
+                "Coded pulses flicker across the comm band, repeating every forty seconds.",
+                "A wrecked hull tumbles past, hull plating scorched black by some ancient weapon.",
             },
             PlanetName = "Deep Space near Tatooine",
             StarSystemName = "Tatoo System",
@@ -315,6 +372,11 @@ public static class LocationData
                 "The station rotates slowly, revealing blast marks across its midsection.",
                 "A faint power signature emanates from deep within. Someone—or something—is still here.",
                 "Debris from the station forms a halo of wreckage around it.",
+                "A severed docking arm drifts nearby, cables frozen like brittle roots.",
+                "Emergency beacons blink red in lonely sequence. No one is coming.",
+                "You spot an escape pod frozen against the hull — never launched.",
+                "Scorched hull plating spells out a word in some forgotten alphabet.",
+                "The station's hab-ring lists drunkenly on a broken axis.",
             },
             Climate = Climate.Normal,
             PlanetName = "Tatooine Orbit",
@@ -337,6 +399,11 @@ public static class LocationData
                 "You find a datapad. The last entry reads: 'They came from the rift itself...'",
                 "The Force roils here like a storm. Something dark lingers in these walls.",
                 "A distant metallic clang echoes through the corridors. You are not alone.",
+                "A frozen crewmember sits in a chair, hands folded neatly on the console.",
+                "Dried blood traces a path from a research lab to nothing. The path simply ends.",
+                "Your helmet lamp catches something huge scrawled on the bulkhead: DO NOT OPEN.",
+                "The gravity plating flickers underfoot. For a second you drift.",
+                "A mess hall holds a dozen uneaten meals, forks still in hands that crumbled to dust.",
             },
             Climate = Climate.Normal,
             PlanetName = "Tatooine Orbit",
@@ -345,12 +412,12 @@ public static class LocationData
             TerritoryName = "Outer Rim Territories",
         };
 
-        world["mos_entha"] = new Location
+        world["tatooine_mos_entha"] = new Location
         {
-            Id = "mos_entha",
+            Id = "tatooine_mos_entha",
             Name = "Mos Entha — Outer Streets",
             Description = "The sand-blasted streets of Mos Entha stretch beneath the twin suns, choked with Hutt-faction markings carved into every wall and doorframe. Enforcers in mismatched armor lounge at corners, eyes following every newcomer. This is Jabba Desilijic Tiure's territory—every credit earned here has a cut taken before it reaches your pocket.",
-            Exits = new() { ["northwest"] = "alley", ["south"] = "hutt_compound", ["southeast"] = "mospic_high_range" },
+            Exits = new() { ["northwest"] = "tatooine_espa_alley", ["south"] = "tatooine_entha_hutt_compound", ["southeast"] = "tatooine_mospic_high_range" },
             PossibleEncounters = new() { NPCData.PirateThugs, NPCData.PirateThugs, NPCData.BountyHunter },
             EncounterChance = 0.35,
             HasShop = true,
@@ -361,6 +428,11 @@ public static class LocationData
                 "A nervous-looking Rodian slips down a side passage as you approach.",
                 "The smell of spice and charred metal hangs heavy in the afternoon heat.",
                 "Two armored heavies settle a dispute with raised voices and a pointed blaster—the losing argument holsters first.",
+                "A Bith informant whispers into a comm, eyes darting across the street.",
+                "A speeder screeches through the intersection with three pursuers firing blasters after it.",
+                "A child sells forged Hutt-faction tattoos for five credits — pressed out of a stolen medical tool.",
+                "A slave auctioneer's voice rises above the crowd. You keep moving.",
+                "A Gamorrean enforcer eats a nerf leg raw in the shade of an awning, daring anyone to comment.",
             },
             FriendlyNPCs = new() { NPCData.Merchant },
             PlanetName = "Tatooine",
@@ -370,12 +442,12 @@ public static class LocationData
             Climate = Climate.Hot
         };
 
-        world["hutt_compound"] = new Location
+        world["tatooine_entha_hutt_compound"] = new Location
         {
-            Id = "hutt_compound",
+            Id = "tatooine_entha_hutt_compound",
             Name = "Mos Entha — Hutt Compound",
             Description = "Beyond the rusted gate lies the inner compound ruled by Jabba's lieutenants. The architecture is bloated and ornate, carved from the same red sandstone as the surrounding desert but gilded with Hutt excess—bronze fixtures, slave-worked mosaics, and the pervasive stench of Hutt musk and contraband spice. Jabba's banner—a bloated slug sigil—flies from every post. Only the bold or the foolish come here uninvited.",
-            Exits = new() { ["north"] = "mos_entha" },
+            Exits = new() { ["north"] = "tatooine_mos_entha" },
             PossibleEncounters = new() { NPCData.PirateThugs, NPCData.BountyHunter, NPCData.BountyHunter, NPCData.ImperialOfficer },
             EncounterChance = 0.5,
             AmbientMessages = new()
@@ -385,6 +457,11 @@ public static class LocationData
                 "A lieutenant in Hutt livery lists 'outstanding debts' from a crumpled flimsiplast scroll.",
                 "Blaster burns scar the inner walls—someone made a run for it recently. They didn't make it far.",
                 "The compound's central pit is sealed with durasteel grating. You decide not to look too closely.",
+                "A Twi'lek dancer moves through the crowd with a practiced smile and a tracking collar.",
+                "A Nikto bodyguard polishes an electrostaff, eyes never leaving the throne room's doors.",
+                "Somewhere deep in the compound, a bellowing laugh shakes dust from the rafters.",
+                "A tally board lists bounty marks in Huttese, names redacted and added in shaky hand.",
+                "The air reeks of overripe fruit and something that was once alive.",
             },
             PlanetName = "Tatooine",
             StarSystemName = "Tatoo System",
@@ -409,6 +486,11 @@ public static class LocationData
                 "The walls close in overhead—at the narrowest point the sky is just a thin stripe of blue.",
                 "Distant Bantha bellows echo off the stone, far too close for comfort.",
                 "A rusted T-16 skyhopper frame is half-buried in a sandbank, its markings long since scoured away.",
+                "A swoop racer's ghostly slipstream still hangs in the air — someone ran this loop minutes ago.",
+                "A womp rat colony scatters from under an overhang at your passing.",
+                "A makeshift finish-line flag flaps from a rock spire, faded and shredded by wind.",
+                "The canyon echoes back a scream — or the wind playing tricks.",
+                "A circle of small offerings — bones, copper wire, dried meat — surrounds a weathered totem.",
             },
             PlanetName = "Tatooine",
             StarSystemName = "Tatoo System",
@@ -417,27 +499,162 @@ public static class LocationData
             Climate = Climate.Hot
         };
 
-        world["mospic_high_range"] = new Location
+        world["tatooine_mospic_high_range"] = new Location
         {
-            Id = "mospic_high_range",
+            Id = "tatooine_mospic_high_range",
             Name = "Mospic High Range",
             Description = "The Mospic High Range looms above the desert floor in broken tiers of wind-carved red-rock plateaus and deep shadowed canyons. Ancient Tusken burial cairns mark every ridge line; the Raiders consider these highlands sacred ground and defend them without mercy. There are no roads here—only goat trails worn by Banthas and the patient footsteps of Sand People who have called this wilderness home for ten thousand years.",
-            Exits = new() { ["northwest"] = "mos_entha" },
-            PossibleEncounters = new() { NPCData.TuskenRaider, NPCData.TuskenRaider, NPCData.TuskenRaider, NPCData.Diagnoga },
+            Exits = new() { ["northwest"] = "tatooine_mos_entha" },
+            PossibleEncounters = new() { NPCData.TuskenRaider, NPCData.TuskenRaider },
             EncounterChance = 0.55,
             AmbientMessages = new()
             {
-                "A Bantha lowing call rolls down from the plateau above—answered, moments later, from below.",
+                "Test.",
                 "You spot movement on a high ridge: a robed silhouette watching you, then gone.",
                 "The wind here carries a rhythmic tapping—a Gaderffii stick on stone, unhurried and deliberate.",
                 "Sun-bleached skulls have been placed along the trail at intervals. A warning, or a boundary marker.",
-                "The canyon walls are covered in ancient Tusken pictographs—hunting scenes, star maps, something that might be a warning.",
+                "The canyon walls are covered in ancient Tusken pictographs: hunting scenes, star maps, something that might be a warning.",
+                "An ululating call rises from three directions at once — coordinated, deliberate.",
+                "You find a hand-woven trap laid for something larger than you.",
+                "A smoke signal rises from a distant plateau. An answer threads up from the far horizon.",
+                "The red rock here bears scorch marks too fresh to belong to history.",
+                "Shards of a shattered gaderffii stick lie half-buried in sand, as though left behind in retreat.",
             },
             PlanetName = "Tatooine",
             StarSystemName = "Tatoo System",
             SectorName = "Arkanis Sector",
             TerritoryName = "Outer Rim Territories",
-            Climate = Climate.Hot
+            Climate = Climate.Normal
+        };
+        
+        world["tatooine_western_great_mesra"] = new Location
+        {
+            Id = "tatooine_western_great_mesra",
+            Name = "Western Great Mesra Plateau",
+            Description = "Rocky plateaus descend into the Northern Dune Sea. Visible to the east across a steep valley in Jabba's Palace.",
+            Exits = new() { ["west"] = "tatooine_mospic_high_range", ["east"] = "tatooine_jabba_palace_entrance" },
+            PossibleEncounters = new() { NPCData.ImperialOfficer, NPCData.Stormtrooper, NPCData.Stormtrooper },
+            EncounterChance = 0.35,
+            AmbientMessages = new()
+            {
+                "An officer barks orders at a subordinate about docking clearances.",
+                "Sensor data scrolls across a wall-sized display—dozens of ships in the sector.",
+                "A priority transmission chimes. Everyone tenses for a moment.",
+                "A comms technician mutters 'That's not a rebel channel, that's just interference' for the third time.",
+                "Two Stormtroopers stand at perfect parade rest by the entrance.",
+                "A holographic system map rotates slowly, highlighting patrol routes in red.",
+                "A droid server rolls past with hot caf for the officers on duty.",
+                "A garrison commander reviews a datapad, frowning deeply.",
+            },
+            PlanetName = "Tatooine",
+            StarSystemName = "Tatoo System",
+            SectorName = "Arkanis Sector",
+            TerritoryName = "Outer Rim Territories",
+            Climate = Climate.Normal
+        };
+        
+        world["tatooine_jabba_palace_entrance"] = new Location
+        {
+            Id = "tatooine_jabba_palace_entrance",
+            Name = "Jabba's Palace - Entrance",
+            Description = "Rocky plateaus descend into the Northern Dune Sea. Visible to the east across a steep valley in Jabba's Palace.",
+            Exits = new() { ["west"] = "tatooine_western_great_mesra", ["up"] = "tatooine_jabba_palace_throne", ["down"] = "tatooine_jabba_palace_underworks" },
+            PossibleEncounters = new() { NPCData.ImperialOfficer, NPCData.Stormtrooper, NPCData.Stormtrooper },
+            EncounterChance = 0.35,
+            AmbientMessages = new()
+            {
+                "A Bo'marr monk peers at you with its spider-like droid housing for its brain jar.",
+                "At sunset, the wide primary tower and its narrow communications tower of the palace look like two droids.",
+                "A skiff jets off from the sail barge maintenance depot with Weequay mercenaries squinting at you.",
+                "Hard to believe Jabba's palace was a monastery, given the carousing and bedlam occuring there today.",
+                "The unmistakable, mushroom-shaped domes of Jabba's palace encompass the entire horizon as you stand outside its doors.",
+                "The difficult pathways to get to the upper levels and rancor pit below means one way in and three ways out: dead, alive, or on carbon.",
+                "The sand-colored buildings take on red hues in the sunset.",
+                "A Gamorrean guard in leather armor and wookie furs, relieves a pair of Klatooinians for the afternoon shift.",
+            },
+            PlanetName = "Tatooine",
+            StarSystemName = "Tatoo System",
+            SectorName = "Arkanis Sector",
+            TerritoryName = "Outer Rim Territories",
+            Climate = Climate.Normal
+        };
+        
+        world["tatooine_jabba_palace_throne"] = new Location
+        {
+            Id = "tatooine_jabba_palace_throne",
+            Name = "Jabba's Palace - Throne Room",
+            Description = "Rocky plateaus descend into the Northern Dune Sea. Visible to the east across a steep valley in Jabba's Palace.",
+            Exits = new() { ["down"] = "tatooine_jabba_palace_entrance" },
+            PossibleEncounters = new() { NPCData.ImperialOfficer, NPCData.Stormtrooper, NPCData.Stormtrooper },
+            EncounterChance = 0.35,
+            AmbientMessages = new()
+            {
+                "An officer barks orders at a subordinate about docking clearances.",
+                "Sensor data scrolls across a wall-sized display—dozens of ships in the sector.",
+                "A priority transmission chimes. Everyone tenses for a moment.",
+                "A comms technician mutters 'That's not a rebel channel, that's just interference' for the third time.",
+                "Two Stormtroopers stand at perfect parade rest by the entrance.",
+                "A holographic system map rotates slowly, highlighting patrol routes in red.",
+                "A droid server rolls past with hot caf for the officers on duty.",
+                "A garrison commander reviews a datapad, frowning deeply.",
+            },
+            PlanetName = "Tatooine",
+            StarSystemName = "Tatoo System",
+            SectorName = "Arkanis Sector",
+            TerritoryName = "Outer Rim Territories",
+            Climate = Climate.Normal
+        };
+        
+        world["tatooine_jabba_palace_underworks"] = new Location
+        {
+            Id = "tatooine_jabba_palace_underworks",
+            Name = "Jabba Palace - Underworks",
+            Description = "Rocky plateaus descend into the Northern Dune Sea. Visible to the east across a steep valley in Jabba's Palace.",
+            Exits = new() { ["up"] = "tatooine_jabba_palace_entrance", ["down"] = "tatooine_jabba_rancor_pit"  },
+            PossibleEncounters = new() { NPCData.ImperialOfficer, NPCData.Stormtrooper, NPCData.Stormtrooper },
+            EncounterChance = 0.35,
+            AmbientMessages = new()
+            {
+                "An officer barks orders at a subordinate about docking clearances.",
+                "Sensor data scrolls across a wall-sized display—dozens of ships in the sector.",
+                "A priority transmission chimes. Everyone tenses for a moment.",
+                "A comms technician mutters 'That's not a rebel channel, that's just interference' for the third time.",
+                "Two Stormtroopers stand at perfect parade rest by the entrance.",
+                "A holographic system map rotates slowly, highlighting patrol routes in red.",
+                "A droid server rolls past with hot caf for the officers on duty.",
+                "A garrison commander reviews a datapad, frowning deeply.",
+            },
+            PlanetName = "Tatooine",
+            StarSystemName = "Tatoo System",
+            SectorName = "Arkanis Sector",
+            TerritoryName = "Outer Rim Territories",
+            Climate = Climate.Normal
+        };
+        
+        world["tatooine_jabba_palace_rancor_pit"] = new Location
+        {
+            Id = "tatooine_jabba_palace_rancor_pit",
+            Name = "Jabba Palace - Rancor Pit",
+            Description = "Rocky plateaus descend into the Northern Dune Sea. Visible to the east across a steep valley in Jabba's Palace.",
+            Exits = new() { ["up"] = "tatooine_jabba_palace_underworks" },
+            PossibleEncounters = new() { NPCData.ImperialOfficer, NPCData.Stormtrooper, NPCData.Stormtrooper },
+            EncounterChance = 0.35,
+            AmbientMessages = new()
+            {
+                "An officer barks orders at a subordinate about docking clearances.",
+                "Sensor data scrolls across a wall-sized display—dozens of ships in the sector.",
+                "A priority transmission chimes. Everyone tenses for a moment.",
+                "A comms technician mutters 'That's not a rebel channel, that's just interference' for the third time.",
+                "Two Stormtroopers stand at perfect parade rest by the entrance.",
+                "A holographic system map rotates slowly, highlighting patrol routes in red.",
+                "A droid server rolls past with hot caf for the officers on duty.",
+                "A garrison commander reviews a datapad, frowning deeply.",
+            },
+            PlanetName = "Tatooine",
+            StarSystemName = "Tatoo System",
+            SectorName = "Arkanis Sector",
+            TerritoryName = "Outer Rim Territories",
+            Climate = Climate.Normal
         };
         
         world["rodia_orbit"] = new Location
@@ -454,6 +671,11 @@ public static class LocationData
                 "A patrol frigate glides past, its running lights blinking methodically.",
                 "A burst of static on the comm—someone's distress signal, quickly silenced.",
                 "The station's defense turrets track a passing freighter, then stand down.",
+                "A Rodian-marked light freighter slides through the queue with diplomatic priority.",
+                "Swamp haze curls around Rodia below, lit eerie green by the setting sun.",
+                "A Huttese-flagged transport cuts hard across the lane — Rodian traffic control ignores it.",
+                "Your sensors spike briefly with a civilian distress beacon, then lose the signal.",
+                "A Rodian hunter-ship bristles with trophy mounts as it passes your viewport.",
             },
             SpaceEncounters = new() { SpaceEncounterData.ImperialPatrol, SpaceEncounterData.SmugglerFreighter },
             SpaceEncounterChance = 0.25,
@@ -480,6 +702,11 @@ public static class LocationData
                 "The lights flicker across the surface of the Smuggler Moon.",
                 "An illicit transaction is described over open communications channel before a hurried buzz cuts it short.",
                 "Nar Shadaa glistens neon across its space lanes and vertical buildings.",
+                "A swarm of pleasure yachts cycles the orbital clubs, music leaking even through vacuum comms.",
+                "Advertising drones pepper open frequencies with pitches for 'perfectly legal' substances.",
+                "A docking ring lights up as a Hutt-flagged cruiser demands priority clearance.",
+                "Two smugglers negotiate fuel prices on an unsecured channel, both unaware.",
+                "A sector-shielded gang yacht drifts past, bristling with illegal turret mounts.",
             },
             SpaceEncounters = new() { SpaceEncounterData.ImperialPatrol, SpaceEncounterData.SmugglerFreighter },
             SpaceEncounterChance = 0.25,
@@ -495,10 +722,10 @@ public static class LocationData
         world["coruscant_orbit"] = new Location
         {
             Id = "coruscant_orbit",
-            Name = "Orbit",
-            Description = "Jewel of the Core Worlds the city-planet descends into layers of ruthless Imperial control.",
+            Name = "Coruscant Orbit",
+            Description = "Jewel of the Core Worlds — the city-planet descends into layers of ruthless Imperial control. Traffic flows in rigid corridors patrolled by ISDs and sentinel droids.",
             IsSpace = true,
-            Exits = new() { ["rodia_dock"] = "rodia_docking_bay", ["rodia_land"] = "rodia_hangar", ["jump"] = "deep_space" },
+            Exits = new() { ["dock"] = "coruscant_docking_bay", ["jump"] = "deep_space" },
             PossibleEncounters = new() { NPCData.BountyHunter },
             EncounterChance = 0.2,
             AmbientMessages = new()
@@ -506,22 +733,194 @@ public static class LocationData
                 "The amber lights of Coruscant's surface resemble a pattern of dense roots.",
                 "Imperial checkpoints line the dense and orderly space lanes. No one is getting through -- not with a fleet of Imperial Star Destroyers.",
                 "Coruscant: Heart of a Heartless Empire.",
+                "A diplomatic cruiser breaks from the traffic column with an ISD honor guard.",
+                "Your transponder is scanned for the fourth time in as many minutes.",
+                "An Imperial Star Destroyer rotates slowly into view, dwarfing everything nearby.",
+                "Sentinel probes pass a meter from your hull, scanning for banned cargo.",
+                "Comms chatter is flawless, polished, and utterly sterile — just the way the Empire likes it.",
             },
-            SpaceEncounters = new() { SpaceEncounterData.ImperialPatrol, SpaceEncounterData.SmugglerFreighter },
-            SpaceEncounterChance = 0.25,
+            SpaceEncounters = new() { SpaceEncounterData.ImperialPatrol, SpaceEncounterData.ImperialGunboat },
+            SpaceEncounterChance = 0.3,
             PlanetName = "Coruscant",
             StarSystemName = "Coruscant System",
             SectorName = "Corusca Sector",
-            TerritoryName = "Core Territories",
+            TerritoryName = "Core Worlds",
             Climate = Climate.Normal,
             IsSystemSpace = true,
-            HyperspaceCoordinates = [19, 12]
+            HyperspaceCoordinates = [13, 10]
+        };
+
+        world["coruscant_docking_bay"] = new Location
+        {
+            Id = "coruscant_docking_bay",
+            Name = "Coruscant Public Docking Bay 94",
+            Description = "A cavernous public docking bay set into the spire-tops of the lower civic district. Customs droids glide between berths, scanning manifests with mechanical patience. The recycled air carries traces of ozone and high-grade rocket fuel.",
+            Exits = new() { ["up"] = "coruscant_orbit", ["north"] = "coruscant_verity_courtyard" },
+            PossibleEncounters = new() { NPCData.Stormtrooper, NPCData.ImperialOfficer, NPCData.BountyHunter },
+            EncounterChance = 0.3,
+            HasShop = true,
+            AmbientMessages = new()
+            {
+                "An Imperial customs officer dictates a manifest aloud while their droid logs every word.",
+                "A Corellian freighter lifts with a polite chime — no scorching, no exhaust, just clean repulsor hum.",
+                "A queue of diplomats waits patiently behind a velvet rope while their luggage is scanned.",
+                "Two Stormtroopers question a Rodian stevedore. The droid translator's voice is unfailingly polite.",
+                "An ISB agent in slate-gray tunic strides past, eyes everywhere at once.",
+                "A protocol droid offers you a warm towel and a complimentary cup of caf.",
+                "Your transponder is scanned again. The droid apologizes for the inconvenience.",
+                "A maintenance gantry slides into position with surgical precision.",
+            },
+            FriendlyNPCs = new() { NPCData.Merchant },
+            PlanetName = "Coruscant",
+            StarSystemName = "Coruscant System",
+            SectorName = "Corusca Sector",
+            TerritoryName = "Core Worlds",
+            Climate = Climate.Normal,
+            HyperspaceCoordinates = [13, 10]
+        };
+
+        world["coruscant_verity_courtyard"] = new Location
+        {
+            Id = "coruscant_verity_courtyard",
+            Name = "Verity Courtyard",
+            Description = "A vast plaza of polished durastone tiles ringed by senatorial spires. Holographic banners proclaim Imperial unity in twelve languages. Probe droids drift overhead in slow, looping arcs.",
+            Exits = new() { ["south"] = "coruscant_docking_bay", ["north"] = "coruscant_federal_courtyard", ["east"] = "coruscant_compnor_arcology" },
+            PossibleEncounters = new() { NPCData.Stormtrooper, NPCData.ImperialOfficer },
+            EncounterChance = 0.2,
+            AmbientMessages = new()
+            {
+                "An aerial procession of Imperial officials passes overhead in mirrored speeders.",
+                "A propaganda holo cycles: 'ORDER. PROSPERITY. THE EMPIRE.'",
+                "A pair of senatorial aides whisper urgently and then go silent as you pass.",
+                "Probe droids hum in slow lazy circles, recording everything below.",
+                "A child reaches up to touch a hovering banner; their guardian pulls them back firmly.",
+                "An Imperial chorus performs an anthem from a raised dais. Attendance feels mandatory.",
+                "Two ISB agents pretend to converse while watching the crowd in a polished obsidian wall.",
+                "A loyalty pledge terminal blinks softly: 'STEP FORWARD TO REAFFIRM.'",
+            },
+            FriendlyNPCs = new() { NPCData.Merchant },
+            PlanetName = "Coruscant",
+            StarSystemName = "Coruscant System",
+            SectorName = "Corusca Sector",
+            TerritoryName = "Core Worlds",
+            Climate = Climate.Normal,
+            HyperspaceCoordinates = [13, 10]
+        };
+
+        world["coruscant_compnor_arcology"] = new Location
+        {
+            Id = "coruscant_compnor_arcology",
+            Name = "COMPNOR Arcology",
+            Description = "The Commission for the Preservation of the New Order's residential arcology rises in cold steel terraces. Doctrinal tapestries hang in every corridor. Even the lighting feels supervised.",
+            Exits = new() { ["west"] = "coruscant_verity_courtyard", ["north"] = "coruscant_compnor_imperial_register" },
+            PossibleEncounters = new() { NPCData.ImperialOfficer, NPCData.Stormtrooper, NPCData.DarkAdept },
+            EncounterChance = 0.4,
+            AmbientMessages = new()
+            {
+                "Loyalty officers conduct routine doctrinal interviews behind frosted transparisteel.",
+                "A child recites Imperial creed in unison with a holo-instructor.",
+                "The hum of surveillance scanners is a constant, low-frequency presence.",
+                "A junior cadet eyes you uneasily and looks away before you can meet their gaze.",
+                "An ISB poster glares from every wall: 'IF YOU SEE SOMETHING, REPORT EVERYTHING.'",
+                "An automated greeter chirps your transponder ID and stops smiling.",
+                "Two Sub-Adult Group cadets march past in formation, eyes forward.",
+                "A cleaning droid scrubs at a spot on the floor that no longer exists.",
+            },
+            PlanetName = "Coruscant",
+            StarSystemName = "Coruscant System",
+            SectorName = "Corusca Sector",
+            TerritoryName = "Core Worlds",
+            Climate = Climate.Normal,
+            HyperspaceCoordinates = [13, 10]
+        };
+
+        world["coruscant_compnor_imperial_register"] = new Location
+        {
+            Id = "coruscant_compnor_imperial_register",
+            Name = "COMPNOR Imperial Register",
+            Description = "Row upon row of registry terminals catalog every citizen of the Empire. Quiet clerks input data with mechanical patience. The very air feels indexed and cross-referenced.",
+            Exits = new() { ["south"] = "coruscant_compnor_arcology" },
+            PossibleEncounters = new() { NPCData.ImperialOfficer, NPCData.ImperialOfficer, NPCData.Stormtrooper },
+            EncounterChance = 0.45,
+            AmbientMessages = new()
+            {
+                "A clerk pauses, glances at you, and silently makes a note in a record.",
+                "An automated voice intones: 'REGISTRATION RENEWAL: CITIZEN 4471-A. SUBMIT.'",
+                "Towering data tapestries scroll endlessly with names and identification numbers.",
+                "An ISB agent compares two manifests at an isolated desk and frowns.",
+                "A janitor droid waxes the floor in geometric perfection, never crossing the same line twice.",
+                "A holographic indicator blinks red over an empty workstation, then fades to amber.",
+                "Two registrars argue politely about whether a name should be reclassified.",
+                "The lighting flickers once. Every clerk pretends not to notice.",
+            },
+            PlanetName = "Coruscant",
+            StarSystemName = "Coruscant System",
+            SectorName = "Corusca Sector",
+            TerritoryName = "Core Worlds",
+            Climate = Climate.Normal,
+            HyperspaceCoordinates = [13, 10]
+        };
+
+        world["coruscant_federal_courtyard"] = new Location
+        {
+            Id = "coruscant_federal_courtyard",
+            Name = "Federal Courtyard",
+            Description = "A vast formal plaza fronting the Imperial Palace. Honor guards in gleaming armor stand motionless at every column. Holocrystal sculptures of Imperial victories rise from reflecting pools.",
+            Exits = new() { ["south"] = "coruscant_verity_courtyard", ["east"] = "coruscant_imperial_palace" },
+            PossibleEncounters = new() { NPCData.ImperialOfficer, NPCData.Stormtrooper, NPCData.Stormtrooper },
+            EncounterChance = 0.35,
+            AmbientMessages = new()
+            {
+                "Two Royal Guards in crimson helms watch you with utter, perfect stillness.",
+                "An aerial fly-by of TIE Defenders rattles the reflecting pools into ripples.",
+                "Senators in flowing robes confer in low voices, flanked by armored escorts.",
+                "A holographic Emperor speaks silently from a thirty-meter projector.",
+                "A protocol droid corrects a tourist's posture, gently but firmly.",
+                "The fountains shift in coordinated patterns, choreographed for the moment.",
+                "An ISB officer adjusts an earpiece and turns to follow someone with their gaze.",
+                "A Coruscant Guard squad runs through a precise formation drill, watched by a colonel.",
+            },
+            FriendlyNPCs = new() { NPCData.Merchant },
+            PlanetName = "Coruscant",
+            StarSystemName = "Coruscant System",
+            SectorName = "Corusca Sector",
+            TerritoryName = "Core Worlds",
+            Climate = Climate.Normal,
+            HyperspaceCoordinates = [13, 10]
+        };
+
+        world["coruscant_imperial_palace"] = new Location
+        {
+            Id = "coruscant_imperial_palace",
+            Name = "Imperial Palace - Public Atrium",
+            Description = "The Imperial Palace rises in dark mirrored facets, its public atrium a cathedral of Imperial power. Massive banners hang from the vaulted ceiling. Visitors tread softly; no one speaks above a whisper.",
+            Exits = new() { ["west"] = "coruscant_federal_courtyard" },
+            PossibleEncounters = new() { NPCData.ImperialOfficer, NPCData.DarkAdept, NPCData.Stormtrooper, NPCData.Stormtrooper },
+            EncounterChance = 0.5,
+            AmbientMessages = new()
+            {
+                "A Royal Guard turns their head a quarter-degree to track you, then resumes stillness.",
+                "The hum of Force-rich air thickens here. Something old listens from the upper galleries.",
+                "An ISB Inquisitor passes silently, eyes shielded by a mirrored visor. The temperature drops.",
+                "A senator emerges pale from an audience chamber, hands trembling.",
+                "Honor guard banners stir without any wind to carry them.",
+                "An automated voice softly invites you to 'PROCEED NO FURTHER, CITIZEN.'",
+                "A black-robed adjutant escorts a chained prisoner toward a sealed lift.",
+                "The polished obsidian floor reflects torches that aren't there.",
+            },
+            PlanetName = "Coruscant",
+            StarSystemName = "Coruscant System",
+            SectorName = "Corusca Sector",
+            TerritoryName = "Core Worlds",
+            Climate = Climate.Normal,
+            HyperspaceCoordinates = [13, 10]
         };
 
         // Note: deep_space uses a numeric `jump` menu (handled in CommandParser)
         // rather than static exits to in-system space locations.
 
         // Initialize NPC resolve for encounters
+        RegisterImported(world);
         return world;
     }
 }

@@ -2,7 +2,7 @@ using TerminalHyperspace.Models;
 
 namespace TerminalHyperspace.Content;
 
-public static class ItemData
+public static partial class ItemData
 {
     public static Item BlasterPistol => new()
     {

@@ -1,0 +1,40 @@
+[CHARACTER]
+Name=Wookie
+Species=Wookie
+Role=Bounty Hunter
+CurrentResolve=10
+[ATTRIBUTES]
+Dexterity=3,0
+Knowledge=1,2
+Mechanical=2,0
+Perception=2,2
+Strength=3,1
+Technical=1,2
+Force=1,0
+[SKILLS]
+Intimidate=1,1
+Athletics=0,2
+Blasters=0,2
+Search=0,2
+Streetwise=0,1
+Brawl=0,1
+Swim=0,1
+Stamina=0,1
+[INVENTORY]
+Item=Blaster Pistol|Standard-issue sidearm. Reliable and common across the galaxy.|True|3,0|Blasters|30
+Item=Medpack|Restores some Resolve when used. Requires a Medicine check.|False|0,0||0
+EquippedWeapon=Blaster Pistol
+EquippedArmor=Padded Flight Suit
+[VEHICLES]
+InVehicle=False
+InSpaceVehicle=False
+[GAMESTATE]
+Location=tatooine_espa_cantina
+TurnCount=0
+Credits=100
+EnemiesDefeated=0
+Visited=tatooine_espa_cantina
+Cleared=
+UpgradePoints=0
+ForcePoints=0
+CompletedChecks=

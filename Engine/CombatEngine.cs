@@ -126,7 +126,14 @@ public class CombatEngine
             {
                 var dmg = DiceRoller.Roll(new DiceCode(_player.GetAttribute(AttributeType.Strength).Dice));
                 _term.DiceRoll($"Unarmed damage: {dmg}");
-                int finalDmg = ApplyArmor(dmg.Total, _enemy);
+                int rawDmg = dmg.Total;
+                bool crit = atkTotal >= defense * 2;
+                if (crit)
+                {
+                    rawDmg *= 2;
+                    _term.Combat($"★ CRITICAL HIT! Damage doubled: {dmg.Total} → {rawDmg}");
+                }
+                int finalDmg = ApplyArmor(rawDmg, _enemy);
                 _enemy.CurrentResolve -= finalDmg;
                 _term.Combat($"You land a solid blow! {_enemy.Name} takes {finalDmg} damage.");
             }
@@ -151,7 +158,14 @@ public class CombatEngine
         {
             var damageRoll = DiceRoller.Roll(weapon.Damage);
             _term.DiceRoll($"Damage ({weapon.Name}): {damageRoll}");
-            int finalDmg = ApplyArmor(damageRoll.Total, _enemy);
+            int rawDmg = damageRoll.Total;
+            bool crit = attackTotal >= def * 2;
+            if (crit)
+            {
+                rawDmg *= 2;
+                _term.Combat($"★ CRITICAL HIT! Damage doubled: {damageRoll.Total} → {rawDmg}");
+            }
+            int finalDmg = ApplyArmor(rawDmg, _enemy);
             _enemy.CurrentResolve -= finalDmg;
             _term.Combat($"Hit! {_enemy.Name} takes {finalDmg} damage.");
         }
@@ -213,7 +227,14 @@ public class CombatEngine
         {
             var damageRoll = DiceRoller.Roll(selectedWeapon.Damage);
             _term.DiceRoll($"Vehicle weapon damage: {damageRoll}");
-            int finalDmg = ApplyArmor(damageRoll.Total, target);
+            int rawDmg = damageRoll.Total;
+            bool crit = attacker == _player && attackTotal >= def * 2;
+            if (crit)
+            {
+                rawDmg *= 2;
+                _term.Combat($"★ CRITICAL HIT! Damage doubled: {damageRoll.Total} → {rawDmg}");
+            }
+            int finalDmg = ApplyArmor(rawDmg, target);
             target.CurrentResolve -= finalDmg;
             _term.Combat($"Direct hit! {target.Name} takes {finalDmg} damage.");
         }

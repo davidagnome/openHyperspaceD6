@@ -33,13 +33,18 @@ public class CommandParser
                 Move(arg);
                 break;
             case "north": case "south": case "east": case "west":
+            case "northeast": case "northwest": case "southeast": case "southwest":
+            case "ne": case "nw": case "se": case "sw":
             case "up": case "down": case "dock": case "land":
             case "jump": case "explore": case "board":
             case "leave": case "airlock":
-                Move(cmd);
+                Move(ExpandDir(cmd));
                 break;
             case "locator":
                 Locator();
+                break;
+            case "map":
+                ShowMap();
                 break;
             case "status":
             case "sheet":
@@ -114,6 +119,11 @@ public class CommandParser
             case "saves":
                 ListSaves();
                 break;
+            case "journal":
+            case "missions":
+            case "mission":
+                ShowJournal();
+                break;
             case "help":
             case "?":
                 ShowHelp();
@@ -126,6 +136,229 @@ public class CommandParser
             default:
                 _term.Error($"Unknown command: '{cmd}'. Type 'help' for a list of commands.");
                 break;
+        }
+    }
+
+    // ===========================================================
+    // MISSIONS
+    // ===========================================================
+    private void ShowJournal()
+    {
+        _term.Header("MISSION JOURNAL");
+        var active = _state.Missions.Where(m => m.Status == MissionStatus.Active).ToList();
+        var completed = _state.Missions.Where(m => m.Status == MissionStatus.Completed).ToList();
+        var failed = _state.Missions.Where(m => m.Status == MissionStatus.Failed).ToList();
+
+        if (active.Count == 0 && completed.Count == 0 && failed.Count == 0)
+        {
+            _term.Info("  (no missions yet — talk to friendly NPCs to find work)");
+            return;
+        }
+
+        if (active.Count > 0)
+        {
+            _term.SubHeader("Active");
+            foreach (var m in active) PrintMissionLine(m);
+        }
+        if (completed.Count > 0)
+        {
+            _term.SubHeader("Completed");
+            foreach (var m in completed) PrintMissionLine(m);
+        }
+        if (failed.Count > 0)
+        {
+            _term.SubHeader("Failed");
+            foreach (var m in failed) PrintMissionLine(m);
+        }
+    }
+
+    private void PrintMissionLine(Mission m)
+    {
+        _term.Info($"  [{m.Type}] {m.Title}");
+        _term.Info($"      Destination: {m.DestinationName(_state.World)}");
+        switch (m.Type)
+        {
+            case MissionType.Escort when !string.IsNullOrEmpty(m.EscortNpcName):
+                _term.Info($"      Escorting:   {m.EscortNpcName}");
+                break;
+            case MissionType.Delivery when m.MissionItem != null:
+                _term.Info($"      Cargo:       {m.MissionItem.Name}");
+                break;
+            case MissionType.Sabotage:
+            case MissionType.Recon:
+                _term.Info($"      Skill check: {m.CheckSkill} (TN {m.CheckTargetNumber})");
+                break;
+        }
+        if (m.Status == MissionStatus.Active)
+            _term.Info($"      Reward:      {m.CreditReward} cr, +{m.UpgradePointReward} UP");
+    }
+
+    /// Offers a mission to the player. Returns true if accepted.
+    private bool OfferMission(Mission m)
+    {
+        _term.Blank();
+        _term.SubHeader("MISSION OFFER");
+        _term.Dialogue("Contact", m.BriefingText);
+        _term.Mechanic($"Type: {m.Type}    Destination: {m.DestinationName(_state.World)}");
+        _term.Mechanic($"Reward: {m.CreditReward} credits, +{m.UpgradePointReward} Upgrade Point{(m.UpgradePointReward == 1 ? "" : "s")}");
+        if (m.Type == MissionType.Sabotage || m.Type == MissionType.Recon)
+            _term.Mechanic($"On arrival: {m.CheckSkill} skill check (Target {m.CheckTargetNumber})");
+        _term.Prompt("Accept the job? [y]es / [n]o (decline)");
+        var answer = _term.ReadInput().Trim().ToLower();
+        if (answer != "y" && answer != "yes" && answer != "accept")
+        {
+            _term.Narrative("You decline. Your contact shrugs and finds someone else.");
+            return false;
+        }
+
+        m.Status = MissionStatus.Active;
+        _state.Missions.Add(m);
+        _state.OfferedMissionIds.Add(m.Id);
+
+        // Delivery missions place the cargo in the player's inventory.
+        if (m.Type == MissionType.Delivery && m.MissionItem != null)
+        {
+            _state.Player.Inventory.Add(m.MissionItem);
+            _term.Info($"  Received: {m.MissionItem.Name}. Take it to {m.MissionItem.MissionDestinationName}.");
+        }
+        else if (m.Type == MissionType.Escort)
+        {
+            _term.Info($"  {m.EscortNpcName} now follows you. Lead them to {m.DestinationName(_state.World)}.");
+        }
+        else
+        {
+            _term.Info($"  Mission accepted. Travel to {m.DestinationName(_state.World)}.");
+        }
+        _term.Info("  Type 'journal' anytime to review your active missions.");
+        return true;
+    }
+
+    /// Picks a mission offer the player hasn't seen and offers it.
+    private void MaybeOfferMissionDuringTalk()
+    {
+        var pool = MissionData.AllOffers
+            .Select(f => f())
+            .Where(m => !_state.OfferedMissionIds.Contains(m.Id))
+            .ToList();
+        if (pool.Count == 0) return;
+        var pick = pool[_rng.Next(pool.Count)];
+        OfferMission(pick);
+    }
+
+    /// Called after the player enters a new location. Resolves Delivery, Escort,
+    /// Sabotage, and Recon missions whose DestinationLocationId matches.
+    private void CheckMissionArrival()
+    {
+        var matches = _state.Missions
+            .Where(m => m.Status == MissionStatus.Active &&
+                        m.DestinationLocationId == _state.CurrentLocationId)
+            .ToList();
+        foreach (var m in matches) ResolveMissionArrival(m);
+    }
+
+    private void ResolveMissionArrival(Mission m)
+    {
+        _term.Blank();
+        _term.Header($"MISSION: {m.Title}");
+
+        switch (m.Type)
+        {
+            case MissionType.Escort:
+                _term.Narrative($"You deliver {m.EscortNpcName} safely to {m.DestinationName(_state.World)}.");
+                CompleteMission(m);
+                break;
+
+            case MissionType.Delivery:
+                if (m.MissionItem == null || !_state.Player.Inventory.Contains(m.MissionItem))
+                {
+                    _term.Error($"You arrived without {m.MissionItem?.Name ?? "the cargo"} — the mission fails.");
+                    m.Status = MissionStatus.Failed;
+                    return;
+                }
+                _state.Player.Inventory.Remove(m.MissionItem);
+                _term.Narrative($"You hand over the {m.MissionItem.Name}. Your contact nods and pays out.");
+                CompleteMission(m);
+                break;
+
+            case MissionType.Sabotage:
+            case MissionType.Recon:
+                ResolveMissionSkillCheck(m);
+                break;
+        }
+    }
+
+    private void ResolveMissionSkillCheck(Mission m)
+    {
+        var label = m.Type == MissionType.Sabotage ? "sabotage" : "recon";
+        _term.Mechanic($"Skill Check: {m.CheckSkill} (Target {m.CheckTargetNumber})");
+        _term.Prompt($"Attempt the {label} now? [y]es / [n]o (try later)");
+        if (_term.ReadInput().Trim().ToLower() != "y")
+        {
+            _term.Narrative("You hold off and blend into the surroundings.");
+            return;
+        }
+
+        var code = _state.Player.GetBestFor(m.CheckSkill);
+        bool fpDouble = ForceRoller.PromptForcePointDouble(_state, _term);
+        var roll = DiceRoller.Roll(code);
+        _term.DiceRoll($"{m.CheckSkill} ({code}): {roll}");
+        int finalTotal = ForceRoller.ApplyForcePointDouble(roll.Total, fpDouble, _term);
+
+        if (finalTotal >= m.CheckTargetNumber)
+        {
+            _term.Narrative(m.CheckSuccessText);
+            CompleteMission(m);
+        }
+        else
+        {
+            _term.Narrative(m.CheckFailText);
+            m.Status = MissionStatus.Failed;
+            _term.Error("  Mission failed.");
+        }
+    }
+
+    private void CompleteMission(Mission m)
+    {
+        m.Status = MissionStatus.Completed;
+        if (m.CreditReward > 0)
+        {
+            _state.CreditsBalance += m.CreditReward;
+            _term.Info($"  +{m.CreditReward} credits (Balance: {_state.CreditsBalance})");
+        }
+        if (m.UpgradePointReward > 0)
+        {
+            _state.UpgradePoints += m.UpgradePointReward;
+            _term.Info($"  +{m.UpgradePointReward} Upgrade Point{(m.UpgradePointReward == 1 ? "" : "s")} (Total: {_state.UpgradePoints})");
+        }
+        _term.SubHeader("★ Mission complete!");
+    }
+
+    private static string ExpandDir(string s) => s switch
+    {
+        "ne" => "northeast",
+        "nw" => "northwest",
+        "se" => "southeast",
+        "sw" => "southwest",
+        _ => s
+    };
+
+    private void ShowMap()
+    {
+        var snap = MapBuilder.Build(_state);
+        if (snap == null)
+        {
+            _term.Error("This location isn't on a named planet — no map to draw.");
+            return;
+        }
+        var bridge = UI.GuiBridge.Instance;
+        if (bridge != null)
+        {
+            bridge.RenderMap(snap);
+            _term.Info($"Opened planetary map: {snap.Planet}");
+        }
+        else
+        {
+            _term.Info($"Planetary map ({snap.Planet}): {snap.Rooms.Count} rooms — open the GUI to view.");
         }
     }
 
@@ -241,6 +474,7 @@ public class CommandParser
         Look();
         ShowAmbient();
         ApplyClimateEffects();
+        CheckMissionArrival();
 
         // Space encounters take priority in IsSpace locations when player is in a ship
         if (_state.CurrentLocation.IsSpace && _state.Player.InSpaceVehicle)
@@ -248,11 +482,9 @@ public class CommandParser
 
         CheckEncounter();
     }
-
-    /// <summary>
+    
     /// Presents a numeric jump menu from deep_space to every in-system space location
     /// (IsSpace && IsSystemSpace), grouped by Territory > Sector > Planet.
-    /// </summary>
     private void JumpFromDeepSpace()
     {
         if (_state.Player.SpaceVehicle == null || !_state.Player.InSpaceVehicle)
@@ -345,6 +577,7 @@ public class CommandParser
         Look();
         ShowAmbient();
         ApplyClimateEffects();
+        CheckMissionArrival();
 
         if (_state.CurrentLocation.IsSpace && _state.Player.InSpaceVehicle)
             CheckSpaceEncounter();
@@ -573,6 +806,8 @@ public class CommandParser
             var item = _state.Player.Inventory[i];
             var equipped = item == _state.Player.EquippedWeapon ? " [EQUIPPED]" : "";
             _term.Info($"  [{i + 1}] {item}{equipped}");
+            if (item.IsMissionItem && !string.IsNullOrEmpty(item.MissionDestinationName))
+                _term.Mechanic($"      ⮕ Mission cargo — deliver to: {item.MissionDestinationName}");
         }
     }
 
@@ -972,18 +1207,31 @@ public class CommandParser
         foreach (var (speaker, line) in dialogues)
             _term.Dialogue(speaker, line);
 
-        // Chance of a talk-based skill check quest
+        // Roll the conversation outcome: skill-check, mission offer, or small reward.
+        var outcome = _rng.NextDouble();
+
+        // Mission offer (~35% chance) when there's still a fresh mission to give.
+        bool hasFreshMission = MissionData.AllOffers.Any(f => !_state.OfferedMissionIds.Contains(f().Id));
+        if (hasFreshMission && outcome < 0.35)
+        {
+            MaybeOfferMissionDuringTalk();
+            return;
+        }
+
+        // Talk-based skill check (~40% of remaining)
         var availableChecks = SkillCheckData.TalkChecks
             .Where(c => !_state.CompletedChecks.Contains(c.Id))
             .ToList();
-        if (availableChecks.Count > 0 && _rng.NextDouble() < 0.5)
+        if (availableChecks.Count > 0 && outcome < 0.75)
         {
             var check = availableChecks[_rng.Next(availableChecks.Count)];
             _term.Blank();
             RunSkillCheck(check);
+            return;
         }
-        // Fallback: chance of a plain credit reward
-        else if (_rng.NextDouble() < 0.3)
+
+        // Small chance of a credit tip
+        if (_rng.NextDouble() < 0.3)
         {
             int reward = _rng.Next(20, 80);
             _state.CreditsBalance += reward;
@@ -1264,6 +1512,36 @@ public class CommandParser
         {
             _term.Blank();
             _term.Narrative(check.FailText);
+
+            // --- Failure penalties ---
+            if (check.CreditPenalty > 0)
+            {
+                int actual = Math.Min(check.CreditPenalty, _state.CreditsBalance);
+                _state.CreditsBalance -= actual;
+                _term.Error($"  -{actual} credits (Balance: {_state.CreditsBalance})");
+            }
+            if (!string.IsNullOrWhiteSpace(check.FailPenaltyText))
+            {
+                _term.Narrative(check.FailPenaltyText);
+            }
+            if (check.CombatNpcOnFail != null)
+            {
+                var enemy = check.CombatNpcOnFail();
+                enemy.InitializeResolve();
+                _term.Blank();
+                _term.Combat($"Things turn violent — {enemy.Name} moves to attack!");
+                _term.Mechanic($"Defense: {enemy.Defense} | Resolve: {enemy.Resolve}");
+
+                var combat = new CombatEngine(_state.Player, enemy, _term, _state);
+                bool survived = combat.RunCombat();
+                if (!survived)
+                {
+                    _state.GameOver = true;
+                    return;
+                }
+                if (enemy.IsDefeated)
+                    _state.EnemiesDefeated++;
+            }
         }
     }
 
@@ -1391,6 +1669,7 @@ public class CommandParser
         _term.Info("    north/south/east/west — Cardinal directions");
         _term.Info("    up/down/dock/jump     — Special directions");
         _term.Info("    locator               — Location by Planet, Star System, Sector");
+        _term.Info("    map                   — Show a planetary map of all rooms");
         _term.Info("");
         _term.Info("  Character:");
         _term.Info("    status / sheet        — View your character sheet");
@@ -1403,6 +1682,7 @@ public class CommandParser
         _term.Info("    talk                  — Talk to friendly NPCs");
         _term.Info("    use <item>            — Use an item (e.g., 'use medpack')");
         _term.Info("    rest                  — Rest to recover Resolve");
+        _term.Info("    journal / missions    — View active and completed missions");
         _term.Info("    upgrade / levelup     — Spend Upgrade Points on attributes/skills");
         _term.Info("    roll <skill/attr>     — Make a skill or attribute roll");
         _term.Info("");

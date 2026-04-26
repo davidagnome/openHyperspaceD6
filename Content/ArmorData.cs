@@ -2,7 +2,7 @@ using TerminalHyperspace.Models;
 
 namespace TerminalHyperspace.Content;
 
-public static class ArmorData
+public static partial class ArmorData
 {
     public static readonly Armor Unarmored = new()
     {
@@ -65,7 +65,7 @@ public static class ArmorData
         => All.FirstOrDefault(a => a.Name.Equals(name, StringComparison.OrdinalIgnoreCase)) ?? Unarmored;
 }
 
-public static class ShieldData
+public static partial class ShieldData
 {
     public static readonly VehicleShield Unshielded = new()
     {

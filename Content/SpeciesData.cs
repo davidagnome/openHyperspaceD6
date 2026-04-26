@@ -2,10 +2,16 @@ using TerminalHyperspace.Models;
 
 namespace TerminalHyperspace.Content;
 
-public static class SpeciesData
+public static partial class SpeciesData
 {
-    public static List<Species> All => new()
+    static partial void RegisterImported(List<Species> list);
+
+    public static List<Species> All
     {
+        get
+        {
+            var list = new List<Species>
+            {
         new Species
         {
             Name = "Human",
@@ -183,5 +189,9 @@ public static class SpeciesData
                 [SkillType.Alter] = new DiceCode(0, 1),
             }
         },
-    };
+            };
+            RegisterImported(list);
+            return list;
+        }
+    }
 }

@@ -1,0 +1,21 @@
+{
+  "version": 2,
+  "dgSpecHash": "wCaWe9EGBtE=",
+  "success": true,
+  "projectFilePath": "/Volumes/Data/Dev/terminalHyperspace/Tools/Importer/Importer.csproj",
+  "expectedPackageFiles": [
+    "/Users/dpeters911/.nuget/packages/closedxml/0.104.2/closedxml.0.104.2.nupkg.sha512",
+    "/Users/dpeters911/.nuget/packages/closedxml.parser/1.2.0/closedxml.parser.1.2.0.nupkg.sha512",
+    "/Users/dpeters911/.nuget/packages/documentformat.openxml/3.1.1/documentformat.openxml.3.1.1.nupkg.sha512",
+    "/Users/dpeters911/.nuget/packages/documentformat.openxml.framework/3.1.1/documentformat.openxml.framework.3.1.1.nupkg.sha512",
+    "/Users/dpeters911/.nuget/packages/excelnumberformat/1.1.0/excelnumberformat.1.1.0.nupkg.sha512",
+    "/Users/dpeters911/.nuget/packages/microsoft.net.illink.tasks/10.0.3/microsoft.net.illink.tasks.10.0.3.nupkg.sha512",
+    "/Users/dpeters911/.nuget/packages/rbush/4.0.0/rbush.4.0.0.nupkg.sha512",
+    "/Users/dpeters911/.nuget/packages/sixlabors.fonts/1.0.0/sixlabors.fonts.1.0.0.nupkg.sha512",
+    "/Users/dpeters911/.nuget/packages/system.io.packaging/8.0.1/system.io.packaging.8.0.1.nupkg.sha512",
+    "/Users/dpeters911/.nuget/packages/microsoft.netcore.app.runtime.linux-x64/10.0.3/microsoft.netcore.app.runtime.linux-x64.10.0.3.nupkg.sha512",
+    "/Users/dpeters911/.nuget/packages/microsoft.aspnetcore.app.runtime.linux-x64/10.0.3/microsoft.aspnetcore.app.runtime.linux-x64.10.0.3.nupkg.sha512",
+    "/Users/dpeters911/.nuget/packages/microsoft.netcore.app.host.linux-x64/10.0.3/microsoft.netcore.app.host.linux-x64.10.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}

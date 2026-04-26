@@ -174,7 +174,14 @@ public class SpaceCombatEngine
         {
             var damageRoll = DiceRoller.Roll(selectedWeapon.Damage);
             _term.DiceRoll($"Weapon damage ({selectedWeapon.Name}): {damageRoll}");
-            int finalDmg = ApplyShields(damageRoll.Total, _enemyShip);
+            int rawDmg = damageRoll.Total;
+            bool crit = attackTotal >= defenseRoll.Total * 2;
+            if (crit)
+            {
+                rawDmg *= 2;
+                _term.Combat($"★ CRITICAL HIT! Damage doubled: {damageRoll.Total} → {rawDmg}");
+            }
+            int finalDmg = ApplyShields(rawDmg, _enemyShip);
             _enemyShip.CurrentResolve -= finalDmg;
             _term.Combat($"Direct hit on {_enemyShip.Name}! {finalDmg} damage dealt.");
         }
