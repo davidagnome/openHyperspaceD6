@@ -1322,21 +1322,315 @@ public static partial class SkillCheckData
     };
 
     // =========================================================
+    // BESTINE / JUNDLAND BRANCH (Tatooine)
+    // =========================================================
+    public static SkillCheckEvent PikaOasisFermentedFruit => new()
+    {
+        Id = "pika_oasis_fermentedfruit",
+        Description = "A pikobi-fruit fallen from the bough has fermented in the heat. Sniff test or harvest with care?",
+        SuccessText = "You time the harvest perfectly — half a dozen ripe fruits, prized as offworld delicacy.",
+        FailText = "You misjudge the spore release; the fruit collapses into a pungent, useless mash.",
+        Skill = SkillType.Survival, Difficulty = CheckDifficulty.Easy,
+        TargetNumber = 9, CreditReward = 35, UpgradePointReward = 1, Repeatable = true,
+    };
+    public static SkillCheckEvent PikaOasisTuskenTruce => new()
+    {
+        Id = "pika_oasis_tusken",
+        Description = "Tusken handlers are watering banthas at the spring. A misstep here could break the unspoken truce.",
+        SuccessText = "You move with deliberate stillness, eyes lowered. The Tuskens accept your presence and ignore you.",
+        FailText = "A handler bristles at your approach and reaches for a gaderffii.",
+        FailPenaltyText = "The truce is broken — at least for you.",
+        Skill = SkillType.Agility, Difficulty = CheckDifficulty.Moderate,
+        TargetNumber = 13, CreditReward = 0, UpgradePointReward = 2,
+        CombatNpcOnFail = NPCData.TuskenRaider,
+    };
+    public static SkillCheckEvent PikaOasisHiddenCache => new()
+    {
+        Id = "pika_oasis_cache",
+        Description = "Old smuggler signs are scratched into a tree trunk near the spring. Read them right and there might be a cache nearby.",
+        SuccessText = "Ten meters east, three paces from the boulder — credits and a pristine spice phial.",
+        FailText = "You misread the marks and dig up only old ration wrappers.",
+        Skill = SkillType.Streetwise, Difficulty = CheckDifficulty.Moderate,
+        TargetNumber = 12, CreditReward = 80, UpgradePointReward = 1,
+    };
+
+    public static SkillCheckEvent BestineOutskirtsRecruiterDodge => new()
+    {
+        Id = "bestine_outskirts_recruiter",
+        Description = "An Imperial recruiter blocks your path with a smile. 'Have you considered serving the Empire, citizen?'",
+        SuccessText = "You ramble on about chronic foot pain and old injuries until they politely let you pass.",
+        FailText = "Your evasion comes off as suspicious. They scan your transponder.",
+        FailPenaltyText = "A 'civic infraction' fine is debited from your account.",
+        Skill = SkillType.Deceive, Difficulty = CheckDifficulty.Easy,
+        TargetNumber = 10, CreditReward = 20, UpgradePointReward = 1, CreditPenalty = 30,
+    };
+    public static SkillCheckEvent BestineOutskirtsSpeederSalvage => new()
+    {
+        Id = "bestine_outskirts_speeder",
+        Description = "An abandoned speeder up on blocks looks salvageable. Could you scavenge a working part without being seen?",
+        SuccessText = "You ease a working power converter free without spilling fluids. A nice score.",
+        FailText = "You snap a fuel line; coolant hisses everywhere and the kid in the cockpit yells.",
+        Skill = SkillType.Vehicles, Difficulty = CheckDifficulty.Moderate,
+        TargetNumber = 12, CreditReward = 65, UpgradePointReward = 1, Repeatable = true,
+    };
+    public static SkillCheckEvent BestineOutskirtsDroidHelp => new()
+    {
+        Id = "bestine_outskirts_droid",
+        Description = "A vagrant droid beeps weakly at your feet, motivator failing. A few minutes of work could save it.",
+        SuccessText = "You patch the motivator with field improvisations. The droid follows you for a block in gratitude.",
+        FailText = "You short the wrong relay; the droid sparks and goes still.",
+        Skill = SkillType.Droids, Difficulty = CheckDifficulty.Moderate,
+        TargetNumber = 12, CreditReward = 40, UpgradePointReward = 1,
+    };
+
+    public static SkillCheckEvent BestineMarketBountyList => new()
+    {
+        Id = "bestine_market_bountylist",
+        Description = "The herald's bounty list scrolls by quickly. A close read might turn up actionable intel — or your own face.",
+        SuccessText = "You memorize three open contracts and one familiar name. Useful information for the right buyer.",
+        FailText = "An ISB watcher notices you reading too intently. They make a note.",
+        Skill = SkillType.Search, Difficulty = CheckDifficulty.Moderate,
+        TargetNumber = 13, CreditReward = 90, UpgradePointReward = 1,
+    };
+    public static SkillCheckEvent BestineMarketBothanDropoff => new()
+    {
+        Id = "bestine_market_bothan",
+        Description = "A Bothan in a long coat brushes past you. A slip of flimsi is now in your pocket. Read it discreetly?",
+        SuccessText = "Coordinates and a delivery schedule. Whoever you hand this to next will pay generously.",
+        FailText = "A patrol notices you reading and moves to investigate.",
+        FailPenaltyText = "The flimsi is confiscated.",
+        Skill = SkillType.Hide, Difficulty = CheckDifficulty.Difficult,
+        TargetNumber = 16, CreditReward = 150, UpgradePointReward = 2,
+        CombatNpcOnFail = NPCData.Stormtrooper,
+    };
+    public static SkillCheckEvent BestineMarketHaggle => new()
+    {
+        Id = "bestine_market_haggle",
+        Description = "A vendor wants too much for a 'pre-Imperial' rifle. The serial numbers are clearly ground off.",
+        SuccessText = "You point out the alterations and the vendor's tone shifts. The price drops sharply.",
+        FailText = "The vendor calls your bluff and ends the haggle. Word spreads to other stalls.",
+        Skill = SkillType.Persuade, Difficulty = CheckDifficulty.Moderate,
+        TargetNumber = 13, CreditReward = 50, UpgradePointReward = 1, Repeatable = true,
+    };
+
+    public static SkillCheckEvent GarrisonInfiltratePerimeter => new()
+    {
+        Id = "garrison_perimeter",
+        Description = "A walking patrol turns the corner ahead. You could blend in or duck into a side alley.",
+        SuccessText = "You find a vantage that lets you note patrol timing without being seen. Useful for any future op.",
+        FailText = "A trooper makes eye contact through their visor and turns toward you.",
+        FailPenaltyText = "Your face is now logged in the perimeter system.",
+        Skill = SkillType.Hide, Difficulty = CheckDifficulty.Difficult,
+        TargetNumber = 16, CreditReward = 0, UpgradePointReward = 2,
+        CombatNpcOnFail = NPCData.Stormtrooper,
+    };
+    public static SkillCheckEvent GarrisonATSTSchematic => new()
+    {
+        Id = "garrison_atst",
+        Description = "An AT-ST sits with an open access panel; a clever scan could capture diagnostics data.",
+        SuccessText = "Your datapad pulls a clean schematic dump as you hop off the AT-ST's foot. The Rebellion will be very grateful.",
+        FailText = "The walker's automated countermeasures detect your scan. Best to leave before the Empire shows up.",
+        Skill = SkillType.Sensors, Difficulty = CheckDifficulty.Difficult,
+        TargetNumber = 17, CreditReward = 200, UpgradePointReward = 2,
+    };
+    public static SkillCheckEvent GarrisonForgedClearance => new()
+    {
+        Id = "garrison_clearance",
+        Description = "You spot a clearance terminal momentarily unattended.",
+        SuccessText = "You slice a temporary clearance code into your datapad — useful for one round of mischief.",
+        FailText = "The terminal flags your attempt and chimes for the duty officer.",
+        Skill = SkillType.Computers, Difficulty = CheckDifficulty.Difficult,
+        TargetNumber = 18, CreditReward = 180, UpgradePointReward = 2,
+        CombatNpcOnFail = NPCData.ImperialOfficer,
+    };
+
+    public static SkillCheckEvent SpaceportCustomsBypass => new()
+    {
+        Id = "spaceport_customs",
+        Description = "A customs droid demands an unscheduled scan. Quick talk or quick fingers?",
+        SuccessText = "You produce paperwork that satisfies the droid. It chirps approval and moves on.",
+        FailText = "The droid escalates to a human officer who orders a full search.",
+        FailPenaltyText = "Inspection fees are levied.",
+        Skill = SkillType.Persuade, Difficulty = CheckDifficulty.Moderate,
+        TargetNumber = 13, CreditReward = 60, UpgradePointReward = 1, CreditPenalty = 50,
+    };
+    public static SkillCheckEvent SpaceportRefuelScam => new()
+    {
+        Id = "spaceport_refuel",
+        Description = "An automated refueling station has its diagnostics panel ajar. A small adjustment could buy you free fuel.",
+        SuccessText = "You spoof the meter long enough to top off your tanks for free.",
+        FailText = "The system alerts the dockmaster of meter tampering. Better leave quickly.",
+        Skill = SkillType.Computers, Difficulty = CheckDifficulty.Moderate,
+        TargetNumber = 14, CreditReward = 75, UpgradePointReward = 1, Repeatable = true,
+    };
+    public static SkillCheckEvent SpaceportPilotIntel => new()
+    {
+        Id = "spaceport_pilot",
+        Description = "A bounty hunter's pilot is sharing drinks with locals near the queue. They might let slip a route.",
+        SuccessText = "You match them shot-for-shot and walk away with a smuggler's cleared lane through the Rift.",
+        FailText = "They sober up faster than expected and demand to know who's asking.",
+        Skill = SkillType.Persuade, Difficulty = CheckDifficulty.Difficult,
+        TargetNumber = 16, CreditReward = 130, UpgradePointReward = 2,
+    };
+
+    public static SkillCheckEvent JundlandEastWarningBell => new()
+    {
+        Id = "jundland_east_bell",
+        Description = "A warning bell hangs from a krayt-dragon's rib. Ringing it might keep something away — or call it forth.",
+        SuccessText = "You ring the bell once, briefly. The wind responds, and a shape on a distant ridge moves on.",
+        FailText = "You ring it too long. Something distant takes notice.",
+        Skill = SkillType.Deceive, Difficulty = CheckDifficulty.Moderate,
+        TargetNumber = 13, CreditReward = 0, UpgradePointReward = 1,
+    };
+    public static SkillCheckEvent JundlandEastFootprints => new()
+    {
+        Id = "jundland_east_tracks",
+        Description = "Footprints cross your path and end mid-stride. The weight pattern is wrong for a humanoid.",
+        SuccessText = "You read the gait, the impressions, and the timing — a scout's notes worth selling to the right cell.",
+        FailText = "You misread the spoor and follow it the wrong way for an hour.",
+        Skill = SkillType.Survival, Difficulty = CheckDifficulty.Moderate,
+        TargetNumber = 12, CreditReward = 60, UpgradePointReward = 1,
+    };
+    public static SkillCheckEvent JundlandEastBanditAmbush => new()
+    {
+        Id = "jundland_east_ambush",
+        Description = "Pirate scouts have set a clumsy ambush in a slot canyon ahead. Might be best to slip past them",
+        SuccessText = "You skirt the ambush via a high ledge and watch from above, unseen.",
+        FailText = "A foot slip alerts the Pirates.",
+        Skill = SkillType.Hide, Difficulty = CheckDifficulty.Moderate,
+        TargetNumber = 13, CreditReward = 50, UpgradePointReward = 1,
+        CombatNpcOnFail = NPCData.PirateThugs,
+    };
+
+    public static SkillCheckEvent JundlandCentralPictograph => new()
+    {
+        Id = "jundland_central_pictograph",
+        Description = "Tusken pictographs cover the canyon wall. Decoding them could reveal a hidden water source — or a war path.",
+        SuccessText = "You parse the symbols: a hidden cistern lies two ridges south. Useful intel for any caravan.",
+        FailText = "Your interpretation is wrong; the pictographs were a curse, and you've now read it aloud.",
+        Skill = SkillType.Xenology, Difficulty = CheckDifficulty.Difficult,
+        TargetNumber = 16, CreditReward = 100, UpgradePointReward = 2,
+    };
+    public static SkillCheckEvent JundlandCentralEchoNavigate => new()
+    {
+        Id = "jundland_central_echo",
+        Description = "Sound echoes off three different canyons at once. Picking the true direction is a challenge.",
+        SuccessText = "You triangulate the source: footsteps two canyons over, moving away. You move toward them.",
+        FailText = "You guess wrong and lose half a day to the maze.",
+        Skill = SkillType.Search, Difficulty = CheckDifficulty.Moderate,
+        TargetNumber = 13, CreditReward = 40, UpgradePointReward = 1,
+    };
+    public static SkillCheckEvent JundlandCentralJediScrap => new()
+    {
+        Id = "jundland_central_jediscrap",
+        Description = "A scrap of robe caught on rock. Old, sun-bleached, brown. Worth a closer look?",
+        SuccessText = "You recover a fragment with a faint Jedi insignia.",
+        FailText = "You snag the fabric on the rock and tear it beyond recovery.",
+        Skill = SkillType.Galaxy, Difficulty = CheckDifficulty.Difficult,
+        TargetNumber = 17, CreditReward = 160, UpgradePointReward = 2,
+    };
+
+    public static SkillCheckEvent JundlandWestSpireClimb => new()
+    {
+        Id = "jundland_west_climb",
+        Description = "An eroded rock spire could offer a vantage of the entire western Jundland. The climb is treacherous but rewarding.",
+        SuccessText = "From the top you spot a Tusken hunting party miles east — and a single light burning in the hermit's window.",
+        FailText = "You slip on loose scree and tumble to a painful stop a few meters down.",
+        Skill = SkillType.Athletics, Difficulty = CheckDifficulty.Moderate,
+        TargetNumber = 14, CreditReward = 0, UpgradePointReward = 2,
+    };
+    public static SkillCheckEvent JundlandWestMeditationCairn => new()
+    {
+        Id = "jundland_west_cairn",
+        Description = "A small stone cairn sits unnatural in this place. Sitting here, the desert hums quietly.",
+        SuccessText = "You feel a current of the Force pass through. Your mind sharpens; old answers click into place.",
+        FailText = "You sit, but the desert is just a desert. Sand in your boots, sun in your eyes.",
+        Skill = SkillType.Sense, Difficulty = CheckDifficulty.Difficult,
+        TargetNumber = 16, CreditReward = 0, UpgradePointReward = 3,
+    };
+    public static SkillCheckEvent JundlandWestTuskenWatcher => new()
+    {
+        Id = "jundland_west_watcher",
+        Description = "A Tusken Elder watches you from a southern bluff. Showing respect and peaceful intent will help",
+        SuccessText = "You leave a small offering on a flat stone. The Tusken inclines their head, just slightly.",
+        FailText = "You misjudge the gesture; the Elder rises and a coordinated cry rises from the rocks.",
+        Skill = SkillType.Xenology, Difficulty = CheckDifficulty.Moderate,
+        TargetNumber = 14, CreditReward = 0, UpgradePointReward = 2,
+        CombatNpcOnFail = NPCData.TuskenRaider,
+    };
+
+    public static SkillCheckEvent JawaTerritoriesAuctionWin => new()
+    {
+        Id = "jawa_auction_win",
+        Description = "A R5-series droid is on the auction block. With the right bid, it could be yours.",
+        SuccessText = "You win the bid for a song. The droid trills a thankful tune as it powers up under your control.",
+        FailText = "The bidding spirals; you walk away with empty pockets and no droid.",
+        Skill = SkillType.Persuade, Difficulty = CheckDifficulty.Moderate,
+        TargetNumber = 13, CreditReward = 0, UpgradePointReward = 2, CreditPenalty = 60,
+    };
+    public static SkillCheckEvent JawaTerritoriesSalvageStream => new()
+    {
+        Id = "jawa_territories_salvage",
+        Description = "A sandcrawler's belt spools out salvage in a slow conveyor stream. The Jawas are distracted.",
+        SuccessText = "You pluck a working motivator off the belt without being seen. Resaleable, easily.",
+        FailText = "A sharp Jawa elder catches your hand mid-grab and chitters furiously.",
+        Skill = SkillType.Steal, Difficulty = CheckDifficulty.Moderate,
+        TargetNumber = 14, CreditReward = 70, UpgradePointReward = 1, Repeatable = true,
+    };
+    public static SkillCheckEvent JawaTerritoriesPartIdentify => new()
+    {
+        Id = "jawa_territories_part",
+        Description = "An auctioneer tries to pass off a damaged hyperdrive coil as 'lightly used.' Can you tell the difference?",
+        SuccessText = "You point out the welded crack. The crowd murmurs; the Jawa lowers the price drastically.",
+        FailText = "You bid high on a coil that won't last a single jump.",
+        Skill = SkillType.Vehicles, Difficulty = CheckDifficulty.Moderate,
+        TargetNumber = 13, CreditReward = 60, UpgradePointReward = 1, CreditPenalty = 80,
+    };
+
+    public static SkillCheckEvent OldBenJournalRead => new()
+    {
+        Id = "oldben_journal",
+        Description = "A hand-stitched journal half-buried in sand. The script is archaic Aurebesh.",
+        SuccessText = "You decipher entries about meditation, exile, and a child to be raised in secret. Profoundly important.",
+        FailText = "The script defeats you; you copy a few characters and move on, sensing you missed something.",
+        Skill = SkillType.Galaxy, Difficulty = CheckDifficulty.Challenging,
+        TargetNumber = 20, CreditReward = 0, UpgradePointReward = 3,
+    };
+    public static SkillCheckEvent OldBenForcePresence => new()
+    {
+        Id = "oldben_presence",
+        Description = "The Force here is patient and watchful. Reaching out to it, gently, might reveal something.",
+        SuccessText = "A flicker — an old Jedi's voice, calm: 'You will learn what you must, when you must.' It fades.",
+        FailText = "You reach out clumsily; the watcher withdraws, and the room feels colder.",
+        Skill = SkillType.Sense, Difficulty = CheckDifficulty.Challenging,
+        TargetNumber = 21, CreditReward = 0, UpgradePointReward = 3,
+    };
+    public static SkillCheckEvent OldBenSaberCircle => new()
+    {
+        Id = "oldben_saber",
+        Description = "A scorched circle on the floor where a saber once cut stone. Examining it might reveal the cut's age.",
+        SuccessText = "You date the cut to roughly two decades ago. Whoever made it has been gone — or hidden — that long.",
+        FailText = "Heat patterns elude you. The cut is old; that's all you can say.",
+        Skill = SkillType.Melee, Difficulty = CheckDifficulty.Difficult,
+        TargetNumber = 17, CreditReward = 0, UpgradePointReward = 2,
+    };
+
+    // =========================================================
     // TALK-TRIGGERED CHECKS (quest pool)
     // =========================================================
     public static SkillCheckEvent TalkMedicineRequest => new()
     {
         Id = "talk_medicine",
-        Description = "A wounded spacer leans against the wall, clutching a blaster burn. 'Please... can you patch me up?'",
-        SuccessText = "You clean and dress the wound with practiced hands. The spacer thanks you profusely and insists on paying.",
-        FailText = "You do your best, but the wound needs more than you can offer. 'Thanks for trying,' the spacer winces.",
+        Description = "A wounded local leans against the wall, clutching a blaster burn. 'Please, can you patch me up?'",
+        SuccessText = "You clean and dress the wound. The local thanks you profusely and insists on paying.",
+        FailText = "You do your best, but the wound needs more than you can offer. 'Thanks for trying,' they wince.",
         Skill = SkillType.Medicine, Difficulty = CheckDifficulty.Easy,
         TargetNumber = 9, CreditReward = 25, UpgradePointReward = 1,
     };
     public static SkillCheckEvent TalkWillpowerInterrogation => new()
     {
         Id = "talk_willpower",
-        Description = "An Imperial agent approaches. 'We're looking for a fugitive. You wouldn't happen to know anything, would you?' Their gaze is piercing.",
+        Description = "An Imperial agent approaches. 'We're looking for a fugitive. You wouldn't happen to know anything, would you?'",
         SuccessText = "You meet their stare without flinching. 'Can't help you.' The agent moves on, satisfied you're not hiding anything.",
         FailText = "You stammer and avert your eyes. 'We'll be watching you, spacer.'",
         FailPenaltyText = "An arbitrary 'processing fee' is levied.",
@@ -1413,6 +1707,16 @@ public static partial class SkillCheckData
         ["coruscant_compnor_imperial_register"] = new() { CoruscantRegisterRecordSlice, CoruscantRegisterClerkBribe, CoruscantRegisterAuditTrail },
         ["coruscant_federal_courtyard"] = new() { CoruscantFederalRoyalGuardStare, CoruscantFederalSenatorFavor, CoruscantFederalDroneIntercept },
         ["coruscant_imperial_palace"] = new() { CoruscantPalaceForceEcho, CoruscantPalaceDataCourier, CoruscantPalaceInquisitorAvoid },
+        ["tatooine_pika_oasis"] = new() { PikaOasisFermentedFruit, PikaOasisTuskenTruce, PikaOasisHiddenCache },
+        ["tatooine_bestine_outskirts"] = new() { BestineOutskirtsRecruiterDodge, BestineOutskirtsSpeederSalvage, BestineOutskirtsDroidHelp },
+        ["tatooine_bestine_market"] = new() { BestineMarketBountyList, BestineMarketBothanDropoff, BestineMarketHaggle },
+        ["tatooine_bestine_garrison"] = new() { GarrisonInfiltratePerimeter, GarrisonATSTSchematic, GarrisonForgedClearance },
+        ["tatooine_bestine_spaceport"] = new() { SpaceportCustomsBypass, SpaceportRefuelScam, SpaceportPilotIntel },
+        ["tatooine_judland_wasteland_east"] = new() { JundlandEastWarningBell, JundlandEastFootprints, JundlandEastBanditAmbush },
+        ["tatooine_judland_wasteland_central"] = new() { JundlandCentralPictograph, JundlandCentralEchoNavigate, JundlandCentralJediScrap },
+        ["tatooine_judland_wasteland_west"] = new() { JundlandWestSpireClimb, JundlandWestMeditationCairn, JundlandWestTuskenWatcher },
+        ["tatooine_northern_jawa_territories"] = new() { JawaTerritoriesAuctionWin, JawaTerritoriesSalvageStream, JawaTerritoriesPartIdentify },
+        ["tatooine_old_ben_residence"] = new() { OldBenJournalRead, OldBenForcePresence, OldBenSaberCircle },
             };
             RegisterImportedLocationChecks(map);
             return map;

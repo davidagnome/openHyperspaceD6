@@ -128,11 +128,97 @@ public static partial class MissionData
         UpgradePointReward = 1,
     };
 
+    // ===========================================================
+    // BESTINE / JUNDLAND BRANCH
+    // ===========================================================
+    public static Mission EscortFugitiveToOldBen() => new()
+    {
+        Id = "escort_oldben",
+        Title = "Escort a Fugitive to the Hermit's Bluff",
+        BriefingText = "A frightened young woman needs to reach the hermit at the edge of the Jundland. She won't say why. She has paid in advance, in pre-Imperial credits.",
+        Type = MissionType.Escort,
+        DestinationLocationId = "tatooine_old_ben_residence",
+        EscortNpcName = "Frightened Fugitive",
+        CreditReward = 350,
+        UpgradePointReward = 2,
+    };
+
+    public static Mission DeliveryJawaParts() => new()
+    {
+        Id = "delivery_jawaparts",
+        Title = "Courier a Crate of Salvage to the Jawa Camp",
+        BriefingText = "A Bestine merchant needs a sealed crate of refurbished motivators delivered to the Jawa traders in the northern wastes. They'll pay double for hand-delivery.",
+        Type = MissionType.Delivery,
+        DestinationLocationId = "tatooine_northern_jawa_territories",
+        MissionItem = new Item
+        {
+            Name = "Crate of Refurbished Motivators",
+            Description = "A heavy durasteel crate. The contents whistle faintly when shaken.",
+            IsMissionItem = true,
+            MissionDestinationLocationId = "tatooine_northern_jawa_territories",
+            MissionDestinationName = "Northern Jawa Territories",
+        },
+        CreditReward = 280,
+        UpgradePointReward = 1,
+    };
+
+    public static Mission SabotageBestineGarrison() => new()
+    {
+        Id = "sabotage_bestine_garrison",
+        Title = "Disable the Bestine Garrison's Walker Bay",
+        BriefingText = "A Rebel cell needs the AT-ST maintenance bay knocked offline for forty-eight hours. Slip in, weld a few coolant lines wrong, slip out.",
+        Type = MissionType.Sabotage,
+        DestinationLocationId = "tatooine_bestine_garrison",
+        CheckSkill = SkillType.Armament,
+        CheckTargetNumber = 18,
+        CheckSuccessText = "You re-route the coolant return through a heat-soaked manifold. By the time the techs find the fault, the bay is dark for two days.",
+        CheckFailText = "Sparks fly from the wrong relay. Klaxons sound and you barely make it back to the gate.",
+        CreditReward = 450,
+        UpgradePointReward = 3,
+    };
+
+    public static Mission ReconJundlandTuskenPaths() => new()
+    {
+        Id = "recon_jundland_paths",
+        Title = "Map the Tusken Patrol Routes in Central Jundland",
+        BriefingText = "An offworld survey team needs a clean map of the Tusken patrol patterns through the central Jundland. Survive long enough to chart them.",
+        Type = MissionType.Recon,
+        DestinationLocationId = "tatooine_judland_wasteland_central",
+        CheckSkill = SkillType.Survival,
+        CheckTargetNumber = 15,
+        CheckSuccessText = "Three days, three patrols, one clear pattern. Your map sells for twice the agreed rate.",
+        CheckFailText = "You lose the trail in a slot canyon and emerge with sketchy notes the buyers reject.",
+        CreditReward = 220,
+        UpgradePointReward = 1,
+    };
+
+    public static Mission DeliveryHermitJournal() => new()
+    {
+        Id = "delivery_hermit_journal",
+        Title = "Return a Recovered Journal to the Hermit's Bluff",
+        BriefingText = "An old hand-stitched journal surfaced in a Bestine pawnshop. A whispered contact wants it returned to the hermit's residence — quietly.",
+        Type = MissionType.Delivery,
+        DestinationLocationId = "tatooine_old_ben_residence",
+        MissionItem = new Item
+        {
+            Name = "Hand-Stitched Journal",
+            Description = "Cracked leather binding, archaic Aurebesh on the spine. Heavier than it looks.",
+            IsMissionItem = true,
+            MissionDestinationLocationId = "tatooine_old_ben_residence",
+            MissionDestinationName = "Old Ben's Residence",
+        },
+        CreditReward = 320,
+        UpgradePointReward = 2,
+    };
+
     public static List<Func<Mission>> AllOffers => new()
     {
         EscortDiplomat, EscortInformant,
         DeliverySpiceCargo, DeliveryDataPad,
         SabotageReactor, SabotageCommand,
         ReconHangar, ReconTunnels,
+        EscortFugitiveToOldBen, DeliveryJawaParts,
+        SabotageBestineGarrison, ReconJundlandTuskenPaths,
+        DeliveryHermitJournal,
     };
 }

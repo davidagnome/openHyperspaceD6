@@ -504,7 +504,7 @@ public static partial class LocationData
             Id = "tatooine_mospic_high_range",
             Name = "Mospic High Range",
             Description = "The Mospic High Range looms above the desert floor in broken tiers of wind-carved red-rock plateaus and deep shadowed canyons. Ancient Tusken burial cairns mark every ridge line; the Raiders consider these highlands sacred ground and defend them without mercy. There are no roads here—only goat trails worn by Banthas and the patient footsteps of Sand People who have called this wilderness home for ten thousand years.",
-            Exits = new() { ["northwest"] = "tatooine_mos_entha" },
+            Exits = new() { ["northwest"] = "tatooine_mos_entha", ["south"] = "tatooine_pika_oasis" },
             PossibleEncounters = new() { NPCData.TuskenRaider, NPCData.TuskenRaider },
             EncounterChance = 0.55,
             AmbientMessages = new()
@@ -914,6 +914,236 @@ public static partial class LocationData
             TerritoryName = "Core Worlds",
             Climate = Climate.Normal,
             HyperspaceCoordinates = [13, 10]
+        };
+
+        // ===========================================================
+        // BESTINE BRANCH — Pika Oasis → Bestine → Jundland → Old Ben
+        // ===========================================================
+
+        const string TatooineNormal = "Tatooine";
+        const string TatooSystem = "Tatoo System";
+        const string ArkanisSector = "Arkanis Sector";
+        const string OuterRim = "Outer Rim Territories";
+
+        world["tatooine_pika_oasis"] = new Location
+        {
+            Id = "tatooine_pika_oasis",
+            Name = "Pika Oasis",
+            Description = "A rare slash of green in the bone-pale desert. A spring fed from deep aquifers feeds a stand of pikobi-fruit trees and reed grass. Caravans, smugglers, and Tusken bands all come here under an unspoken truce — the water is too valuable for anyone to spoil with violence. Usually.",
+            Exits = new() { ["north"] = "tatooine_mospic_high_range", ["south"] = "tatooine_bestine_outskirts" },
+            PossibleEncounters = new() { NPCData.TuskenRaider, NPCData.PirateThugs, NPCData.CreatureSmall },
+            EncounterChance = 0.3,
+            AmbientMessages = new()
+            {
+                "Pikobi-fruit ferments quietly on the bough — a sweet, yeasty smell drifts on the breeze.",
+                "A line of bantha calves wades belly-deep into the spring, escorted by their Tusken handlers.",
+                "Two rival caravan masters ignore each other while filling their water bladders side by side.",
+                "A reed-warbler trills from the thicket; for a moment the desert sounds almost forgiving.",
+                "An old smuggler dozes in the dappled shade with a blaster pistol balanced on their stomach.",
+            },
+            FriendlyNPCs = new() { NPCData.Merchant },
+            PlanetName = TatooineNormal, StarSystemName = TatooSystem,
+            SectorName = ArkanisSector, TerritoryName = OuterRim, Climate = Climate.Normal
+        };
+
+        world["tatooine_bestine_outskirts"] = new Location
+        {
+            Id = "tatooine_bestine_outskirts",
+            Name = "Bestine Outskirts",
+            Description = "The shanties and moisture-farms thinning into the city proper. Tarp-roofed huts lean against rusted speeder skeletons; Imperial recruitment posters flap on every other wall. The smell of charred protein cubes and lubricant follows you toward the city gates.",
+            Exits = new() { ["north"] = "tatooine_pika_oasis", ["south"] = "tatooine_bestine_market" },
+            PossibleEncounters = new() { NPCData.Stormtrooper, NPCData.PirateThugs, NPCData.ImperialOfficer },
+            EncounterChance = 0.3,
+            AmbientMessages = new()
+            {
+                "A pair of moisture vaporators hiss in synchronized pulses, condensing the morning dew.",
+                "An Imperial recruiter's holo loops endlessly: 'SERVE TATOOINE. SERVE THE EMPIRE.'",
+                "A speeder up on blocks has every body panel removed; a kid sits cross-legged inside the cockpit shell, learning.",
+                "Two off-duty stormtroopers haggle with an old woman over a bag of polystarch buns.",
+                "A vagrant droid wanders the dust, beeping politely at anyone who might give it a charge.",
+            },
+            PlanetName = TatooineNormal, StarSystemName = TatooSystem,
+            SectorName = ArkanisSector, TerritoryName = OuterRim, Climate = Climate.Normal
+        };
+
+        world["tatooine_bestine_market"] = new Location
+        {
+            Id = "tatooine_bestine_market",
+            Name = "Bestine — Capital Market",
+            Description = "The seat of Imperial governance on Tatooine pretends to be a market square. Banners of the Empire fly above stalls hawking surplus blasters and 'recovered' contraband. Spies watch from second-story balconies; everyone notices the spies and pretends not to.",
+            Exits = new()
+            {
+                ["north"] = "tatooine_bestine_outskirts",
+                ["east"] = "tatooine_bestine_garrison",
+                ["west"] = "tatooine_bestine_spaceport",
+                ["south"] = "tatooine_judland_wasteland_east"
+            },
+            PossibleEncounters = new() { NPCData.Stormtrooper, NPCData.ImperialOfficer, NPCData.PirateThugs, NPCData.BountyHunter },
+            EncounterChance = 0.3,
+            HasShop = true,
+            HasVehicleShop = true,
+            FriendlyNPCs = new() { NPCData.Merchant },
+            AmbientMessages = new()
+            {
+                "An Imperial herald reads the daily bounty list aloud from a raised platform.",
+                "A vendor demonstrates a 'genuine pre-Imperial' rifle whose serial numbers have been ground off.",
+                "A Bothan in a long coat slips a flimsi note into another patron's pocket without breaking stride.",
+                "Two Imperial officers debate the merits of a confiscated speeder bike, eyeing the crowd warily.",
+                "A holo of Governor Tarkin hangs above the central fountain; the fountain has been dry for years.",
+            },
+            PlanetName = TatooineNormal, StarSystemName = TatooSystem,
+            SectorName = ArkanisSector, TerritoryName = OuterRim, Climate = Climate.Normal
+        };
+
+        world["tatooine_bestine_garrison"] = new Location
+        {
+            Id = "tatooine_bestine_garrison",
+            Name = "Bestine Imperial Garrison",
+            Description = "The 501st Bestine Detachment occupies a fortified durasteel compound at the city's eastern edge. Walking patrols loop the perimeter with practiced precision. The air carries hot ozone from constantly-running power couplings.",
+            Exits = new() { ["west"] = "tatooine_bestine_market" },
+            PossibleEncounters = new() { NPCData.Stormtrooper, NPCData.Stormtrooper, NPCData.Snowtrooper, NPCData.ImperialOfficer },
+            EncounterChance = 0.55,
+            AmbientMessages = new()
+            {
+                "A drill sergeant barks orders at a squad of new conscripts in the courtyard.",
+                "An AT-ST stalks past the gatehouse on heavy bipedal pistons, crew waving lazily.",
+                "Sparks fall from a maintenance scaffold where a TIE Fighter is being refit between sorties.",
+                "A trio of stormtroopers sits in a circle eating ration tubes, helmets at their feet.",
+                "An officer reviews a glowing star map on a holotable, frowning at a region marked 'JUNDLAND.'",
+            },
+            PlanetName = TatooineNormal, StarSystemName = TatooSystem,
+            SectorName = ArkanisSector, TerritoryName = OuterRim, Climate = Climate.Normal
+        };
+
+        world["tatooine_bestine_spaceport"] = new Location
+        {
+            Id = "tatooine_bestine_spaceport",
+            Name = "Bestine Spaceport",
+            Description = "A working spaceport for the capital — bigger than Mos Espa's docking bays and run with strict Imperial protocol. Customs droids glide between berths; a queue of merchants waits patiently while their manifests are scanned.",
+            Exits = new() { ["east"] = "tatooine_bestine_market", ["up"] = "tatooine_orbit" },
+            PossibleEncounters = new() { NPCData.Stormtrooper, NPCData.BountyHunter, NPCData.ImperialOfficer },
+            EncounterChance = 0.3,
+            HasShop = true,
+            HasVehicleShop = true,
+            AmbientMessages = new()
+            {
+                "A YT-2400 freighter clears customs and lifts in a precise vertical column of repulsor wash.",
+                "Customs droids form an orderly procession from berth to berth, scanning manifests in silent unison.",
+                "A merchant family sells fresh nerf jerky from a foldout cart between docking-pad gantries.",
+                "An Imperial customs officer reads aloud from a confiscated cargo list, voice flat with boredom.",
+                "A bounty hunter in scuffed armor leans against their landing strut, watching the queue.",
+            },
+            FriendlyNPCs = new() { NPCData.Merchant },
+            PlanetName = TatooineNormal, StarSystemName = TatooSystem,
+            SectorName = ArkanisSector, TerritoryName = OuterRim, Climate = Climate.Normal
+        };
+
+        world["tatooine_judland_wasteland_east"] = new Location
+        {
+            Id = "tatooine_judland_wasteland_east",
+            Name = "Jundland Wastes — Eastern Approach",
+            Description = "The Jundland's eastern edge: petrified canyons of ochre stone and bleached bone. Wind hisses constantly through gaps in the rock. Imperial patrols don't come this far; the few travelers you meet are fugitives, hermits, or worse.",
+            Exits = new() { ["north"] = "tatooine_bestine_market", ["west"] = "tatooine_judland_wasteland_central" },
+            PossibleEncounters = new() { NPCData.TuskenRaider, NPCData.CreatureSmall, NPCData.PirateThugs },
+            EncounterChance = 0.4,
+            AmbientMessages = new()
+            {
+                "A wind devil whips into being for half a second, then tears itself apart on a cliff face.",
+                "Bleached krayt-dragon ribs arch over the trail; somebody's strung a warning bell from the largest one.",
+                "A line of footprints crosses your path and ends abruptly mid-stride.",
+                "Distant tapping echoes through the canyon — gaderffii on stone, slow and steady.",
+                "A vulture-bat circles overhead, watching with patient interest.",
+            },
+            PlanetName = TatooineNormal, StarSystemName = TatooSystem,
+            SectorName = ArkanisSector, TerritoryName = OuterRim, Climate = Climate.Normal
+        };
+
+        world["tatooine_judland_wasteland_central"] = new Location
+        {
+            Id = "tatooine_judland_wasteland_central",
+            Name = "Jundland Wastes — Central Maze",
+            Description = "The deep Jundland: a labyrinth of slot canyons that swallow sound and direction. Sand People war-shrines mark every chokepoint. Even Tatooine's twin suns barely reach the canyon floor here, and the temperature drops fast in the shadows.",
+            Exits = new() { ["east"] = "tatooine_judland_wasteland_east", ["west"] = "tatooine_judland_wasteland_west" },
+            PossibleEncounters = new() { NPCData.TuskenRaider, NPCData.TuskenRaider, NPCData.CreatureSmall },
+            EncounterChance = 0.55,
+            AmbientMessages = new()
+            {
+                "A row of bleached banthas' skulls watches the canyon floor from a high ledge.",
+                "Tusken pictographs in red ochre cover one wall — hunting scenes, star paths, warnings.",
+                "Your footsteps echo back from three different directions at once.",
+                "A torn fragment of a Jedi robe — or a robe like one — flutters caught on a rock spike.",
+                "The air is suddenly cold; a moment later the wind shifts and the heat returns.",
+            },
+            PlanetName = TatooineNormal, StarSystemName = TatooSystem,
+            SectorName = ArkanisSector, TerritoryName = OuterRim, Climate = Climate.Normal
+        };
+
+        world["tatooine_judland_wasteland_west"] = new Location
+        {
+            Id = "tatooine_judland_wasteland_west",
+            Name = "Jundland Wastes — Western Reaches",
+            Description = "The western Jundland opens onto a bleak expanse of cracked clay flats and isolated rock spires. A single eroded path winds up toward a hermit's residence on a high bluff. The Force feels different here — quieter, watchful.",
+            Exits = new()
+            {
+                ["east"] = "tatooine_judland_wasteland_central",
+                ["south"] = "tatooine_northern_jawa_territories",
+                ["northwest"] = "tatooine_old_ben_residence"
+            },
+            PossibleEncounters = new() { NPCData.TuskenRaider, NPCData.CreatureSmall },
+            EncounterChance = 0.4,
+            AmbientMessages = new()
+            {
+                "Heat shimmer dissolves a distant rock spire into a dancing apparition.",
+                "An aged Tusken stands motionless on a bluff to the south, watching you and saying nothing.",
+                "A circle of small stones marks a meditation cairn — not Tusken, not Jawa, something older.",
+                "A womp rat skitters across the path and disappears into a crack between boulders.",
+                "The wind carries a half-heard syllable, gone before you can place it.",
+            },
+            PlanetName = TatooineNormal, StarSystemName = TatooSystem,
+            SectorName = ArkanisSector, TerritoryName = OuterRim, Climate = Climate.Normal
+        };
+
+        world["tatooine_northern_jawa_territories"] = new Location
+        {
+            Id = "tatooine_northern_jawa_territories",
+            Name = "Northern Jawa Territories",
+            Description = "The roving Jawa clans of the northern flats have parked their sandcrawlers in a loose ring, forming an impromptu trade-camp. Hooded figures swarm in chittering clusters, hauling salvage between the towering machines. The smell of solder, ozone, and unwashed wool is overwhelming.",
+            Exits = new() { ["north"] = "tatooine_judland_wasteland_west" },
+            PossibleEncounters = new() { NPCData.PirateThugs, NPCData.TuskenRaider },
+            EncounterChance = 0.25,
+            HasShop = true,
+            HasVehicleShop = true,
+            FriendlyNPCs = new() { NPCData.Merchant, NPCData.Merchant },
+            AmbientMessages = new()
+            {
+                "A sandcrawler's bay door yawns open; conveyor belts spool out salvaged droid parts onto the sand.",
+                "A pair of Jawas argue furiously over the fair market value of a half-corroded astromech head.",
+                "A child Jawa proudly demonstrates a working power converter to its smaller siblings.",
+                "An auctioneer in a battered electromegaphone calls bids in rapid-fire Jawa, tone unmistakable.",
+                "A R5-series droid is wheeled onto the auction block; it whistles a sad, resigned tune.",
+            },
+            PlanetName = TatooineNormal, StarSystemName = TatooSystem,
+            SectorName = ArkanisSector, TerritoryName = OuterRim, Climate = Climate.Normal
+        };
+
+        world["tatooine_old_ben_residence"] = new Location
+        {
+            Id = "tatooine_old_ben_residence",
+            Name = "Old Ben's Residence",
+            Description = "A modest hermit's dwelling carved into the side of a high bluff overlooking the Jundland. Dust drifts through the open doorway; a single cup of caf sits cold on a low stone table, as though the occupant just stepped out. The Force here is dense, patient — like a fingerprint pressed into the air.",
+            Exits = new() { ["southeast"] = "tatooine_judland_wasteland_west" },
+            PossibleEncounters = new() { NPCData.DarkAdept, NPCData.CreatureSmall },
+            EncounterChance = 0.2,
+            AmbientMessages = new()
+            {
+                "Sand has half-buried a journal on the table; the binding is hand-stitched, the script archaic.",
+                "A scorched circle on the floor marks where a saber once cut through stone — long since cooled.",
+                "Outside, a krayt-dragon's distant call rolls down the canyons, paused, then echoes again.",
+                "A small carved wooden token sits on a high shelf — featureless except for two suns and a starbird.",
+                "The Force in here is not unkind. It seems to be... waiting for someone.",
+            },
+            PlanetName = TatooineNormal, StarSystemName = TatooSystem,
+            SectorName = ArkanisSector, TerritoryName = OuterRim, Climate = Climate.Normal
         };
 
         // Note: deep_space uses a numeric `jump` menu (handled in CommandParser)
