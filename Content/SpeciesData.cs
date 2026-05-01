@@ -12,6 +12,7 @@ public static partial class SpeciesData
         {
             var list = new List<Species>
             {
+
         new Species
         {
             Name = "Human",
@@ -32,6 +33,7 @@ public static partial class SpeciesData
                 [SkillType.Willpower] = new DiceCode(0, 1),
             }
         },
+
         new Species
         {
             Name = "Bothan",
@@ -48,9 +50,10 @@ public static partial class SpeciesData
             },
             SkillBonuses = new()
             {
-                [SkillType.Hide] = new DiceCode(0, 2)
+                [SkillType.Hide] = new DiceCode(0, 2),
             }
         },
+
         new Species
         {
             Name = "Mon Calamari",
@@ -70,6 +73,7 @@ public static partial class SpeciesData
                 [SkillType.Swim] = new DiceCode(0, 2),
             }
         },
+
         new Species
         {
             Name = "Trandoshan",
@@ -89,6 +93,7 @@ public static partial class SpeciesData
                 [SkillType.Stamina] = new DiceCode(0, 2),
             }
         },
+
         new Species
         {
             Name = "Synthoid",
@@ -110,10 +115,11 @@ public static partial class SpeciesData
                 [SkillType.Sensors] = new DiceCode(0, 1),
             }
         },
+
         new Species
         {
             Name = "Rodian",
-            Description = "Frog-like aliens with spiky, hair-live spines instead of hair.",
+            Description = "Frog-like aliens with spiky, hair-like spines instead of hair.",
             BaseAttributes = new()
             {
                 [AttributeType.Dexterity] = new DiceCode(3),
@@ -129,6 +135,7 @@ public static partial class SpeciesData
                 [SkillType.Persuade] = new DiceCode(0, 2),
             }
         },
+
         new Species
         {
             Name = "Zabrak",
@@ -148,6 +155,7 @@ public static partial class SpeciesData
                 [SkillType.Willpower] = new DiceCode(0, 2),
             }
         },
+
         new Species
         {
             Name = "Wookie",
@@ -165,9 +173,10 @@ public static partial class SpeciesData
             SkillBonuses = new()
             {
                 [SkillType.Intimidate] = new DiceCode(0, 2),
-                [SkillType.Athletics] = new DiceCode(0, 2)
+                [SkillType.Athletics] = new DiceCode(0, 2),
             }
         },
+
         new Species
         {
             Name = "Green-Ones",

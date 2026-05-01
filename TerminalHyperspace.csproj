@@ -32,6 +32,9 @@
   <ItemGroup>
     <Compile Remove="Tools/**" />
     <None Remove="Tools/**" />
+    <AvaloniaXaml Remove="Tools/**" />
+    <AvaloniaResource Remove="Tools/**" />
+    <AdditionalFiles Remove="Tools/**" />
   </ItemGroup>
 
 </Project>

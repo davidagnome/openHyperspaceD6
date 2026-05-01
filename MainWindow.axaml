@@ -2,124 +2,294 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         x:Class="TerminalHyperspace.MainWindow"
         Title="Terminal Hyperspace"
-        Width="1280" Height="820"
-        Background="#06060C"
+        Width="1440" Height="960"
+        Background="#0C0F12"
         Icon="avares://TerminalHyperspace/Assets/logo.png">
+
   <!--
-    2x2 layout (proportional):
-      [0,0] 67% × 67%  Output
-      [0,1] 33% × 67%  Map
-      [1,0] 67% × 33%  Command input + WrapPanel of buttons
-      [1,1] 33% × 33%  Character overview
+    Phase-1 layout (visual chrome only, wiring unchanged):
+      Row 0 (44px) — Titlebar:    brand on left, location breadcrumb in center
+      Row 1 (1*)   — Main grid:
+                        Col 0 (1.05*) Character panel
+                        Col 1 (2*)    Terminal panel + Input/Chips panel
+                        Col 2 (1.05*) Map panel
+      Row 2 (28px) — Status bar:  pulse + ambient text
   -->
-  <Grid Name="RootGrid" ColumnDefinitions="2*,*" RowDefinitions="2*,*">
+  <Grid Name="RootGrid"
+        Margin="20"
+        RowDefinitions="44,*,28"
+       >
 
-    <!-- Output (top-left) -->
-    <Border Grid.Row="0" Grid.Column="0" Padding="10" Background="#000010"
-            BorderBrush="#1F1F33" BorderThickness="0,0,1,1">
-      <ScrollViewer Name="OutputScroller" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-        <SelectableTextBlock Name="OutputBlock"
-                             FontFamily="{StaticResource MonoRegular}"
-                             FontSize="13"
-                             TextWrapping="Wrap"
-                             Foreground="#DDDDDD"/>
-      </ScrollViewer>
-    </Border>
-
-    <!-- Map (top-right) -->
-    <Border Grid.Row="0" Grid.Column="1" Padding="0" Background="#22171B"
-            BorderBrush="#1F1F33" BorderThickness="0,0,0,1">
-      <DockPanel>
-        <TextBlock DockPanel.Dock="Top" Name="MapTitle" Text="Map — type 'map' to view"
-                   Margin="10,6" Foreground="#BF9C5E" FontSize="14"
-                   FontFamily="{StaticResource MonoBold}"/>
-        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-          <Canvas Name="MapCanvas" Background="#22171B" Width="600" Height="600"/>
-        </ScrollViewer>
-      </DockPanel>
-    </Border>
-
-    <!-- Command input + WrapPanel (bottom-left) -->
-    <Border Grid.Row="1" Grid.Column="0" Padding="0" Background="#171D22"
-            BorderBrush="#1F1F33" BorderThickness="0,0,1,0">
-      <DockPanel>
-        <Grid DockPanel.Dock="Top" ColumnDefinitions="Auto,*,Auto" Background="#0A0A14">
-          <TextBlock Grid.Column="0"
-                     Text=" &gt; "
-                     VerticalAlignment="Center"
-                     Foreground="#55FF55"
-                     FontFamily="{StaticResource MonoRegular}"
-                     FontSize="14"/>
-          <TextBox Grid.Column="1"
-                   Name="InputBox"
-                   Background="Transparent"
-                   BorderThickness="1"
-                   BorderBrush="#666666"
-                   Foreground="#EEEEEE"
-                   CaretBrush="#55FF55"
+    <!-- ===================================================== -->
+    <!-- Titlebar                                                -->
+    <!-- ===================================================== -->
+    <Border Grid.Row="0" Classes="bar" Padding="14,0">
+      <Grid ColumnDefinitions="Auto,*,Auto">
+        <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+          <Ellipse Width="10" Height="8" Fill="#77E632"/>
+          <TextBlock Text="OPEN HYPERSPACE D6"
+                     FontFamily="{StaticResource DINishCondensedBold}"
+                     FontSize="14"
+                     Foreground="#50D5D6"
+                     LetterSpacing="2.8"
+                     VerticalAlignment="Center"/>
+        </StackPanel>
+        <TextBlock Grid.Column="1"
+                   Name="LocationHeader"
+                   Text="—"
+                   Margin="20,0,0,0"
                    FontFamily="{StaticResource MonoRegular}"
                    FontSize="14"
-                   KeyDown="OnInputKeyDown">
-            <TextBox.Styles>
-              <Style Selector="TextBox:focus /template/ Border#PART_BorderElement">
-                <Setter Property="BorderBrush" Value="#666666"/>
-              </Style>
-              <Style Selector="TextBox:pointerover /template/ Border#PART_BorderElement">
-                <Setter Property="BorderBrush" Value="#55FF55"/>
-              </Style>
-            </TextBox.Styles>
-          </TextBox>
-          <Button Grid.Column="2"
-                  Content="Send"
-                  Margin="6,4"
-                  Click="OnSendClick"/>
-        </Grid>
-        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-          <!--
-            CommandPanel is a vertical StackPanel; BuildCommandSidebar fills it
-            with section TextBlocks alternating with WrapPanels of buttons so
-            each section's commands wrap horizontally on their own row.
-          -->
-          <StackPanel Name="CommandPanel" Spacing="2" Margin="6"/>
-        </ScrollViewer>
-      </DockPanel>
+                   Foreground="#FFCA3A"
+                   VerticalAlignment="Center"
+                   TextTrimming="CharacterEllipsis"/>
+        <!-- Phase 2 will populate this StackPanel with RES/CR/FP/UP meters. -->
+        <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="14" VerticalAlignment="Center"/>
+      </Grid>
     </Border>
 
-    <!-- Character overview (bottom-right) -->
-    <Border Grid.Row="1" Grid.Column="1" Padding="10" Background="#171D22">
-      <DockPanel>
-        <StackPanel DockPanel.Dock="Top" Spacing="3">
-          <TextBlock Text="openHyperspaceD6"
-                     FontSize="18" Foreground="#FFCA3A"
-                     FontFamily="{StaticResource MonoBold}"
-                     Margin="0,0,0,8"/>
-          <TextBlock Text="Character"
-                     FontSize="14" Foreground="#3C58F6"
-                     FontFamily="{StaticResource MonoBold}"
-                     Margin="0,0,0,4"/>
-          <TextBlock Name="OvName"    Text="—" Foreground="#F7FAFB" FontFamily="{StaticResource MonoRegular}" FontSize="14"/>
-          <TextBlock Name="OvSpecies" Text="" Foreground="#AAAAAA" FontFamily="{StaticResource MonoRegular}" FontSize="14"/>
-          <TextBlock Name="OvRole"    Text="" Foreground="#AAAAAA" FontFamily="{StaticResource MonoRegular}" FontSize="14"/>
-          <TextBlock Name="OvResolve" Text="" Foreground="#FF595E" FontFamily="{StaticResource MonoRegular}" FontSize="14" Margin="0,4,0,0"/>
-          <TextBlock Name="OvCredits" Text="" Foreground="#FFCA3A" FontFamily="{StaticResource MonoRegular}" FontSize="14"/>
-          <TextBlock Name="OvTurns"   Text="" Foreground="#888888" FontFamily="{StaticResource MonoRegular}" FontSize="14"/>
-          <TextBlock Text="Standing"
-                     FontSize="14" Foreground="#3C58F6"
-                     FontFamily="{StaticResource MonoBold}"
-                     Margin="0,8,0,4"/>
-          <WrapPanel Name="OvStandings" Orientation="Horizontal"/>
-          <TextBlock Text="Inventory"
-                     FontSize="14" Foreground="#3C58F6"
-                     FontFamily="{StaticResource MonoBold}"
-                     Margin="0,8,0,4"/>
+    <!-- ===================================================== -->
+    <!-- Main 3-column grid                                      -->
+    <!-- ===================================================== -->
+    <Grid Grid.Row="1" ColumnDefinitions="1*,2.5*,1.5*">
+
+      <!-- ============================================================ -->
+      <!-- Character panel (left, full height)                            -->
+      <!-- ============================================================ -->
+      <Border Grid.Column="0" Classes="panel">
+        <Grid RowDefinitions="2,Auto,1,*">
+          <!-- accent stripe -->
+          <Border Grid.Row="0">
+            <Border.Background>
+              <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,0%">
+                <GradientStop Offset="0.0" Color="Transparent"/>
+                <GradientStop Offset="0.5" Color="#36949D"/>
+                <GradientStop Offset="1.0" Color="Transparent"/>
+              </LinearGradientBrush>
+            </Border.Background>
+          </Border>
+          <Grid Grid.Row="1" Margin="14,10,14,8" ColumnDefinitions="*,Auto">
+            <TextBlock Grid.Column="0"
+                       Text="CHARACTER SHEET"
+                       Classes="panel-title"
+                       Foreground="#50D5D6"
+                       FontSize="18"/>
+            <Border Grid.Column="1" Classes="badge">
+              <TextBlock Text="CHAR"/>
+            </Border>
+          </Grid>
+          <Border Grid.Row="2" Background="#1C2731"/>
+          <ScrollViewer Grid.Row="3"
+                        VerticalScrollBarVisibility="Auto"
+                        HorizontalScrollBarVisibility="Disabled">
+            <StackPanel Margin="14,12" Spacing="3">
+              <TextBlock Name="OvName"    Text="—"
+                         FontFamily="{StaticResource DINishCondensedBold}"
+                         FontSize="19"
+                         LetterSpacing="0.6"
+                         Foreground="#D8E3EC"/>
+              <TextBlock Name="OvSpecies" Text=""
+                         FontFamily="{StaticResource MonoRegular}"
+                         FontSize="12"
+                         Foreground="#50D5D6"/>
+              <TextBlock Name="OvRole"    Text=""
+                         FontFamily="{StaticResource MonoRegular}"
+                         FontSize="12"
+                         Foreground="#FFCA3A"/>
+
+              <TextBlock Text="DERIVED" Classes="section-h" Margin="0,12,0,4"/>
+              <TextBlock Name="OvResolve" Text=""
+                         FontFamily="{StaticResource MonoRegular}"
+                         FontSize="13"
+                         Foreground="#FF595E"/>
+              <TextBlock Name="OvCredits" Text=""
+                         FontFamily="{StaticResource MonoRegular}"
+                         FontSize="13"
+                         Foreground="#FFCA3A"/>
+              <TextBlock Name="OvTurns" Text=""
+                         FontFamily="{StaticResource MonoRegular}"
+                         FontSize="13"
+                         Foreground="#8AA0B3"/>
+
+              <TextBlock Text="STANDING" Classes="section-h" Margin="0,12,0,4"/>
+              <WrapPanel Name="OvStandings" Orientation="Horizontal"/>
+
+              <TextBlock Text="INVENTORY" Classes="section-h" Margin="0,12,0,4"/>
+              <WrapPanel Name="OvInventory" Orientation="Horizontal"/>
+            </StackPanel>
+          </ScrollViewer>
+        </Grid>
+      </Border>
+
+      <!-- ============================================================ -->
+      <!-- Middle column — Terminal (top) + Input/Chips (bottom)         -->
+      <!-- ============================================================ -->
+      <Grid Grid.Column="1" RowDefinitions="2*,*">
+
+        <!-- Terminal panel -->
+        <Border Grid.Row="0" Classes="panel">
+          <Grid RowDefinitions="2,Auto,1,*">
+            <Border Grid.Row="0">
+              <Border.Background>
+                <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,0%">
+                  <GradientStop Offset="0.0" Color="Transparent"/>
+                  <GradientStop Offset="0.5" Color="#4A9416"/>
+                  <GradientStop Offset="1.0" Color="Transparent"/>
+                </LinearGradientBrush>
+              </Border.Background>
+            </Border>
+            <Grid Grid.Row="1" Margin="14,10,14,8" ColumnDefinitions="*,Auto">
+              <TextBlock Grid.Column="0"
+                         Text="GAME LOG"
+                         Classes="panel-title"
+                         Foreground="#77E632"
+                         FontSize="18"/>
+              <Border Grid.Column="1" Classes="badge">
+                <TextBlock Text="auto-scroll on"/>
+              </Border>
+            </Grid>
+            <Border Grid.Row="2" Background="#1C2731"/>
+            <ScrollViewer Grid.Row="3"
+                          Name="OutputScroller"
+                          Padding="14,12,14,28"
+                          HorizontalScrollBarVisibility="Disabled"
+                          VerticalScrollBarVisibility="Auto">
+              <StackPanel Name="OutputStack"
+                          Orientation="Vertical"
+                          Margin="0,0,0,24"/>
+            </ScrollViewer>
+          </Grid>
+        </Border>
+
+        <!-- Input + suggestion chips panel -->
+        <Border Grid.Row="1" Classes="panel">
+          <Grid RowDefinitions="2,Auto,1,*">
+            <Border Grid.Row="0">
+              <Border.Background>
+                <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,0%">
+                  <GradientStop Offset="0.0" Color="Transparent"/>
+                  <GradientStop Offset="0.5" Color="#FFCA3A"/>
+                  <GradientStop Offset="1.0" Color="Transparent"/>
+                </LinearGradientBrush>
+              </Border.Background>
+            </Border>
+            <Grid Grid.Row="1" Margin="14,10,14,8" ColumnDefinitions="*,Auto">
+              <TextBlock Grid.Column="0"
+                         Text="COMMAND INPUT"
+                         Classes="panel-title"
+                         Foreground="#FFCA3A"
+                         FontSize="18"/>
+              <Border Grid.Column="1" Classes="badge">
+                <TextBlock Text="enter to submit"/>
+              </Border>
+            </Grid>
+            <Border Grid.Row="2" Background="#1C2731"/>
+            <DockPanel Grid.Row="3" Margin="14,10,14,12">
+              <Border DockPanel.Dock="Top" Classes="input-form" Padding="12,10" Margin="0,0,0,10">
+                <Grid ColumnDefinitions="Auto,*,Auto">
+                  <TextBlock Grid.Column="0"
+                             Text="&gt;"
+                             Margin="0,0,10,0"
+                             VerticalAlignment="Center"
+                             Foreground="#77E632"
+                             FontFamily="{StaticResource MonoBold}"
+                             FontSize="16"/>
+                  <TextBox Grid.Column="1"
+                           Name="InputBox"
+                           Background="Transparent"
+                           BorderThickness="0"
+                           Foreground="#D8E3EC"
+                           CaretBrush="#77E632"
+                           FontFamily="{StaticResource MonoRegular}"
+                           FontSize="14"
+                           Watermark="type a command — try 'help', 'look', 'jump', 'sheet'…"
+                           KeyDown="OnInputKeyDown"/>
+                  <Button Grid.Column="2"
+                          Classes="send"
+                          Content="EXECUTE ↵"
+                          Margin="6,0,0,0"
+                          Click="OnSendClick"/>
+                </Grid>
+              </Border>
+              <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <StackPanel Name="CommandPanel" Spacing="2"/>
+              </ScrollViewer>
+            </DockPanel>
+          </Grid>
+        </Border>
+      </Grid>
+
+      <!-- ============================================================ -->
+      <!-- Map panel (right, full height)                                 -->
+      <!-- ============================================================ -->
+      <Border Grid.Column="2" Classes="panel">
+        <Grid RowDefinitions="2,Auto,1,*">
+          <Border Grid.Row="0">
+            <Border.Background>
+              <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,0%">
+                <GradientStop Offset="0.0" Color="Transparent"/>
+                <GradientStop Offset="0.5" Color="#6A4C93"/>
+                <GradientStop Offset="1.0" Color="Transparent"/>
+              </LinearGradientBrush>
+            </Border.Background>
+          </Border>
+          <Grid Grid.Row="1" Margin="14,10,14,8" ColumnDefinitions="*,Auto">
+            <TextBlock Grid.Column="0"
+                       Name="MapTitle"
+                       Text="PLANETARY MAP"
+                       Classes="panel-title"
+                       Foreground="#C252C5"
+                       FontSize="18"/>
+            <Border Grid.Column="1" Classes="badge">
+              <TextBlock Text="map"/>
+            </Border>
+          </Grid>
+          <Border Grid.Row="2" Background="#1C2731"/>
+          <ScrollViewer Grid.Row="3"
+                        Padding="10"
+                        HorizontalScrollBarVisibility="Auto"
+                        VerticalScrollBarVisibility="Auto">
+            <Border Background="#0A1018"
+                    BorderBrush="#1B252F"
+                    BorderThickness="1"
+                    CornerRadius="4">
+              <Canvas Name="MapCanvas"
+                      Background="Transparent"
+                      Width="600" Height="600"/>
+            </Border>
+          </ScrollViewer>
+        </Grid>
+      </Border>
+    </Grid>
+
+    <!-- ===================================================== -->
+    <!-- Status bar                                              -->
+    <!-- ===================================================== -->
+    <Border Grid.Row="2" Classes="bar" Padding="14,0">
+      <Grid ColumnDefinitions="*,Auto,*">
+        <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+          <Ellipse Width="6" Height="6" Fill="#77E632"/>
+          <TextBlock Text="Connected · GUI Bridge · Avalonia"
+                     FontFamily="{StaticResource MonoRegular}"
+                     FontSize="12"
+                     Foreground="#8AA0B3"
+                     VerticalAlignment="Center"/>
         </StackPanel>
-        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-          <!-- Horizontal WrapPanel = responsive column flow: items pack
-               left-to-right, wrapping into a new row when the pane width
-               can't fit another tile. -->
-          <WrapPanel Name="OvInventory" Orientation="Horizontal"/>
-        </ScrollViewer>
-      </DockPanel>
+        <TextBlock Grid.Column="1"
+                   Text="HYPERSPACE D6"
+                   FontFamily="{StaticResource DINishCondensedBold}"
+                   FontSize="12"
+                   Foreground="#8AA0B3"
+                   LetterSpacing="3"
+                   VerticalAlignment="Center"/>
+        <TextBlock Grid.Column="2"
+                   Text="ready"
+                   FontFamily="{StaticResource MonoRegular}"
+                   FontSize="12"
+                   Foreground="#36949D"
+                   HorizontalAlignment="Right"
+                   VerticalAlignment="Center"/>
+      </Grid>
     </Border>
   </Grid>
 </Window>

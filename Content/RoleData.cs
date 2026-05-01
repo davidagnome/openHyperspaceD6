@@ -154,6 +154,19 @@ public static partial class RoleData
                 [SkillType.Computers] = new DiceCode(0, 1),
             }
         },
+        new Role
+        {
+            Name = "Custom",
+            Description = "You'll start with additional upgrade points to upgrade your characters",
+            AttributeBonuses = new()
+            {
+                [AttributeType.Knowledge] = new DiceCode(0),
+            },
+            SkillBonuses = new()
+            {
+                [SkillType.Galaxy] = new DiceCode(0,0),
+            }
+        },
             };
             RegisterImported(list);
             return list;

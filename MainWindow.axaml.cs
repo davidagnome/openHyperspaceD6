@@ -69,10 +69,44 @@ public partial class MainWindow : Window
         ("Quit",          "quit"),
     };
 
+    private bool _stickToBottom = true;
+    private Border? _bottomSentinel;
+
     public MainWindow()
     {
         InitializeComponent();
         BuildCommandSidebar();
+
+        // Add a fixed-height sentinel as the StackPanel's last child. We call
+        // BringIntoView on it after every append, which forces the ScrollViewer
+        // to scroll the sentinel into the viewport — and because the sentinel
+        // sits *below* the actual text, the real last line is guaranteed to be
+        // visible above it. This sidesteps the timing problems with ScrollToEnd
+        // landing on a stale Extent for the very last write.
+        _bottomSentinel = new Border
+        {
+            Height = 64,
+            IsHitTestVisible = false,
+        };
+        OutputStack.Children.Add(_bottomSentinel);
+
+        OutputScroller.LayoutUpdated += (_, _) =>
+        {
+            if (_stickToBottom)
+                _bottomSentinel?.BringIntoView();
+        };
+        OutputScroller.ScrollChanged += (_, e) =>
+        {
+            // Only re-evaluate stickiness on user-initiated scrolls (offset
+            // moved without the extent growing). Otherwise content being
+            // appended during startup unpins us before splash text finishes,
+            // because Offset stays at 0 while Extent shoots past Viewport.
+            if (e.ExtentDelta.Y != 0 || e.OffsetDelta.Y == 0)
+                return;
+            var sv = OutputScroller;
+            _stickToBottom =
+                sv.Offset.Y + sv.Viewport.Height >= sv.Extent.Height - 8;
+        };
 
         GuiBridge.Instance = _bridge;
         _bridge.OnWrite += OnBridgeWrite;
@@ -108,21 +142,22 @@ public partial class MainWindow : Window
         {
             if (string.IsNullOrEmpty(command))
             {
-                // Start a new wrap section. The divider is the first child of the
-                // WrapPanel so it sits inline with the buttons that follow it
-                // (and wraps onto its own row only when space runs out).
+                // Section divider — uppercase, letter-spaced, ink-faint, matches
+                // the design's section-h treatment so it reads as a heading.
                 currentWrap = new WrapPanel
                 {
                     Orientation = Avalonia.Layout.Orientation.Horizontal,
-                    Margin = new Avalonia.Thickness(0, 4, 0, 4)
+                    Margin = new Avalonia.Thickness(0, 8, 0, 4),
                 };
                 currentWrap.Children.Add(new TextBlock
                 {
-                    Text = label,
-                    Foreground = new SolidColorBrush(Color.Parse("#00783A")),
-                    Margin = new Avalonia.Thickness(0, 0, 8, 0),
+                    Text = label.Replace("─", "").Trim().ToUpperInvariant(),
+                    Margin = new Avalonia.Thickness(0, 0, 10, 0),
                     VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center,
-                    FontFamily = Fonts.MonoBold
+                    FontFamily = Fonts.DINishCondensedBold,
+                    FontSize = 10,
+                    LetterSpacing = 2.5,
+                    Foreground = new SolidColorBrush(Color.Parse("#506474"))
                 });
                 CommandPanel.Children.Add(currentWrap);
                 continue;
@@ -136,15 +171,13 @@ public partial class MainWindow : Window
                 CommandPanel.Children.Add(currentWrap);
             }
 
+            // Chip-styled button — visual treatment comes from `Button.chip` in App.axaml.
             var button = new Button
             {
                 Content = label,
-                HorizontalContentAlignment = Avalonia.Layout.HorizontalAlignment.Center,
-                Padding = new Avalonia.Thickness(8, 4),
                 Margin = new Avalonia.Thickness(0, 0, 4, 4),
-                FontFamily = Fonts.MonoBold,
-                Foreground = Palette.GreenMidBrush
             };
+            button.Classes.Add("chip");
             button.Click += (_, _) =>
             {
                 Submit(command);
@@ -186,7 +219,13 @@ public partial class MainWindow : Window
 
     private void OnBridgeClear()
     {
-        Dispatcher.UIThread.Post(() => OutputBlock.Inlines?.Clear());
+        Dispatcher.UIThread.Post(() =>
+        {
+            OutputStack.Children.Clear();
+            _currentLine = null;
+            if (_bottomSentinel != null)
+                OutputStack.Children.Add(_bottomSentinel);
+        });
     }
 
     private void OnBridgeRenderMap(MapSnapshot snap)
@@ -195,6 +234,7 @@ public partial class MainWindow : Window
     private void OnBridgeCharacterUpdate(CharacterSnapshot snap)
         => Dispatcher.UIThread.Post(() =>
         {
+            LocationHeader.Text = snap.CurrentLocation;
             OvName.Text    = snap.Name;
             OvSpecies.Text = $"Species: {snap.Species}";
             OvRole.Text    = $"Role:    {snap.Role}";
@@ -285,7 +325,7 @@ public partial class MainWindow : Window
     {
         // Map pane is always visible now; just redraw with the new snapshot.
         MapCanvas.Children.Clear();
-        MapTitle.Text = $"Map — {snap.Planet}";
+        MapTitle.Text = $"PLANETARY MAP — {snap.Planet.ToUpperInvariant()}";
 
         if (snap.Rooms.Count == 0) return;
 
@@ -403,18 +443,60 @@ public partial class MainWindow : Window
         MapCanvas.Children.Add(tb);
     }
 
+    private SelectableTextBlock? _currentLine;
+    private static readonly IBrush DefaultLineBrush = new SolidColorBrush(Color.Parse("#D8E3EC"));
+
+    // Each game-log line is a dedicated SelectableTextBlock inside OutputStack.
+    // We keep this per-line model (instead of one big TextBlock with mixed
+    // Inlines + embedded \n) because Avalonia's text measurement under-reports
+    // height when a single Run contains newlines, leaving the ScrollViewer's
+    // Extent shorter than the rendered content and cropping the tail.
     private void AppendRun(string text, ConsoleColor color)
     {
-        OutputBlock.Inlines ??= new InlineCollection();
-        OutputBlock.Inlines.Add(new Run
+        var brush = new SolidColorBrush(MapColor(color));
+        var segments = text.Split('\n');
+        for (int i = 0; i < segments.Length; i++)
         {
-            Text = text,
-            Foreground = new SolidColorBrush(MapColor(color))
-        });
+            if (segments[i].Length > 0)
+            {
+                EnsureCurrentLine();
+                _currentLine!.Inlines!.Add(new Run { Text = segments[i], Foreground = brush });
+            }
+            // A '\n' separator (anywhere except after the last segment) ends
+            // the current line. The next append starts a fresh line.
+            if (i < segments.Length - 1)
+            {
+                EnsureCurrentLine();
+                _currentLine = null;
+            }
+        }
+    }
 
-        // Auto-scroll to bottom
-        Dispatcher.UIThread.Post(() => OutputScroller.ScrollToEnd(),
-            DispatcherPriority.Background);
+    private void EnsureCurrentLine()
+    {
+        if (_currentLine != null) return;
+        _currentLine = new SelectableTextBlock
+        {
+            FontFamily = Fonts.MonoRegular,
+            FontSize = 13,
+            TextWrapping = TextWrapping.Wrap,
+            Foreground = DefaultLineBrush,
+            Inlines = new InlineCollection(),
+        };
+        // Keep the sentinel as the very last child so BringIntoView always
+        // targets the bottom of the log, with our new line directly above it.
+        if (_bottomSentinel != null)
+        {
+            int sentinelIndex = OutputStack.Children.IndexOf(_bottomSentinel);
+            if (sentinelIndex >= 0)
+                OutputStack.Children.Insert(sentinelIndex, _currentLine);
+            else
+                OutputStack.Children.Add(_currentLine);
+        }
+        else
+        {
+            OutputStack.Children.Add(_currentLine);
+        }
     }
 
     private static Color MapColor(ConsoleColor c) => c switch

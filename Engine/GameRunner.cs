@@ -191,6 +191,18 @@ public static class GameRunner
         var standings = Models.FactionData.Tracked
             .Select(f => new StandingEntry(f, Models.FactionData.Label(f), p.GetStanding(f)))
             .ToList();
+
+        // Compose a single-line "Planet — Room" header for the new top bar in
+        // MainWindow. Falls back gracefully when the world hasn't been built or
+        // the current room id doesn't resolve.
+        string locationHeader = "—";
+        if (state.World != null && state.World.TryGetValue(state.CurrentLocationId, out var loc))
+        {
+            locationHeader = string.IsNullOrEmpty(loc.PlanetName)
+                ? loc.Name
+                : $"{loc.PlanetName} — {loc.Name}";
+        }
+
         bridge.UpdateCharacter(new CharacterSnapshot(
             Name: p.Name,
             Species: p.SpeciesName,
@@ -202,14 +214,16 @@ public static class GameRunner
             UpgradePoints: state.UpgradePoints,
             ForcePoints: state.ForcePoints,
             Inventory: inventory,
-            Standings: standings));
+            Standings: standings,
+            CurrentLocation: locationHeader));
     }
 
     private static GameState CreateNewGame(Terminal term)
     {
         var creator = new CharacterCreation(term);
         var player = creator.Create();
-        var state = new GameState { Player = player, UpgradePoints = 6 };
+        int upgradePointsStart = player.RoleName == "Custom" ? 30 : 6;
+        var state = new GameState { Player = player,  UpgradePoints = upgradePointsStart };
         state.Initialize();
         state.VisitedLocations.Add(state.CurrentLocationId);
         return state;

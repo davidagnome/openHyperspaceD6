@@ -4,6 +4,98 @@
              RequestedThemeVariant="Dark">
   <Application.Styles>
     <FluentTheme />
+
+    <!-- Phase 1 chrome — panel/bar/badge/section header/chip styles. -->
+    <Style Selector="Border.panel">
+      <Setter Property="Background" Value="#131A20"/>
+      <Setter Property="BorderBrush" Value="#233040"/>
+      <Setter Property="BorderThickness" Value="1"/>
+      <Setter Property="CornerRadius" Value="6"/>
+      <Setter Property="ClipToBounds" Value="True"/>
+    </Style>
+
+    <Style Selector="Border.bar">
+      <Setter Property="Background" Value="#0E161E"/>
+      <Setter Property="BorderBrush" Value="#233040"/>
+      <Setter Property="BorderThickness" Value="1"/>
+      <Setter Property="CornerRadius" Value="6"/>
+    </Style>
+
+    <Style Selector="TextBlock.panel-title">
+      <Setter Property="FontFamily" Value="avares://TerminalHyperspace/Fonts/DINishCondensed-Bold.otf#DINish Condensed"/>
+      <Setter Property="FontSize" Value="11"/>
+      <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+
+    <Style Selector="Border.badge">
+      <Setter Property="Background" Value="#1A2330"/>
+      <Setter Property="BorderBrush" Value="#1B252F"/>
+      <Setter Property="BorderThickness" Value="1"/>
+      <Setter Property="CornerRadius" Value="3"/>
+      <Setter Property="Padding" Value="6,2"/>
+      <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+    <Style Selector="Border.badge > TextBlock">
+      <Setter Property="FontFamily" Value="avares://TerminalHyperspace/Fonts/DejaVuSansMono.ttf#DejaVu Sans Mono"/>
+      <Setter Property="FontSize" Value="10"/>
+      <Setter Property="Foreground" Value="#506474"/>
+    </Style>
+
+    <Style Selector="TextBlock.section-h">
+      <Setter Property="FontFamily" Value="avares://TerminalHyperspace/Fonts/DINishCondensed-Bold.otf#DINish Condensed"/>
+      <Setter Property="FontSize" Value="12"/>
+      <Setter Property="Foreground" Value="#506474"/>
+    </Style>
+
+    <!-- Input form (the bordered "[ > ____ Execute ↵ ]" wrapper). -->
+    <Style Selector="Border.input-form">
+      <Setter Property="Background" Value="#08111A"/>
+      <Setter Property="BorderBrush" Value="#233040"/>
+      <Setter Property="BorderThickness" Value="1"/>
+      <Setter Property="CornerRadius" Value="4"/>
+    </Style>
+
+    <Style Selector="Button.send">
+      <Setter Property="Background" Value="#4A9416"/>
+      <Setter Property="BorderBrush" Value="#4A9416"/>
+      <Setter Property="BorderThickness" Value="1"/>
+      <Setter Property="CornerRadius" Value="3"/>
+      <Setter Property="Padding" Value="12,6"/>
+      <Setter Property="Foreground" Value="#D8E3EC"/>
+      <Setter Property="FontFamily" Value="avares://TerminalHyperspace/Fonts/DINishCondensed-Bold.otf#DINish Condensed"/>
+      <Setter Property="FontSize" Value="11"/>
+    </Style>
+    <Style Selector="Button.send /template/ ContentPresenter">
+      <Setter Property="Background" Value="#4A9416"/>
+      <Setter Property="BorderBrush" Value="#4A9416"/>
+    </Style>
+    <Style Selector="Button.send:pointerover /template/ ContentPresenter">
+      <Setter Property="Background" Value="#77E632"/>
+      <Setter Property="BorderBrush" Value="#77E632"/>
+    </Style>
+
+    <!-- Suggestion chips that replace the Command Panel buttons. -->
+    <Style Selector="Button.chip">
+      <Setter Property="Background" Value="#0F161C"/>
+      <Setter Property="BorderBrush" Value="#1B252F"/>
+      <Setter Property="BorderThickness" Value="1"/>
+      <Setter Property="CornerRadius" Value="3"/>
+      <Setter Property="Padding" Value="8,4"/>
+      <Setter Property="Foreground" Value="#8AA0B3"/>
+      <Setter Property="FontFamily" Value="avares://TerminalHyperspace/Fonts/DejaVuSansMono.ttf#DejaVu Sans Mono"/>
+      <Setter Property="FontSize" Value="11"/>
+    </Style>
+    <Style Selector="Button.chip /template/ ContentPresenter">
+      <Setter Property="Background" Value="#0F161C"/>
+      <Setter Property="BorderBrush" Value="#1B252F"/>
+    </Style>
+    <Style Selector="Button.chip:pointerover /template/ ContentPresenter">
+      <Setter Property="Background" Value="#0F161C"/>
+      <Setter Property="BorderBrush" Value="#FFCA3A"/>
+    </Style>
+    <Style Selector="Button.chip:pointerover">
+      <Setter Property="Foreground" Value="#D8E3EC"/>
+    </Style>
   </Application.Styles>
 
   <Application.Resources>

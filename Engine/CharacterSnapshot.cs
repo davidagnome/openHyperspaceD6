@@ -23,5 +23,6 @@ public record CharacterSnapshot(
     int UpgradePoints,
     int ForcePoints,
     IReadOnlyList<InventoryEntry> Inventory,
-    IReadOnlyList<StandingEntry> Standings
+    IReadOnlyList<StandingEntry> Standings,
+    string CurrentLocation
 );

@@ -52,7 +52,13 @@ public static partial class LocationData
             Id = "tatooine_espa_cantina",
             Name = "Mos Espa - Bucket of Bolts Cantina",
             Description = "A dim, seedy cantina on the edge of Mos Espa. The air is thick with smoke from a dozen alien imbibing pipes and drinks. A rodian band plays jizz music -- and not well.",
-            Exits = new() { ["north"] = "tatooine_espa_market", ["east"] = "tatooine_espa_docking_bay", ["south"] = "tatooine_espa_alley" },
+            Exits = new()
+            {
+                ["north"] = "tatooine_espa_market",
+                ["east"] = "tatooine_espa_docking_bay",
+                ["south"] = "tatooine_espa_alley",
+                ["west"] = "tatooine_xelric_draw_east",
+            },
             PossibleEncounters = new() { NPCData.PirateThugs, NPCData.BountyHunter },
             EncounterChance = 0.2,
             AmbientMessages = new()
@@ -72,7 +78,7 @@ public static partial class LocationData
             StarSystemName = "Tatoo System",
             SectorName = "Arkanis Sector",
             TerritoryName = "Outer Rim Territories",
-            Climate = Climate.Normal
+            Climate = Climate.Normal,
         };
 
         world["tatooine_espa_market"] = new Location
@@ -80,7 +86,12 @@ public static partial class LocationData
             Id = "tatooine_espa_market",
             Name = "Mos Espa Market District",
             Description = "A bustling open-air bazaar crammed between durasteel bulkheads. Vendors hawk everything from reprocessed ration packs to suspiciously pristine military hardware. Holographic signs flicker in a dozen languages.",
-            Exits = new() { ["south"] = "tatooine_espa_cantina", ["east"] = "tatooine_espa_hangar", ["north"] = "tatooine_espa_upper_district" },
+            Exits = new()
+            {
+                ["south"] = "tatooine_espa_cantina",
+                ["east"] = "tatooine_espa_hangar",
+                ["north"] = "tatooine_espa_upper_district",
+            },
             PossibleEncounters = new() { NPCData.PirateThugs },
             EncounterChance = 0.15,
             HasShop = true,
@@ -100,7 +111,7 @@ public static partial class LocationData
             StarSystemName = "Tatoo System",
             SectorName = "Arkanis Sector",
             TerritoryName = "Outer Rim Territories",
-            Climate = Climate.Normal
+            Climate = Climate.Normal,
         };
 
         world["tatooine_espa_docking_bay"] = new Location
@@ -108,7 +119,12 @@ public static partial class LocationData
             Id = "tatooine_espa_docking_bay",
             Name = "Mos Espa Docking Bay 7",
             Description = "A cavernous docking bay where ships of all sizes rest on scarred landing pads. Fuel lines snake across the floor like mechanical vines. Maintenance droids whir and beep as they tend to battered hulls.",
-            Exits = new() { ["west"] = "tatooine_espa_cantina", ["north"] = "tatooine_espa_hangar", ["up"] = "tatooine_orbit" },
+            Exits = new()
+            {
+                ["west"] = "tatooine_espa_cantina",
+                ["north"] = "tatooine_espa_hangar",
+                ["up"] = "tatooine_orbit",
+            },
             PossibleEncounters = new() { NPCData.Stormtrooper, NPCData.BountyHunter },
             EncounterChance = 0.25,
             HasVehicleShop = true,
@@ -127,7 +143,7 @@ public static partial class LocationData
             StarSystemName = "Tatoo System",
             SectorName = "Arkanis Sector",
             TerritoryName = "Outer Rim Territories",
-            Climate = Climate.Normal
+            Climate = Climate.Normal,
         };
 
         world["tatooine_espa_alley"] = new Location
@@ -135,7 +151,12 @@ public static partial class LocationData
             Id = "tatooine_espa_alley",
             Name = "Mos Espa - Underbelly Alley",
             Description = "A narrow, trash-strewn corridor beneath the Mos Espa main level. Flickering lights cast long shadows between dripping pipes. This is where deals go wrong and people go missing.",
-            Exits = new() { ["north"] = "tatooine_espa_cantina", ["east"] = "tatooine_espa_tunnels", ["southeast"] = "tatooine_mos_entha" },
+            Exits = new()
+            {
+                ["north"] = "tatooine_espa_cantina",
+                ["east"] = "tatooine_espa_tunnels",
+                ["southeast"] = "tatooine_mos_entha",
+            },
             PossibleEncounters = new() { NPCData.PirateThugs, NPCData.PirateThugs, NPCData.BountyHunter },
             EncounterChance = 0.45,
             AmbientMessages = new()
@@ -154,7 +175,7 @@ public static partial class LocationData
             StarSystemName = "Tatoo System",
             SectorName = "Arkanis Sector",
             TerritoryName = "Outer Rim Territories",
-            Climate = Climate.Normal
+            Climate = Climate.Normal,
         };
 
         world["tatooine_espa_tunnels"] = new Location
@@ -162,7 +183,11 @@ public static partial class LocationData
             Id = "tatooine_espa_tunnels",
             Name = "Mos Espa - Maintenance Tunnels",
             Description = "A labyrinth of service tunnels running through the station's infrastructure. The air is stale and warm. Pipes hiss with steam and the distant rumble of machinery never stops.",
-            Exits = new() { ["west"] = "tatooine_espa_alley", ["down"] = "tatooine_espa_reactor" },
+            Exits = new()
+            {
+                ["west"] = "tatooine_espa_alley",
+                ["down"] = "tatooine_espa_reactor",
+            },
             PossibleEncounters = new() { NPCData.CreatureSmall, NPCData.CreatureSmall, NPCData.Diagnoga },
             EncounterChance = 0.5,
             AmbientMessages = new()
@@ -181,7 +206,7 @@ public static partial class LocationData
             StarSystemName = "Tatoo System",
             SectorName = "Arkanis Sector",
             TerritoryName = "Outer Rim Territories",
-            Climate = Climate.Normal
+            Climate = Climate.Normal,
         };
 
         world["tatooine_espa_reactor"] = new Location
@@ -189,7 +214,10 @@ public static partial class LocationData
             Id = "tatooine_espa_reactor",
             Name = "Mos Espa - Reactor Core Access",
             Description = "The massive reactor core of Mos Espa hums with terrifying power behind reinforced transparisteel barriers. Warning signs in every language plaster the walls. The air crackles with residual energy.",
-            Exits = new() { ["up"] = "tatooine_espa_tunnels" },
+            Exits = new()
+            {
+                ["up"] = "tatooine_espa_tunnels",
+            },
             PossibleEncounters = new() { NPCData.DarkAdept, NPCData.Stormtrooper },
             EncounterChance = 0.6,
             AmbientMessages = new()
@@ -208,7 +236,7 @@ public static partial class LocationData
             StarSystemName = "Tatoo System",
             SectorName = "Arkanis Sector",
             TerritoryName = "Outer Rim Territories",
-            Climate = Climate.Normal
+            Climate = Climate.Normal,
         };
 
         world["tatooine_espa_hangar"] = new Location
@@ -216,7 +244,13 @@ public static partial class LocationData
             Id = "tatooine_espa_hangar",
             Name = "Mos Espa - Private Hangar Bay",
             Description = "A smaller, more exclusive hangar reserved for those with credits or connections. Ships here are sleeker, better maintained. Armed guards watch the entrances.",
-            Exits = new() { ["south"] = "tatooine_espa_docking_bay", ["west"] = "tatooine_espa_market", ["up"] = "tatooine_orbit", ["east"] = "beggars_canyon" },
+            Exits = new()
+            {
+                ["south"] = "tatooine_espa_docking_bay",
+                ["west"] = "tatooine_espa_market",
+                ["up"] = "tatooine_orbit",
+                ["east"] = "beggars_canyon",
+            },
             PossibleEncounters = new() { NPCData.ImperialOfficer, NPCData.BountyHunter },
             EncounterChance = 0.2,
             HasVehicleShop = true,
@@ -235,7 +269,7 @@ public static partial class LocationData
             StarSystemName = "Tatoo System",
             SectorName = "Arkanis Sector",
             TerritoryName = "Outer Rim Territories",
-            Climate = Climate.Normal
+            Climate = Climate.Normal,
         };
 
         world["tatooine_espa_upper_district"] = new Location
@@ -243,9 +277,14 @@ public static partial class LocationData
             Id = "tatooine_espa_upper_district",
             Name = "Mos Espa Upper District",
             Description = "The polished upper level of Mos Espa, where the wealthy and powerful conduct their affairs. Clean corridors, functioning lights, and the faint scent of something almost floral. The contrast with below is stark.",
-            Exits = new() { ["south"] = "tatooine_espa_market", ["east"] = "tatooine_espa_command" },
+            Exits = new()
+            {
+                ["south"] = "tatooine_espa_market",
+                ["east"] = "tatooine_espa_command",
+            },
             PossibleEncounters = new() { NPCData.ImperialOfficer },
             EncounterChance = 0.15,
+            HasShop = true,
             AmbientMessages = new()
             {
                 "Well-dressed beings stride purposefully past, datapads in hand.",
@@ -259,12 +298,11 @@ public static partial class LocationData
                 "Two kids talk about the upcoming pod-race. The adults have money on Sebulba's big comeback.",
             },
             FriendlyNPCs = new() { NPCData.Merchant },
-            HasShop = true,
             PlanetName = "Tatooine",
             StarSystemName = "Tatoo System",
             SectorName = "Arkanis Sector",
             TerritoryName = "Outer Rim Territories",
-            Climate = Climate.Normal
+            Climate = Climate.Normal,
         };
 
         world["tatooine_espa_command"] = new Location
@@ -272,7 +310,10 @@ public static partial class LocationData
             Id = "tatooine_espa_command",
             Name = "Mos Espa Imperial Station Command Center",
             Description = "The nerve center of the Imperial Regiment at Mos Espa. Massive viewscreens display system-wide sensor data, shipping routes, and Imperial patrol patterns. Officers and technicians bustle between consoles.",
-            Exits = new() { ["west"] = "tatooine_espa_upper_district" },
+            Exits = new()
+            {
+                ["west"] = "tatooine_espa_upper_district",
+            },
             PossibleEncounters = new() { NPCData.ImperialOfficer, NPCData.Stormtrooper, NPCData.Stormtrooper },
             EncounterChance = 0.35,
             AmbientMessages = new()
@@ -290,7 +331,7 @@ public static partial class LocationData
             StarSystemName = "Tatoo System",
             SectorName = "Arkanis Sector",
             TerritoryName = "Outer Rim Territories",
-            Climate = Climate.Normal
+            Climate = Climate.Normal,
         };
 
         world["tatooine_orbit"] = new Location
@@ -299,7 +340,13 @@ public static partial class LocationData
             Name = "Tatooine Orbit",
             Description = "The cold void of space stretches endlessly around you. Tatooine, a glittering web of lights against the dark planet surface. Ships drift in and out of traffic lanes. The nearest star paints everything in pale gold.",
             IsSpace = true,
-            Exits = new() { ["dock"] = "tatooine_espa_docking_bay", ["land"] = "tatooine_espa_hangar", ["jump"] = "deep_space" },
+            IsSystemSpace = true,
+            Exits = new()
+            {
+                ["dock"] = "tatooine_espa_docking_bay",
+                ["land"] = "tatooine_espa_hangar",
+                ["jump"] = "deep_space",
+            },
             PossibleEncounters = new() { NPCData.BountyHunter },
             EncounterChance = 0.2,
             AmbientMessages = new()
@@ -320,8 +367,7 @@ public static partial class LocationData
             SectorName = "Arkanis Sector",
             TerritoryName = "Outer Rim Territories",
             Climate = Climate.Normal,
-            IsSystemSpace = true,
-            HyperspaceCoordinates = [18, 16]
+            HyperspaceCoordinates = new[] { 18, 16 },
         };
 
         world["deep_space"] = new Location
@@ -330,13 +376,13 @@ public static partial class LocationData
             Name = "Deep Space — Tatoo Asteroid Belt",
             Description = "You've jumped to the edge of Tatoo's asteroid belt, a treacherous region of space filled with asteroid fields and navigational hazards. Sensors flicker with ghost readings. Out here, you're on your own.",
             IsSpace = true,
-            // `jump` is a sentinel — CommandParser intercepts it here and shows a
-            // numeric menu of in-system space destinations (IsSpace && IsSystemSpace).
-            Exits = new() { ["jump"] = "deep_space", ["explore"] = "derelict" },
+            Exits = new()
+            {
+                ["jump"] = "deep_space",
+                ["explore"] = "derelict",
+            },
             PossibleEncounters = new() { NPCData.BountyHunter, NPCData.PirateThugs },
             EncounterChance = 0.4,
-            SpaceEncounters = new() { SpaceEncounterData.PirateInterceptor, SpaceEncounterData.BountyHunterShip, SpaceEncounterData.ImperialGunboat },
-            SpaceEncounterChance = 0.45,
             AmbientMessages = new()
             {
                 "An asteroid tumbles past your viewport, close enough to see the mineral veins.",
@@ -349,11 +395,13 @@ public static partial class LocationData
                 "Coded pulses flicker across the comm band, repeating every forty seconds.",
                 "A wrecked hull tumbles past, hull plating scorched black by some ancient weapon.",
             },
+            SpaceEncounters = new() { SpaceEncounterData.PirateInterceptor, SpaceEncounterData.BountyHunterShip, SpaceEncounterData.ImperialGunboat },
+            SpaceEncounterChance = 0.45,
             PlanetName = "Deep Space near Tatooine",
             StarSystemName = "Tatoo System",
             SectorName = "Arkanis Sector",
             TerritoryName = "Outer Rim Territories",
-            Climate = Climate.Normal
+            Climate = Climate.Normal,
         };
 
         world["derelict"] = new Location
@@ -362,11 +410,13 @@ public static partial class LocationData
             Name = "Derelict Station Omega - Exterior",
             Description = "An abandoned research station drifts in the Rift, its hull scarred by weapons fire and micrometeorites. Emergency lights cast a blood-red glow through shattered viewports. Something went very wrong here.",
             IsSpace = true,
-            Exits = new() { ["leave"] = "deep_space", ["board"] = "derelict_interior" },
+            Exits = new()
+            {
+                ["leave"] = "deep_space",
+                ["board"] = "derelict_interior",
+            },
             PossibleEncounters = new() { NPCData.DarkAdept },
             EncounterChance = 0.3,
-            SpaceEncounters = new() { SpaceEncounterData.PirateInterceptor, SpaceEncounterData.BountyHunterShip },
-            SpaceEncounterChance = 0.35,
             AmbientMessages = new()
             {
                 "The station rotates slowly, revealing blast marks across its midsection.",
@@ -378,11 +428,13 @@ public static partial class LocationData
                 "Scorched hull plating spells out a word in some forgotten alphabet.",
                 "The station's hab-ring lists drunkenly on a broken axis.",
             },
-            Climate = Climate.Normal,
+            SpaceEncounters = new() { SpaceEncounterData.PirateInterceptor, SpaceEncounterData.BountyHunterShip },
+            SpaceEncounterChance = 0.35,
             PlanetName = "Tatooine Orbit",
             StarSystemName = "Tatoo System",
             SectorName = "Arkanis Sector",
             TerritoryName = "Outer Rim Territories",
+            Climate = Climate.Normal,
         };
 
         world["derelict_interior"] = new Location
@@ -390,7 +442,10 @@ public static partial class LocationData
             Id = "derelict_interior",
             Name = "Derelict Station Omega — Interior",
             Description = "The interior is a tomb. The walls are scored with something that looks disturbingly like claw marks—but far too large for any creature you know.",
-            Exits = new() { ["airlock"] = "derelict" },
+            Exits = new()
+            {
+                ["airlock"] = "derelict",
+            },
             PossibleEncounters = new() { NPCData.DarkAdept },
             EncounterChance = 0.55,
             AmbientMessages = new()
@@ -405,11 +460,11 @@ public static partial class LocationData
                 "The gravity plating flickers underfoot. For a second you drift.",
                 "A mess hall holds a dozen uneaten meals, forks still in hands that crumbled to dust.",
             },
-            Climate = Climate.Normal,
             PlanetName = "Tatooine Orbit",
             StarSystemName = "Tatoo System",
             SectorName = "Arkanis Sector",
             TerritoryName = "Outer Rim Territories",
+            Climate = Climate.Normal,
         };
 
         world["tatooine_mos_entha"] = new Location
@@ -417,7 +472,12 @@ public static partial class LocationData
             Id = "tatooine_mos_entha",
             Name = "Mos Entha — Outer Streets",
             Description = "The sand-blasted streets of Mos Entha stretch beneath the twin suns, choked with Hutt-faction markings carved into every wall and doorframe. Enforcers in mismatched armor lounge at corners, eyes following every newcomer. This is Jabba Desilijic Tiure's territory—every credit earned here has a cut taken before it reaches your pocket.",
-            Exits = new() { ["northwest"] = "tatooine_espa_alley", ["south"] = "tatooine_entha_hutt_compound", ["southeast"] = "tatooine_mospic_high_range" },
+            Exits = new()
+            {
+                ["northwest"] = "tatooine_espa_alley",
+                ["south"] = "tatooine_entha_hutt_compound",
+                ["southeast"] = "tatooine_mospic_high_range",
+            },
             PossibleEncounters = new() { NPCData.PirateThugs, NPCData.PirateThugs, NPCData.BountyHunter },
             EncounterChance = 0.35,
             HasShop = true,
@@ -439,7 +499,7 @@ public static partial class LocationData
             StarSystemName = "Tatoo System",
             SectorName = "Arkanis Sector",
             TerritoryName = "Outer Rim Territories",
-            Climate = Climate.Hot
+            Climate = Climate.Hot,
         };
 
         world["tatooine_entha_hutt_compound"] = new Location
@@ -447,7 +507,10 @@ public static partial class LocationData
             Id = "tatooine_entha_hutt_compound",
             Name = "Mos Entha — Hutt Compound",
             Description = "Beyond the rusted gate lies the inner compound ruled by Jabba's lieutenants. The architecture is bloated and ornate, carved from the same red sandstone as the surrounding desert but gilded with Hutt excess—bronze fixtures, slave-worked mosaics, and the pervasive stench of Hutt musk and contraband spice. Jabba's banner—a bloated slug sigil—flies from every post. Only the bold or the foolish come here uninvited.",
-            Exits = new() { ["north"] = "tatooine_mos_entha" },
+            Exits = new()
+            {
+                ["north"] = "tatooine_mos_entha",
+            },
             PossibleEncounters = new() { NPCData.PirateThugs, NPCData.BountyHunter, NPCData.BountyHunter, NPCData.ImperialOfficer },
             EncounterChance = 0.5,
             AmbientMessages = new()
@@ -467,7 +530,7 @@ public static partial class LocationData
             StarSystemName = "Tatoo System",
             SectorName = "Arkanis Sector",
             TerritoryName = "Outer Rim Territories",
-            Climate = Climate.Hot
+            Climate = Climate.Hot,
         };
 
         world["beggars_canyon"] = new Location
@@ -475,10 +538,13 @@ public static partial class LocationData
             Id = "beggars_canyon",
             Name = "Beggar's Canyon Entrance",
             Description = "The legendary canyon cuts a jagged scar through the Tatooine badlands east of Mos Espa. Towering sandstone walls streaked rust and amber, riddled with overhangs and narrow chicanes that racers call the 'Stone Needle Run.' The air currents here are treacherous; updrafts appear without warning and the canyon floor is littered with the wreckage of vehicles whose pilots misjudged a turn.",
-            Exits = new() { ["west"] = "tatooine_hangar" },
+            RequiresVehicle = true,
+            Exits = new()
+            {
+                ["west"] = "tatooine_hangar",
+            },
             PossibleEncounters = new() { NPCData.TuskenRaider, NPCData.TuskenRaider, NPCData.CreatureSmall, NPCData.Diagnoga },
             EncounterChance = 0.4,
-            RequiresVehicle = true,
             AmbientMessages = new()
             {
                 "A gust of wind howls through a gap in the canyon wall, scattering your footing.",
@@ -496,7 +562,7 @@ public static partial class LocationData
             StarSystemName = "Tatoo System",
             SectorName = "Arkanis Sector",
             TerritoryName = "Outer Rim Territories",
-            Climate = Climate.Hot
+            Climate = Climate.Hot,
         };
 
         world["tatooine_mospic_high_range"] = new Location
@@ -504,7 +570,12 @@ public static partial class LocationData
             Id = "tatooine_mospic_high_range",
             Name = "Mospic High Range",
             Description = "The Mospic High Range looms above the desert floor in broken tiers of wind-carved red-rock plateaus and deep shadowed canyons. Ancient Tusken burial cairns mark every ridge line; the Raiders consider these highlands sacred ground and defend them without mercy. There are no roads here—only goat trails worn by Banthas and the patient footsteps of Sand People who have called this wilderness home for ten thousand years.",
-            Exits = new() { ["northwest"] = "tatooine_mos_entha", ["south"] = "tatooine_pika_oasis" },
+            Exits = new()
+            {
+                ["northwest"] = "tatooine_mos_entha",
+                ["south"] = "tatooine_pika_oasis",
+                ["east"] = "tatooine_western_great_mesra",
+            },
             PossibleEncounters = new() { NPCData.TuskenRaider, NPCData.TuskenRaider },
             EncounterChance = 0.55,
             AmbientMessages = new()
@@ -524,15 +595,19 @@ public static partial class LocationData
             StarSystemName = "Tatoo System",
             SectorName = "Arkanis Sector",
             TerritoryName = "Outer Rim Territories",
-            Climate = Climate.Normal
+            Climate = Climate.Normal,
         };
-        
+
         world["tatooine_western_great_mesra"] = new Location
         {
             Id = "tatooine_western_great_mesra",
             Name = "Western Great Mesra Plateau",
             Description = "Rocky plateaus descend into the Northern Dune Sea. Visible to the east across a steep valley in Jabba's Palace.",
-            Exits = new() { ["west"] = "tatooine_mospic_high_range", ["east"] = "tatooine_jabba_palace_entrance" },
+            Exits = new()
+            {
+                ["west"] = "tatooine_mospic_high_range",
+                ["east"] = "tatooine_jabba_palace_entrance",
+            },
             PossibleEncounters = new() { NPCData.ImperialOfficer, NPCData.Stormtrooper, NPCData.Stormtrooper },
             EncounterChance = 0.35,
             AmbientMessages = new()
@@ -550,15 +625,21 @@ public static partial class LocationData
             StarSystemName = "Tatoo System",
             SectorName = "Arkanis Sector",
             TerritoryName = "Outer Rim Territories",
-            Climate = Climate.Normal
+            Climate = Climate.Normal,
         };
-        
+
         world["tatooine_jabba_palace_entrance"] = new Location
         {
             Id = "tatooine_jabba_palace_entrance",
             Name = "Jabba's Palace - Entrance",
             Description = "Rocky plateaus descend into the Northern Dune Sea. Visible to the east across a steep valley in Jabba's Palace.",
-            Exits = new() { ["west"] = "tatooine_western_great_mesra", ["up"] = "tatooine_jabba_palace_throne", ["down"] = "tatooine_jabba_palace_underworks" },
+            Exits = new()
+            {
+                ["west"] = "tatooine_western_great_mesra",
+                ["up"] = "tatooine_jabba_palace_throne",
+                ["down"] = "tatooine_jabba_palace_underworks",
+                ["south"] = "tatooine_southwest_mesra",
+            },
             PossibleEncounters = new() { NPCData.ImperialOfficer, NPCData.Stormtrooper, NPCData.Stormtrooper },
             EncounterChance = 0.35,
             AmbientMessages = new()
@@ -576,15 +657,18 @@ public static partial class LocationData
             StarSystemName = "Tatoo System",
             SectorName = "Arkanis Sector",
             TerritoryName = "Outer Rim Territories",
-            Climate = Climate.Normal
+            Climate = Climate.Normal,
         };
-        
+
         world["tatooine_jabba_palace_throne"] = new Location
         {
             Id = "tatooine_jabba_palace_throne",
             Name = "Jabba's Palace - Throne Room",
             Description = "Rocky plateaus descend into the Northern Dune Sea. Visible to the east across a steep valley in Jabba's Palace.",
-            Exits = new() { ["down"] = "tatooine_jabba_palace_entrance" },
+            Exits = new()
+            {
+                ["down"] = "tatooine_jabba_palace_entrance",
+            },
             PossibleEncounters = new() { NPCData.ImperialOfficer, NPCData.Stormtrooper, NPCData.Stormtrooper },
             EncounterChance = 0.35,
             AmbientMessages = new()
@@ -602,15 +686,19 @@ public static partial class LocationData
             StarSystemName = "Tatoo System",
             SectorName = "Arkanis Sector",
             TerritoryName = "Outer Rim Territories",
-            Climate = Climate.Normal
+            Climate = Climate.Normal,
         };
-        
+
         world["tatooine_jabba_palace_underworks"] = new Location
         {
             Id = "tatooine_jabba_palace_underworks",
             Name = "Jabba Palace - Underworks",
             Description = "Rocky plateaus descend into the Northern Dune Sea. Visible to the east across a steep valley in Jabba's Palace.",
-            Exits = new() { ["up"] = "tatooine_jabba_palace_entrance", ["down"] = "tatooine_jabba_rancor_pit"  },
+            Exits = new()
+            {
+                ["up"] = "tatooine_jabba_palace_entrance",
+                ["down"] = "tatooine_jabba_rancor_pit",
+            },
             PossibleEncounters = new() { NPCData.ImperialOfficer, NPCData.Stormtrooper, NPCData.Stormtrooper },
             EncounterChance = 0.35,
             AmbientMessages = new()
@@ -628,15 +716,18 @@ public static partial class LocationData
             StarSystemName = "Tatoo System",
             SectorName = "Arkanis Sector",
             TerritoryName = "Outer Rim Territories",
-            Climate = Climate.Normal
+            Climate = Climate.Normal,
         };
-        
+
         world["tatooine_jabba_palace_rancor_pit"] = new Location
         {
             Id = "tatooine_jabba_palace_rancor_pit",
             Name = "Jabba Palace - Rancor Pit",
             Description = "Rocky plateaus descend into the Northern Dune Sea. Visible to the east across a steep valley in Jabba's Palace.",
-            Exits = new() { ["up"] = "tatooine_jabba_palace_underworks" },
+            Exits = new()
+            {
+                ["up"] = "tatooine_jabba_palace_underworks",
+            },
             PossibleEncounters = new() { NPCData.ImperialOfficer, NPCData.Stormtrooper, NPCData.Stormtrooper },
             EncounterChance = 0.35,
             AmbientMessages = new()
@@ -654,16 +745,21 @@ public static partial class LocationData
             StarSystemName = "Tatoo System",
             SectorName = "Arkanis Sector",
             TerritoryName = "Outer Rim Territories",
-            Climate = Climate.Normal
+            Climate = Climate.Normal,
         };
-        
+
         world["rodia_orbit"] = new Location
         {
             Id = "rodia_orbit",
             Name = "Rodia Orbit",
-            Description = "",
             IsSpace = true,
-            Exits = new() { ["rodia_dock"] = "rodia_docking_bay", ["rodia_land"] = "rodia_hangar", ["jump"] = "deep_space" },
+            IsSystemSpace = true,
+            Exits = new()
+            {
+                ["rodia_dock"] = "rodia_docking_bay",
+                ["rodia_land"] = "rodia_hangar",
+                ["jump"] = "deep_space",
+            },
             PossibleEncounters = new() { NPCData.BountyHunter },
             EncounterChance = 0.2,
             AmbientMessages = new()
@@ -684,17 +780,22 @@ public static partial class LocationData
             SectorName = "Savareen Sector",
             TerritoryName = "Outer Rim Territories",
             Climate = Climate.Normal,
-            IsSystemSpace = true,
-            HyperspaceCoordinates = [18, 16]
+            HyperspaceCoordinates = new[] { 18, 16 },
         };
-        
+
         world["nar_shadaa_orbit"] = new Location
         {
             Id = "nar_shadaa_orbit",
             Name = "Orbit",
             Description = "Neon lights flicker across the surface of the Smuggler Moon.",
             IsSpace = true,
-            Exits = new() { ["rodia_dock"] = "rodia_docking_bay", ["rodia_land"] = "rodia_hangar", ["jump"] = "deep_space" },
+            IsSystemSpace = true,
+            Exits = new()
+            {
+                ["rodia_dock"] = "rodia_docking_bay",
+                ["rodia_land"] = "rodia_hangar",
+                ["jump"] = "deep_space",
+            },
             PossibleEncounters = new() { NPCData.BountyHunter },
             EncounterChance = 0.2,
             AmbientMessages = new()
@@ -715,17 +816,21 @@ public static partial class LocationData
             SectorName = "Savareen Sector",
             TerritoryName = "Outer Rim Territories",
             Climate = Climate.Normal,
-            IsSystemSpace = true,
-            HyperspaceCoordinates = [18, 16]
+            HyperspaceCoordinates = new[] { 18, 16 },
         };
-        
+
         world["coruscant_orbit"] = new Location
         {
             Id = "coruscant_orbit",
             Name = "Coruscant Orbit",
             Description = "Jewel of the Core Worlds — the city-planet descends into layers of ruthless Imperial control. Traffic flows in rigid corridors patrolled by ISDs and sentinel droids.",
             IsSpace = true,
-            Exits = new() { ["dock"] = "coruscant_docking_bay", ["jump"] = "deep_space" },
+            IsSystemSpace = true,
+            Exits = new()
+            {
+                ["dock"] = "coruscant_docking_bay",
+                ["jump"] = "deep_space",
+            },
             PossibleEncounters = new() { NPCData.BountyHunter },
             EncounterChance = 0.2,
             AmbientMessages = new()
@@ -746,8 +851,7 @@ public static partial class LocationData
             SectorName = "Corusca Sector",
             TerritoryName = "Core Worlds",
             Climate = Climate.Normal,
-            IsSystemSpace = true,
-            HyperspaceCoordinates = [13, 10]
+            HyperspaceCoordinates = new[] { 13, 10 },
         };
 
         world["coruscant_docking_bay"] = new Location
@@ -755,7 +859,11 @@ public static partial class LocationData
             Id = "coruscant_docking_bay",
             Name = "Coruscant Public Docking Bay 94",
             Description = "A cavernous public docking bay set into the spire-tops of the lower civic district. Customs droids glide between berths, scanning manifests with mechanical patience. The recycled air carries traces of ozone and high-grade rocket fuel.",
-            Exits = new() { ["up"] = "coruscant_orbit", ["north"] = "coruscant_verity_courtyard" },
+            Exits = new()
+            {
+                ["up"] = "coruscant_orbit",
+                ["north"] = "coruscant_verity_courtyard",
+            },
             PossibleEncounters = new() { NPCData.Stormtrooper, NPCData.ImperialOfficer, NPCData.BountyHunter },
             EncounterChance = 0.3,
             HasShop = true,
@@ -776,7 +884,7 @@ public static partial class LocationData
             SectorName = "Corusca Sector",
             TerritoryName = "Core Worlds",
             Climate = Climate.Normal,
-            HyperspaceCoordinates = [13, 10]
+            HyperspaceCoordinates = new[] { 13, 10 },
         };
 
         world["coruscant_verity_courtyard"] = new Location
@@ -784,7 +892,12 @@ public static partial class LocationData
             Id = "coruscant_verity_courtyard",
             Name = "Verity Courtyard",
             Description = "A vast plaza of polished durastone tiles ringed by senatorial spires. Holographic banners proclaim Imperial unity in twelve languages. Probe droids drift overhead in slow, looping arcs.",
-            Exits = new() { ["south"] = "coruscant_docking_bay", ["north"] = "coruscant_federal_courtyard", ["east"] = "coruscant_compnor_arcology" },
+            Exits = new()
+            {
+                ["south"] = "coruscant_docking_bay",
+                ["north"] = "coruscant_federal_courtyard",
+                ["east"] = "coruscant_compnor_arcology",
+            },
             PossibleEncounters = new() { NPCData.Stormtrooper, NPCData.ImperialOfficer },
             EncounterChance = 0.2,
             AmbientMessages = new()
@@ -804,7 +917,7 @@ public static partial class LocationData
             SectorName = "Corusca Sector",
             TerritoryName = "Core Worlds",
             Climate = Climate.Normal,
-            HyperspaceCoordinates = [13, 10]
+            HyperspaceCoordinates = new[] { 13, 10 },
         };
 
         world["coruscant_compnor_arcology"] = new Location
@@ -812,7 +925,11 @@ public static partial class LocationData
             Id = "coruscant_compnor_arcology",
             Name = "COMPNOR Arcology",
             Description = "The Commission for the Preservation of the New Order's residential arcology rises in cold steel terraces. Doctrinal tapestries hang in every corridor. Even the lighting feels supervised.",
-            Exits = new() { ["west"] = "coruscant_verity_courtyard", ["north"] = "coruscant_compnor_imperial_register" },
+            Exits = new()
+            {
+                ["west"] = "coruscant_verity_courtyard",
+                ["north"] = "coruscant_compnor_imperial_register",
+            },
             PossibleEncounters = new() { NPCData.ImperialOfficer, NPCData.Stormtrooper, NPCData.DarkAdept },
             EncounterChance = 0.4,
             AmbientMessages = new()
@@ -831,7 +948,7 @@ public static partial class LocationData
             SectorName = "Corusca Sector",
             TerritoryName = "Core Worlds",
             Climate = Climate.Normal,
-            HyperspaceCoordinates = [13, 10]
+            HyperspaceCoordinates = new[] { 13, 10 },
         };
 
         world["coruscant_compnor_imperial_register"] = new Location
@@ -839,7 +956,10 @@ public static partial class LocationData
             Id = "coruscant_compnor_imperial_register",
             Name = "COMPNOR Imperial Register",
             Description = "Row upon row of registry terminals catalog every citizen of the Empire. Quiet clerks input data with mechanical patience. The very air feels indexed and cross-referenced.",
-            Exits = new() { ["south"] = "coruscant_compnor_arcology" },
+            Exits = new()
+            {
+                ["south"] = "coruscant_compnor_arcology",
+            },
             PossibleEncounters = new() { NPCData.ImperialOfficer, NPCData.ImperialOfficer, NPCData.Stormtrooper },
             EncounterChance = 0.45,
             AmbientMessages = new()
@@ -858,7 +978,7 @@ public static partial class LocationData
             SectorName = "Corusca Sector",
             TerritoryName = "Core Worlds",
             Climate = Climate.Normal,
-            HyperspaceCoordinates = [13, 10]
+            HyperspaceCoordinates = new[] { 13, 10 },
         };
 
         world["coruscant_federal_courtyard"] = new Location
@@ -866,7 +986,11 @@ public static partial class LocationData
             Id = "coruscant_federal_courtyard",
             Name = "Federal Courtyard",
             Description = "A vast formal plaza fronting the Imperial Palace. Honor guards in gleaming armor stand motionless at every column. Holocrystal sculptures of Imperial victories rise from reflecting pools.",
-            Exits = new() { ["south"] = "coruscant_verity_courtyard", ["east"] = "coruscant_imperial_palace" },
+            Exits = new()
+            {
+                ["south"] = "coruscant_verity_courtyard",
+                ["east"] = "coruscant_imperial_palace",
+            },
             PossibleEncounters = new() { NPCData.ImperialOfficer, NPCData.Stormtrooper, NPCData.Stormtrooper },
             EncounterChance = 0.35,
             AmbientMessages = new()
@@ -886,7 +1010,7 @@ public static partial class LocationData
             SectorName = "Corusca Sector",
             TerritoryName = "Core Worlds",
             Climate = Climate.Normal,
-            HyperspaceCoordinates = [13, 10]
+            HyperspaceCoordinates = new[] { 13, 10 },
         };
 
         world["coruscant_imperial_palace"] = new Location
@@ -894,7 +1018,10 @@ public static partial class LocationData
             Id = "coruscant_imperial_palace",
             Name = "Imperial Palace - Public Atrium",
             Description = "The Imperial Palace rises in dark mirrored facets, its public atrium a cathedral of Imperial power. Massive banners hang from the vaulted ceiling. Visitors tread softly; no one speaks above a whisper.",
-            Exits = new() { ["west"] = "coruscant_federal_courtyard" },
+            Exits = new()
+            {
+                ["west"] = "coruscant_federal_courtyard",
+            },
             PossibleEncounters = new() { NPCData.ImperialOfficer, NPCData.DarkAdept, NPCData.Stormtrooper, NPCData.Stormtrooper },
             EncounterChance = 0.5,
             AmbientMessages = new()
@@ -913,7 +1040,7 @@ public static partial class LocationData
             SectorName = "Corusca Sector",
             TerritoryName = "Core Worlds",
             Climate = Climate.Normal,
-            HyperspaceCoordinates = [13, 10]
+            HyperspaceCoordinates = new[] { 13, 10 },
         };
 
         // ===========================================================
@@ -930,7 +1057,11 @@ public static partial class LocationData
             Id = "tatooine_pika_oasis",
             Name = "Pika Oasis",
             Description = "A rare slash of green in the bone-pale desert. A spring fed from deep aquifers feeds a stand of pikobi-fruit trees and reed grass. Caravans, smugglers, and Tusken bands all come here under an unspoken truce — the water is too valuable for anyone to spoil with violence. Usually.",
-            Exits = new() { ["north"] = "tatooine_mospic_high_range", ["south"] = "tatooine_bestine_outskirts" },
+            Exits = new()
+            {
+                ["north"] = "tatooine_mospic_high_range",
+                ["south"] = "tatooine_bestine_outskirts",
+            },
             PossibleEncounters = new() { NPCData.TuskenRaider, NPCData.PirateThugs, NPCData.CreatureSmall },
             EncounterChance = 0.3,
             AmbientMessages = new()
@@ -942,8 +1073,11 @@ public static partial class LocationData
                 "An old smuggler dozes in the dappled shade with a blaster pistol balanced on their stomach.",
             },
             FriendlyNPCs = new() { NPCData.Merchant },
-            PlanetName = TatooineNormal, StarSystemName = TatooSystem,
-            SectorName = ArkanisSector, TerritoryName = OuterRim, Climate = Climate.Normal
+            PlanetName = "Tatooine",
+            StarSystemName = "Tatoo System",
+            SectorName = "Arkanis Sector",
+            TerritoryName = "Outer Rim Territories",
+            Climate = Climate.Normal,
         };
 
         world["tatooine_bestine_outskirts"] = new Location
@@ -951,7 +1085,11 @@ public static partial class LocationData
             Id = "tatooine_bestine_outskirts",
             Name = "Bestine Outskirts",
             Description = "The shanties and moisture-farms thinning into the city proper. Tarp-roofed huts lean against rusted speeder skeletons; Imperial recruitment posters flap on every other wall. The smell of charred protein cubes and lubricant follows you toward the city gates.",
-            Exits = new() { ["north"] = "tatooine_pika_oasis", ["south"] = "tatooine_bestine_market" },
+            Exits = new()
+            {
+                ["north"] = "tatooine_pika_oasis",
+                ["south"] = "tatooine_bestine_market",
+            },
             PossibleEncounters = new() { NPCData.Stormtrooper, NPCData.PirateThugs, NPCData.ImperialOfficer },
             EncounterChance = 0.3,
             AmbientMessages = new()
@@ -962,8 +1100,11 @@ public static partial class LocationData
                 "Two off-duty stormtroopers haggle with an old woman over a bag of polystarch buns.",
                 "A vagrant droid wanders the dust, beeping politely at anyone who might give it a charge.",
             },
-            PlanetName = TatooineNormal, StarSystemName = TatooSystem,
-            SectorName = ArkanisSector, TerritoryName = OuterRim, Climate = Climate.Normal
+            PlanetName = "Tatooine",
+            StarSystemName = "Tatoo System",
+            SectorName = "Arkanis Sector",
+            TerritoryName = "Outer Rim Territories",
+            Climate = Climate.Normal,
         };
 
         world["tatooine_bestine_market"] = new Location
@@ -976,13 +1117,12 @@ public static partial class LocationData
                 ["north"] = "tatooine_bestine_outskirts",
                 ["east"] = "tatooine_bestine_garrison",
                 ["west"] = "tatooine_bestine_spaceport",
-                ["south"] = "tatooine_judland_wasteland_east"
+                ["south"] = "tatooine_judland_wasteland_east",
             },
             PossibleEncounters = new() { NPCData.Stormtrooper, NPCData.ImperialOfficer, NPCData.PirateThugs, NPCData.BountyHunter },
             EncounterChance = 0.3,
             HasShop = true,
             HasVehicleShop = true,
-            FriendlyNPCs = new() { NPCData.Merchant },
             AmbientMessages = new()
             {
                 "An Imperial herald reads the daily bounty list aloud from a raised platform.",
@@ -991,8 +1131,12 @@ public static partial class LocationData
                 "Two Imperial officers debate the merits of a confiscated speeder bike, eyeing the crowd warily.",
                 "A holo of Governor Tarkin hangs above the central fountain; the fountain has been dry for years.",
             },
-            PlanetName = TatooineNormal, StarSystemName = TatooSystem,
-            SectorName = ArkanisSector, TerritoryName = OuterRim, Climate = Climate.Normal
+            FriendlyNPCs = new() { NPCData.Merchant },
+            PlanetName = "Tatooine",
+            StarSystemName = "Tatoo System",
+            SectorName = "Arkanis Sector",
+            TerritoryName = "Outer Rim Territories",
+            Climate = Climate.Normal,
         };
 
         world["tatooine_bestine_garrison"] = new Location
@@ -1000,7 +1144,10 @@ public static partial class LocationData
             Id = "tatooine_bestine_garrison",
             Name = "Bestine Imperial Garrison",
             Description = "The 501st Bestine Detachment occupies a fortified durasteel compound at the city's eastern edge. Walking patrols loop the perimeter with practiced precision. The air carries hot ozone from constantly-running power couplings.",
-            Exits = new() { ["west"] = "tatooine_bestine_market" },
+            Exits = new()
+            {
+                ["west"] = "tatooine_bestine_market",
+            },
             PossibleEncounters = new() { NPCData.Stormtrooper, NPCData.Stormtrooper, NPCData.Snowtrooper, NPCData.ImperialOfficer },
             EncounterChance = 0.55,
             AmbientMessages = new()
@@ -1011,8 +1158,11 @@ public static partial class LocationData
                 "A trio of stormtroopers sits in a circle eating ration tubes, helmets at their feet.",
                 "An officer reviews a glowing star map on a holotable, frowning at a region marked 'JUNDLAND.'",
             },
-            PlanetName = TatooineNormal, StarSystemName = TatooSystem,
-            SectorName = ArkanisSector, TerritoryName = OuterRim, Climate = Climate.Normal
+            PlanetName = "Tatooine",
+            StarSystemName = "Tatoo System",
+            SectorName = "Arkanis Sector",
+            TerritoryName = "Outer Rim Territories",
+            Climate = Climate.Normal,
         };
 
         world["tatooine_bestine_spaceport"] = new Location
@@ -1020,7 +1170,11 @@ public static partial class LocationData
             Id = "tatooine_bestine_spaceport",
             Name = "Bestine Spaceport",
             Description = "A working spaceport for the capital — bigger than Mos Espa's docking bays and run with strict Imperial protocol. Customs droids glide between berths; a queue of merchants waits patiently while their manifests are scanned.",
-            Exits = new() { ["east"] = "tatooine_bestine_market", ["up"] = "tatooine_orbit" },
+            Exits = new()
+            {
+                ["east"] = "tatooine_bestine_market",
+                ["up"] = "tatooine_orbit",
+            },
             PossibleEncounters = new() { NPCData.Stormtrooper, NPCData.BountyHunter, NPCData.ImperialOfficer },
             EncounterChance = 0.3,
             HasShop = true,
@@ -1034,8 +1188,11 @@ public static partial class LocationData
                 "A bounty hunter in scuffed armor leans against their landing strut, watching the queue.",
             },
             FriendlyNPCs = new() { NPCData.Merchant },
-            PlanetName = TatooineNormal, StarSystemName = TatooSystem,
-            SectorName = ArkanisSector, TerritoryName = OuterRim, Climate = Climate.Normal
+            PlanetName = "Tatooine",
+            StarSystemName = "Tatoo System",
+            SectorName = "Arkanis Sector",
+            TerritoryName = "Outer Rim Territories",
+            Climate = Climate.Normal,
         };
 
         world["tatooine_judland_wasteland_east"] = new Location
@@ -1043,7 +1200,12 @@ public static partial class LocationData
             Id = "tatooine_judland_wasteland_east",
             Name = "Jundland Wastes — Eastern Approach",
             Description = "The Jundland's eastern edge: petrified canyons of ochre stone and bleached bone. Wind hisses constantly through gaps in the rock. Imperial patrols don't come this far; the few travelers you meet are fugitives, hermits, or worse.",
-            Exits = new() { ["north"] = "tatooine_bestine_market", ["west"] = "tatooine_judland_wasteland_central" },
+            Exits = new()
+            {
+                ["north"] = "tatooine_bestine_market",
+                ["west"] = "tatooine_judland_wasteland_central",
+                ["east"] = "tatooine_motesta_oasis",
+            },
             PossibleEncounters = new() { NPCData.TuskenRaider, NPCData.CreatureSmall, NPCData.PirateThugs },
             EncounterChance = 0.4,
             AmbientMessages = new()
@@ -1054,8 +1216,11 @@ public static partial class LocationData
                 "Distant tapping echoes through the canyon — gaderffii on stone, slow and steady.",
                 "A vulture-bat circles overhead, watching with patient interest.",
             },
-            PlanetName = TatooineNormal, StarSystemName = TatooSystem,
-            SectorName = ArkanisSector, TerritoryName = OuterRim, Climate = Climate.Normal
+            PlanetName = "Tatooine",
+            StarSystemName = "Tatoo System",
+            SectorName = "Arkanis Sector",
+            TerritoryName = "Outer Rim Territories",
+            Climate = Climate.Normal,
         };
 
         world["tatooine_judland_wasteland_central"] = new Location
@@ -1063,7 +1228,11 @@ public static partial class LocationData
             Id = "tatooine_judland_wasteland_central",
             Name = "Jundland Wastes — Central Maze",
             Description = "The deep Jundland: a labyrinth of slot canyons that swallow sound and direction. Sand People war-shrines mark every chokepoint. Even Tatooine's twin suns barely reach the canyon floor here, and the temperature drops fast in the shadows.",
-            Exits = new() { ["east"] = "tatooine_judland_wasteland_east", ["west"] = "tatooine_judland_wasteland_west" },
+            Exits = new()
+            {
+                ["east"] = "tatooine_judland_wasteland_east",
+                ["west"] = "tatooine_judland_wasteland_west",
+            },
             PossibleEncounters = new() { NPCData.TuskenRaider, NPCData.TuskenRaider, NPCData.CreatureSmall },
             EncounterChance = 0.55,
             AmbientMessages = new()
@@ -1074,8 +1243,11 @@ public static partial class LocationData
                 "A torn fragment of a Jedi robe — or a robe like one — flutters caught on a rock spike.",
                 "The air is suddenly cold; a moment later the wind shifts and the heat returns.",
             },
-            PlanetName = TatooineNormal, StarSystemName = TatooSystem,
-            SectorName = ArkanisSector, TerritoryName = OuterRim, Climate = Climate.Normal
+            PlanetName = "Tatooine",
+            StarSystemName = "Tatoo System",
+            SectorName = "Arkanis Sector",
+            TerritoryName = "Outer Rim Territories",
+            Climate = Climate.Normal,
         };
 
         world["tatooine_judland_wasteland_west"] = new Location
@@ -1087,7 +1259,7 @@ public static partial class LocationData
             {
                 ["east"] = "tatooine_judland_wasteland_central",
                 ["south"] = "tatooine_northern_jawa_territories",
-                ["northwest"] = "tatooine_old_ben_residence"
+                ["northwest"] = "tatooine_old_ben_residence",
             },
             PossibleEncounters = new() { NPCData.TuskenRaider, NPCData.CreatureSmall },
             EncounterChance = 0.4,
@@ -1099,8 +1271,11 @@ public static partial class LocationData
                 "A womp rat skitters across the path and disappears into a crack between boulders.",
                 "The wind carries a half-heard syllable, gone before you can place it.",
             },
-            PlanetName = TatooineNormal, StarSystemName = TatooSystem,
-            SectorName = ArkanisSector, TerritoryName = OuterRim, Climate = Climate.Normal
+            PlanetName = "Tatooine",
+            StarSystemName = "Tatoo System",
+            SectorName = "Arkanis Sector",
+            TerritoryName = "Outer Rim Territories",
+            Climate = Climate.Normal,
         };
 
         world["tatooine_northern_jawa_territories"] = new Location
@@ -1108,12 +1283,14 @@ public static partial class LocationData
             Id = "tatooine_northern_jawa_territories",
             Name = "Northern Jawa Territories",
             Description = "The roving Jawa clans of the northern flats have parked their sandcrawlers in a loose ring, forming an impromptu trade-camp. Hooded figures swarm in chittering clusters, hauling salvage between the towering machines. The smell of solder, ozone, and unwashed wool is overwhelming.",
-            Exits = new() { ["north"] = "tatooine_judland_wasteland_west" },
+            Exits = new()
+            {
+                ["north"] = "tatooine_judland_wasteland_west",
+            },
             PossibleEncounters = new() { NPCData.PirateThugs, NPCData.TuskenRaider },
             EncounterChance = 0.25,
             HasShop = true,
             HasVehicleShop = true,
-            FriendlyNPCs = new() { NPCData.Merchant, NPCData.Merchant },
             AmbientMessages = new()
             {
                 "A sandcrawler's bay door yawns open; conveyor belts spool out salvaged droid parts onto the sand.",
@@ -1122,8 +1299,12 @@ public static partial class LocationData
                 "An auctioneer in a battered electromegaphone calls bids in rapid-fire Jawa, tone unmistakable.",
                 "A R5-series droid is wheeled onto the auction block; it whistles a sad, resigned tune.",
             },
-            PlanetName = TatooineNormal, StarSystemName = TatooSystem,
-            SectorName = ArkanisSector, TerritoryName = OuterRim, Climate = Climate.Normal
+            FriendlyNPCs = new() { NPCData.Merchant, NPCData.Merchant },
+            PlanetName = "Tatooine",
+            StarSystemName = "Tatoo System",
+            SectorName = "Arkanis Sector",
+            TerritoryName = "Outer Rim Territories",
+            Climate = Climate.Normal,
         };
 
         world["tatooine_old_ben_residence"] = new Location
@@ -1131,7 +1312,10 @@ public static partial class LocationData
             Id = "tatooine_old_ben_residence",
             Name = "Old Ben's Residence",
             Description = "A modest hermit's dwelling carved into the side of a high bluff overlooking the Jundland. Dust drifts through the open doorway; a single cup of caf sits cold on a low stone table, as though the occupant just stepped out. The Force here is dense, patient — like a fingerprint pressed into the air.",
-            Exits = new() { ["southeast"] = "tatooine_judland_wasteland_west" },
+            Exits = new()
+            {
+                ["southeast"] = "tatooine_judland_wasteland_west",
+            },
             PossibleEncounters = new() { NPCData.DarkAdept, NPCData.CreatureSmall },
             EncounterChance = 0.2,
             AmbientMessages = new()
@@ -1142,14 +1326,72 @@ public static partial class LocationData
                 "A small carved wooden token sits on a high shelf — featureless except for two suns and a starbird.",
                 "The Force in here is not unkind. It seems to be... waiting for someone.",
             },
-            PlanetName = TatooineNormal, StarSystemName = TatooSystem,
-            SectorName = ArkanisSector, TerritoryName = OuterRim, Climate = Climate.Normal
+            PlanetName = "Tatooine",
+            StarSystemName = "Tatoo System",
+            SectorName = "Arkanis Sector",
+            TerritoryName = "Outer Rim Territories",
+            Climate = Climate.Normal,
         };
 
-        // Note: deep_space uses a numeric `jump` menu (handled in CommandParser)
-        // rather than static exits to in-system space locations.
+        world["tatooine_xelric_draw_east"] = new Location
+        {
+            Id = "tatooine_xelric_draw_east",
+            Name = "Xelric Draw East",
+            Description = "The wide, flat lands of the Xelric Draw seem inhospitable. Salt flats. No dunes, just rock formations spread far and wide until the Xelric Draws rises in the West into a series of ridgelines, used by traders except during the Boonta Eve Classic.",
+            Exits = new()
+            {
+                ["east"] = "tatooine_espa_cantina",
+            },
+            EncounterChance = 0.2,
+            AmbientMessages = new()
+            {
+                "The wind howls over the Xelric Draw's wastes. It's hot, far too hot for this far north.",
+            },
+            PlanetName = "Tatooine",
+            StarSystemName = "Tatoo System",
+            SectorName = "Arkanis Sector",
+            TerritoryName = "Outer Rim Territories",
+            Climate = Climate.Hot,
+        };
 
-        // Initialize NPC resolve for encounters
+        world["tatooine_motesta_oasis"] = new Location
+        {
+            Id = "tatooine_motesta_oasis",
+            Name = "Motesta Oasis",
+            Exits = new()
+            {
+                ["west"] = "tatooine_judland_wasteland_east",
+            },
+            EncounterChance = 0.2,
+            Climate = Climate.Normal,
+        };
+
+        world["tatooine_southwest_mesra"] = new Location
+        {
+            Id = "tatooine_southwest_mesra",
+            Name = "Southwest Great Mesra Plateau",
+            Exits = new()
+            {
+                ["north"] = "tatooine_jabba_palace_entrance",
+                ["east"] = "tatooine_southcentral_mesra",
+            },
+            EncounterChance = 0.2,
+            Climate = Climate.Normal,
+        };
+
+
+        world["tatooine_southcentral_mesra"] = new Location
+        {
+            Id = "tatooine_southcentral_mesra",
+            Name = "South Central Great Mesra Plateau",
+            Exits = new()
+            {
+                ["west"] = "tatooine_southwest_mesra",
+            },
+            EncounterChance = 0.2,
+            Climate = Climate.Normal,
+        };
+
         RegisterImported(world);
         return world;
     }

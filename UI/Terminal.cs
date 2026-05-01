@@ -210,7 +210,6 @@ public class Terminal
             
             WriteColored(@"    
    ______________________________________________________________________
-  | .     .               .   .                   .          .           |
   |              . .                     .      ___,_   _         .   .  |
   | .                       .      .          [:t_:::;t''t''+        .   |
   |      .                     .            . `=_ ''`[ j.:\=\            |
@@ -232,14 +231,12 @@ public class Terminal
   |  \:== :: == :=='    __,,,+++|O|. +++..   :::j_[nnj_[_++:+%%_%%|+%|%+O|
   |   ''-. =_:::: },+|O##|+::+|:++:::..    ::: .:+%%%%%%j [%O%%j [:+++|++|
   |   _,,`-------' .+#O#+:||%+ ____   :: .. .:++|O###O%j `'  `' [:::::::+|
-  |.+:..:++|++||||+.O.::++:|::| _  |:...:++++|||+O##||%j [%..%j [+::LS:+%|
    ______________________________________________________________________
 ", ConsoleColor.Cyan);        
             
             WriteColored(@"
     In a galaxy far and away, the Empire tightens its grip on the
-    planets. On Tatooine, a backwater waypoint for smugglers,
-    bounty hunters, and those with looking to keep a low profile,
+    planets. On Tatooine, a backwater for those with looking to keep a low profile,
     your destiny begins...", ConsoleColor.DarkCyan);
             WriteRawLine();
             WriteColored("    Press ENTER to begin...", ConsoleColor.DarkGray);
@@ -257,8 +254,7 @@ public class Terminal
         Console.ForegroundColor = ConsoleColor.DarkCyan;
         Console.WriteLine(@"
     In a galaxy far and away, the Empire tightens its grip on the
-    planets. On Tatooine, a backwater waypoint for smugglers,
-    bounty hunters, and those with looking to keep a low profile,
+    planets. On Tatooine, a backwater for those with looking to keep a low profile,
     your destiny begins...");
         Console.ForegroundColor = ConsoleColor.DarkGray;
         Console.WriteLine();
