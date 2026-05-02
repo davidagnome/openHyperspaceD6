@@ -786,7 +786,7 @@ public static partial class LocationData
         world["nar_shadaa_orbit"] = new Location
         {
             Id = "nar_shadaa_orbit",
-            Name = "Orbit",
+            Name = "Nar Shadaa Orbit",
             Description = "Neon lights flicker across the surface of the Smuggler Moon.",
             IsSpace = true,
             IsSystemSpace = true,
@@ -1200,6 +1200,7 @@ public static partial class LocationData
             Id = "tatooine_judland_wasteland_east",
             Name = "Jundland Wastes — Eastern Approach",
             Description = "The Jundland's eastern edge: petrified canyons of ochre stone and bleached bone. Wind hisses constantly through gaps in the rock. Imperial patrols don't come this far; the few travelers you meet are fugitives, hermits, or worse.",
+            RequiresVehicle = true,
             Exits = new()
             {
                 ["north"] = "tatooine_bestine_market",
@@ -1379,7 +1380,6 @@ public static partial class LocationData
             Climate = Climate.Normal,
         };
 
-
         world["tatooine_southcentral_mesra"] = new Location
         {
             Id = "tatooine_southcentral_mesra",
@@ -1387,6 +1387,65 @@ public static partial class LocationData
             Exits = new()
             {
                 ["west"] = "tatooine_southwest_mesra",
+            },
+            EncounterChance = 0.2,
+            Climate = Climate.Normal,
+        };
+
+        world["edan_docking_bay"] = new Location
+        {
+            Id = "edan_docking_bay",
+            Name = "Edan II - Secluded Docking Bay",
+            Description = "The rebel cell on Edan operates a secluded hangar. They barter with smugglers ",
+            Exits = new()
+            {
+                ["up"] = "edan_orbit",
+                ["west"] = "edan_docking_bay",
+                ["west"] = "edan_rebel_base_perimeter",
+            },
+            EncounterChance = 0.2,
+            AmbientMessages = new()
+            {
+                "The stars shine, still and serene, on a planet untouched by heavy industry.",
+                "A TIE bomber roars overhead. The rebels in the base don't even look up.",
+                "An edan tiger moves through the edge of the bushes surrouding the bay, hoping for a quick meal.",
+            },
+            PlanetName = "Edan II",
+            StarSystemName = "Edan System",
+            SectorName = "Hythrope Sector",
+            TerritoryName = "Expansion Region",
+            Climate = Climate.Normal,
+        };
+
+        world["edan_orbit"] = new Location
+        {
+            Id = "edan_orbit",
+            Name = "Edan II Orbit",
+            Description = "Temperate with mild desert on its eastern continent, Edan II boast thick jungles.",
+            IsSpace = true,
+            IsSystemSpace = true,
+            RequiresVehicle = true,
+            Exits = new()
+            {
+                ["land"] = "edan_docking_bay",
+                ["dock"] = "edan_docking_bay",
+                ["down"] = "edan_docking_bay",
+            },
+            EncounterChance = 0.2,
+            PlanetName = "Edan II",
+            StarSystemName = "Edan System",
+            SectorName = "Hythrope Sector",
+            TerritoryName = "Expansion Region",
+            Climate = Climate.Normal,
+        };
+
+        world["edan_rebel_base_perimeter"] = new Location
+        {
+            Id = "edan_rebel_base_perimeter",
+            Name = "Edan II - Rebel Cell Perimeter",
+            Exits = new()
+            {
+                ["east"] = "edan_docking_bay",
             },
             EncounterChance = 0.2,
             Climate = Climate.Normal,

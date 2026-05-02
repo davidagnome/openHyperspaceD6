@@ -1,5 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Shapes;
 using Avalonia.Input;
 using Avalonia.Interactivity;
@@ -94,6 +95,8 @@ public partial class MainWindow : Window
             case "Vehicle":        BuildVehicleViewIfNeeded();         break;
             case "Role":           BuildRoleViewIfNeeded();            break;
             case "Species":        BuildSpeciesViewIfNeeded();         break;
+            case "Armor":          BuildArmorViewIfNeeded();           break;
+            case "SpaceEncounter": BuildSpaceEncounterViewIfNeeded();  break;
         }
 
         // Hide every view, then show the selected one.
@@ -106,6 +109,8 @@ public partial class MainWindow : Window
         VehicleView.IsVisible        = key == "Vehicle";
         RoleView.IsVisible           = key == "Role";
         SpeciesView.IsVisible        = key == "Species";
+        ArmorView.IsVisible          = key == "Armor";
+        SpaceEncounterView.IsVisible = key == "SpaceEncounter";
 
         // Top bar adapts to whichever Content/*.cs is implied by the selection so
         // the Load/Save buttons make sense even before the other parsers exist.
@@ -119,6 +124,8 @@ public partial class MainWindow : Window
             "Vehicle"        => ("VehicleData.cs:",     "VehicleData.cs"),
             "Role"           => ("RoleData.cs:",        "RoleData.cs"),
             "Species"        => ("SpeciesData.cs:",     "SpeciesData.cs"),
+            "Armor"          => ("ArmorData.cs:",       "ArmorData.cs"),
+            "SpaceEncounter" => ("SpaceEncounterData.cs:", "SpaceEncounterData.cs"),
             _                => ("LocationData.cs:",   "LocationData.cs"),
         };
         TopBarLabel.Text = label;
@@ -156,6 +163,8 @@ public partial class MainWindow : Window
                         case "Vehicle":        LoadVehicles();        break;
                         case "Role":           LoadRoles();           break;
                         case "Species":        LoadSpecies();         break;
+                        case "Armor":          LoadArmors();          break;
+                        case "SpaceEncounter": LoadSpaceEncounters(); break;
                         default:               Load();                break; // Location
                     }
                 }
@@ -183,6 +192,8 @@ public partial class MainWindow : Window
         if (except != "Vehicle")        { _vhParser = null; _vhs.Clear(); _selectedVh = null; }
         if (except != "Role")           { _roleParser = null; _roles.Clear(); _selectedRole = null; }
         if (except != "Species")        { _speciesParser = null; _species.Clear(); _selectedSpecies = null; }
+        if (except != "Armor")          { _armorParser = null; _armors.Clear(); _selectedArmor = null; }
+        if (except != "SpaceEncounter") { _seParser = null; _ses.Clear(); _selectedSe = null; }
     }
 
     // ---------- Loading / saving ----------
@@ -211,6 +222,8 @@ public partial class MainWindow : Window
             case "Vehicle":        LoadVehicles();        break;
             case "Role":           LoadRoles();           break;
             case "Species":        LoadSpecies();         break;
+            case "Armor":          LoadArmors();          break;
+            case "SpaceEncounter": LoadSpaceEncounters(); break;
             default:               Load();                break; // Location
         }
     }
@@ -227,6 +240,8 @@ public partial class MainWindow : Window
             case "Vehicle":        SaveVehicles();        break;
             case "Role":           SaveRoles();           break;
             case "Species":        SaveSpecies();         break;
+            case "Armor":          SaveArmors();          break;
+            case "SpaceEncounter": SaveSpaceEncounters(); break;
             default:               Save();                break; // Location
         }
     }
@@ -390,9 +405,9 @@ public partial class MainWindow : Window
 
         RefreshExitsList();
         RefreshAmbientList();
-        RefreshEncounterList(EdPossibleEncounters, room.PossibleEncounters);
-        RefreshEncounterList(EdFriendlyNPCs,       room.FriendlyNPCs);
-        RefreshEncounterList(EdSpaceEncounters,    room.SpaceEncounters);
+        RefreshEncounterList(EdPossibleEncounters, room.PossibleEncounters, _npcChoices);
+        RefreshEncounterList(EdFriendlyNPCs,       room.FriendlyNPCs,       _npcChoices);
+        RefreshEncounterList(EdSpaceEncounters,    room.SpaceEncounters,    _spaceChoices);
 
         EdExitDest.ItemsSource = _rooms.Select(r => r.Id).OrderBy(s => s).ToList();
     }
@@ -402,7 +417,58 @@ public partial class MainWindow : Window
     private void RefreshExitsList()
     {
         if (_selected == null) return;
-        EdExits.ItemsSource = _selected.Exits.Select((e, i) => new ExitItem(e, i, this)).ToList();
+        EdExits.Children.Clear();
+        var destOptions = _rooms.Select(r => r.Id).OrderBy(s => s).ToList();
+        for (int i = 0; i < _selected.Exits.Count; i++)
+        {
+            var idx = i;
+            var entry = _selected.Exits[idx];
+            var grid = new Grid { ColumnDefinitions = new ColumnDefinitions("*,2*,Auto") };
+
+            var dirCb = new ComboBox
+            {
+                ItemsSource = ExitDirections,
+                SelectedItem = entry.Key,
+                HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Stretch,
+            };
+            dirCb.SelectionChanged += (_, _) =>
+            {
+                if (_selected == null || idx >= _selected.Exits.Count) return;
+                if (dirCb.SelectedItem is string s) _selected.Exits[idx].Key = s;
+                DrawWorldMap();
+            };
+            Grid.SetColumn(dirCb, 0);
+
+            var destCb = new ComboBox
+            {
+                ItemsSource = destOptions,
+                SelectedItem = entry.Value,
+                HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Stretch,
+                Margin = new Avalonia.Thickness(4, 0, 0, 0),
+            };
+            destCb.SelectionChanged += (_, _) =>
+            {
+                if (_selected == null || idx >= _selected.Exits.Count) return;
+                if (destCb.SelectedItem is string s) _selected.Exits[idx].Value = s;
+                DrawWorldMap();
+            };
+            Grid.SetColumn(destCb, 1);
+
+            var del = new Button
+            {
+                Content = "✕",
+                Margin = new Avalonia.Thickness(4, 0, 0, 0),
+                Padding = new Avalonia.Thickness(8, 2),
+            };
+            ToolTip.SetTip(del, "Delete this exit");
+            del.Click += (_, _) => RemoveExit(idx);
+            Grid.SetColumn(del, 2);
+
+            grid.Children.Add(dirCb);
+            grid.Children.Add(destCb);
+            grid.Children.Add(del);
+            EdExits.Children.Add(grid);
+        }
     }
 
     private void RefreshAmbientList()
@@ -419,6 +485,7 @@ public partial class MainWindow : Window
                 AcceptsReturn = true,
                 TextWrapping = TextWrapping.Wrap,
             };
+            ScrollViewer.SetHorizontalScrollBarVisibility(tb, ScrollBarVisibility.Disabled);
             // Sync as the user types so saves capture mid-edit changes too.
             tb.TextChanged += (_, _) =>
             {
@@ -444,10 +511,48 @@ public partial class MainWindow : Window
         }
     }
 
-    private void RefreshEncounterList(ItemsControl ctrl, List<string> source)
+    /// Renders the editable encounter rows for one of the three lists
+    /// (PossibleEncounters / FriendlyNPCs / SpaceEncounters). Each row is
+    /// [ComboBox of available factory names][✕ delete]; changing the dropdown
+    /// updates the underlying list in place.
+    private void RefreshEncounterList(StackPanel panel, List<string> source, List<string> choices)
     {
         if (_selected == null) return;
-        ctrl.ItemsSource = source.Select((s, i) => new EncounterItem(s, i, source, this)).ToList();
+        panel.Children.Clear();
+        for (int i = 0; i < source.Count; i++)
+        {
+            var idx = i;
+            var grid = new Grid { ColumnDefinitions = new ColumnDefinitions("*,Auto") };
+
+            var cb = EditorHelpers.NewCombo(choices);
+            cb.SelectedItem = source[idx];
+            cb.HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Stretch;
+            cb.SelectionChanged += (_, _) =>
+            {
+                if (idx >= source.Count) return;
+                if (cb.SelectedItem is string s) source[idx] = s;
+            };
+            Grid.SetColumn(cb, 0);
+
+            var del = new Button
+            {
+                Content = "✕",
+                Padding = new Avalonia.Thickness(8, 2),
+                Margin = new Avalonia.Thickness(4, 0, 0, 0),
+            };
+            ToolTip.SetTip(del, "Delete this entry");
+            del.Click += (_, _) =>
+            {
+                if (idx >= source.Count) return;
+                source.RemoveAt(idx);
+                RefreshEncounterList(panel, source, choices);
+            };
+            Grid.SetColumn(del, 1);
+
+            grid.Children.Add(cb);
+            grid.Children.Add(del);
+            panel.Children.Add(grid);
+        }
     }
 
     // ---------- Add-buttons ----------
@@ -456,7 +561,7 @@ public partial class MainWindow : Window
     {
         if (_selected == null || EdNpcPicker.SelectedItem is not string s) return;
         _selected.PossibleEncounters.Add(s);
-        RefreshEncounterList(EdPossibleEncounters, _selected.PossibleEncounters);
+        RefreshEncounterList(EdPossibleEncounters, _selected.PossibleEncounters, _npcChoices);
     }
 
     private void OnAddFriendlyNpcClick(object? sender, RoutedEventArgs e)
@@ -465,14 +570,14 @@ public partial class MainWindow : Window
         _selected.FriendlyNPCs.Add(s);
         _selected.FriendlyNPCsPresent = true;
         EdFriendlyNPCsPresent.IsChecked = true;
-        RefreshEncounterList(EdFriendlyNPCs, _selected.FriendlyNPCs);
+        RefreshEncounterList(EdFriendlyNPCs, _selected.FriendlyNPCs, _npcChoices);
     }
 
     private void OnAddSpaceEncounterClick(object? sender, RoutedEventArgs e)
     {
         if (_selected == null || EdSpacePicker.SelectedItem is not string s) return;
         _selected.SpaceEncounters.Add(s);
-        RefreshEncounterList(EdSpaceEncounters, _selected.SpaceEncounters);
+        RefreshEncounterList(EdSpaceEncounters, _selected.SpaceEncounters, _spaceChoices);
     }
 
     private void OnAddExitClick(object? sender, RoutedEventArgs e)
@@ -501,7 +606,7 @@ public partial class MainWindow : Window
         if (_selected == null) return;
         _selected.FriendlyNPCsPresent = EdFriendlyNPCsPresent.IsChecked == true;
         if (!_selected.FriendlyNPCsPresent) _selected.FriendlyNPCs.Clear();
-        RefreshEncounterList(EdFriendlyNPCs, _selected.FriendlyNPCs);
+        RefreshEncounterList(EdFriendlyNPCs, _selected.FriendlyNPCs, _npcChoices);
     }
 
     public void RemoveExit(int idx)
@@ -517,13 +622,6 @@ public partial class MainWindow : Window
         if (_selected == null) return;
         _selected.AmbientMessages.RemoveAt(idx);
         RefreshAmbientList();
-    }
-
-    public void RemoveEncounter(List<string> source, int idx, ItemsControl ctrl)
-    {
-        if (_selected == null) return;
-        source.RemoveAt(idx);
-        RefreshEncounterList(ctrl, source);
     }
 
     // ---------- World map canvas ----------
@@ -692,20 +790,6 @@ public class RoomListItem
     }
 }
 
-public class ExitItem
-{
-    public string Display { get; }
-    public ExitItem(KeyValueEntry e, int idx, MainWindow owner)
-    {
-        Display = $"{e.Key} → {e.Value}";
-        Index = idx;
-        Owner = owner;
-    }
-    public int Index { get; }
-    public MainWindow Owner { get; }
-    public override string ToString() => Display;
-}
-
 public class AmbientItem
 {
     public string Display { get; }
@@ -720,15 +804,3 @@ public class AmbientItem
     public override string ToString() => Display;
 }
 
-public class EncounterItem
-{
-    public string Name { get; }
-    public EncounterItem(string s, int idx, List<string> source, MainWindow owner)
-    {
-        Name = s; Index = idx; Source = source; Owner = owner;
-    }
-    public int Index { get; }
-    public List<string> Source { get; }
-    public MainWindow Owner { get; }
-    public override string ToString() => Name;
-}

@@ -6,6 +6,7 @@ namespace TerminalHyperspace.Content;
 /// offers work. Each call returns a fresh instance so player state doesn't bleed.
 public static partial class MissionData
 {
+
     public static Mission EscortDiplomat() => new()
     {
         Id = "escort_diplomat",
@@ -14,10 +15,7 @@ public static partial class MissionData
         Type = MissionType.Escort,
         DestinationLocationId = "tatooine_espa_hangar",
         EscortNpcName = "Twi'lek Diplomat",
-        CreditReward = 200,
-        UpgradePointReward = 1,
-        FactionBonus = Faction.Rebellion,
-        FactionPenalty = Faction.Empire,
+        CreditReward = 200, UpgradePointReward = 1,
     };
 
     public static Mission EscortInformant() => new()
@@ -28,10 +26,7 @@ public static partial class MissionData
         Type = MissionType.Escort,
         DestinationLocationId = "tatooine_espa_cantina",
         EscortNpcName = "Rebel Informant",
-        CreditReward = 150,
-        UpgradePointReward = 1,
-        FactionBonus = Faction.Rebellion,
-        FactionPenalty = Faction.Empire,
+        CreditReward = 150, UpgradePointReward = 1,
     };
 
     public static Mission DeliverySpiceCargo() => new()
@@ -49,10 +44,7 @@ public static partial class MissionData
             MissionDestinationLocationId = "tatooine_entha_hutt_compound",
             MissionDestinationName = "Mos Entha — Hutt Compound",
         },
-        CreditReward = 250,
-        UpgradePointReward = 1,
-        FactionBonus = Faction.HuttCartel,
-        FactionPenalty = Faction.Empire,
+        CreditReward = 250, UpgradePointReward = 1,
     };
 
     public static Mission DeliveryDataPad() => new()
@@ -68,12 +60,9 @@ public static partial class MissionData
             Description = "A locked datapad pulsing faintly. Tampering is unwise.",
             IsMissionItem = true,
             MissionDestinationLocationId = "tatooine_espa_reactor",
-            MissionDestinationName = "Reactor Core Access",
+            MissionDestinationName = "Mos Espa - Reactor Core Access",
         },
-        CreditReward = 175,
-        UpgradePointReward = 1,
-        FactionBonus = Faction.Rebellion,
-        FactionPenalty = Faction.Empire,
+        CreditReward = 175, UpgradePointReward = 1,
     };
 
     public static Mission SabotageReactor() => new()
@@ -87,10 +76,7 @@ public static partial class MissionData
         CheckTargetNumber = 16,
         CheckSuccessText = "You spike the coolant routine. By the time anyone notices, you'll be gone.",
         CheckFailText = "An alarm trips. Sirens echo through the reactor halls — you barely make it out.",
-        CreditReward = 350,
-        UpgradePointReward = 2,
-        FactionBonus = Faction.Rebellion,
-        FactionPenalty = Faction.Empire,
+        CreditReward = 350, UpgradePointReward = 2,
     };
 
     public static Mission SabotageCommand() => new()
@@ -104,10 +90,7 @@ public static partial class MissionData
         CheckTargetNumber = 18,
         CheckSuccessText = "You crack the housing and ground out the relay. The array goes dark.",
         CheckFailText = "Your tools slip. Officers turn at the noise.",
-        CreditReward = 400,
-        UpgradePointReward = 2,
-        FactionBonus = Faction.Rebellion,
-        FactionPenalty = Faction.Empire,
+        CreditReward = 400, UpgradePointReward = 2,
     };
 
     public static Mission ReconHangar() => new()
@@ -121,10 +104,7 @@ public static partial class MissionData
         CheckTargetNumber = 14,
         CheckSuccessText = "You catalog three suspicious cargo entries before slipping back out.",
         CheckFailText = "A guard catches your reflection in a viewport. You leave empty-handed.",
-        CreditReward = 220,
-        UpgradePointReward = 1,
-        FactionBonus = Faction.BlackSun,
-        FactionPenalty = Faction.Empire,
+        CreditReward = 220, UpgradePointReward = 1,
     };
 
     public static Mission ReconTunnels() => new()
@@ -138,15 +118,9 @@ public static partial class MissionData
         CheckTargetNumber = 12,
         CheckSuccessText = "Your datapad sketches a clean topology of the tunnels. The Rebellion will be pleased.",
         CheckFailText = "Interference scrambles your readings. The map is useless.",
-        CreditReward = 180,
-        UpgradePointReward = 1,
-        FactionBonus = Faction.Rebellion,
-        FactionPenalty = Faction.Neutral,
+        CreditReward = 180, UpgradePointReward = 1,
     };
 
-    // ===========================================================
-    // BESTINE / JUNDLAND BRANCH
-    // ===========================================================
     public static Mission EscortFugitiveToOldBen() => new()
     {
         Id = "escort_oldben",
@@ -155,10 +129,7 @@ public static partial class MissionData
         Type = MissionType.Escort,
         DestinationLocationId = "tatooine_old_ben_residence",
         EscortNpcName = "Frightened Fugitive",
-        CreditReward = 350,
-        UpgradePointReward = 2,
-        FactionBonus = Faction.Jedi,
-        FactionPenalty = Faction.Empire,
+        CreditReward = 350, UpgradePointReward = 2,
     };
 
     public static Mission DeliveryJawaParts() => new()
@@ -176,10 +147,7 @@ public static partial class MissionData
             MissionDestinationLocationId = "tatooine_northern_jawa_territories",
             MissionDestinationName = "Northern Jawa Territories",
         },
-        CreditReward = 280,
-        UpgradePointReward = 1,
-        FactionBonus = Faction.Neutral,
-        FactionPenalty = Faction.Neutral,
+        CreditReward = 280, UpgradePointReward = 1,
     };
 
     public static Mission SabotageBestineGarrison() => new()
@@ -193,10 +161,7 @@ public static partial class MissionData
         CheckTargetNumber = 18,
         CheckSuccessText = "You re-route the coolant return through a heat-soaked manifold. By the time the techs find the fault, the bay is dark for two days.",
         CheckFailText = "Sparks fly from the wrong relay. Klaxons sound and you barely make it back to the gate.",
-        CreditReward = 450,
-        UpgradePointReward = 3,
-        FactionBonus = Faction.Rebellion,
-        FactionPenalty = Faction.Empire,
+        CreditReward = 450, UpgradePointReward = 3,
     };
 
     public static Mission ReconJundlandTuskenPaths() => new()
@@ -210,10 +175,7 @@ public static partial class MissionData
         CheckTargetNumber = 15,
         CheckSuccessText = "Three days, three patrols, one clear pattern. Your map sells for twice the agreed rate.",
         CheckFailText = "You lose the trail in a slot canyon and emerge with sketchy notes the buyers reject.",
-        CreditReward = 220,
-        UpgradePointReward = 1,
-        FactionBonus = Faction.Mandalore,
-        FactionPenalty = Faction.Neutral,
+        CreditReward = 220, UpgradePointReward = 1,
     };
 
     public static Mission DeliveryHermitJournal() => new()
@@ -231,20 +193,13 @@ public static partial class MissionData
             MissionDestinationLocationId = "tatooine_old_ben_residence",
             MissionDestinationName = "Old Ben's Residence",
         },
-        CreditReward = 320,
-        UpgradePointReward = 2,
-        FactionBonus = Faction.Jedi,
-        FactionPenalty = Faction.Neutral,
+        CreditReward = 320, UpgradePointReward = 2,
     };
 
     public static List<Func<Mission>> AllOffers => new()
     {
-        EscortDiplomat, EscortInformant,
-        DeliverySpiceCargo, DeliveryDataPad,
-        SabotageReactor, SabotageCommand,
-        ReconHangar, ReconTunnels,
-        EscortFugitiveToOldBen, DeliveryJawaParts,
-        SabotageBestineGarrison, ReconJundlandTuskenPaths,
-        DeliveryHermitJournal,
+        EscortDiplomat, EscortInformant, DeliverySpiceCargo, DeliveryDataPad, SabotageReactor,
+        SabotageCommand, ReconHangar, ReconTunnels, EscortFugitiveToOldBen, DeliveryJawaParts,
+        SabotageBestineGarrison, ReconJundlandTuskenPaths, DeliveryHermitJournal,
     };
 }

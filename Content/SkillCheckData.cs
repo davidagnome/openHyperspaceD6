@@ -32,9 +32,6 @@ public static partial class SkillCheckData
     static partial void RegisterImportedLocationChecks(Dictionary<string, List<SkillCheckEvent>> map);
     static partial void RegisterImportedTalkChecks(List<SkillCheckEvent> list);
 
-    // =========================================================
-    // TATOOINE_ESPA_CANTINA
-    // =========================================================
     public static SkillCheckEvent CantinaLockbox => new()
     {
         Id = "cantina_lockbox",
@@ -46,6 +43,7 @@ public static partial class SkillCheckData
         TargetNumber = 12, CreditReward = 60, UpgradePointReward = 1,
         CombatNpcOnFail = NPCData.PirateThugs,
     };
+
     public static SkillCheckEvent CantinaSabaccGame => new()
     {
         Id = "cantina_sabacc",
@@ -54,8 +52,10 @@ public static partial class SkillCheckData
         FailText = "Your hand collapses. The dealer scoops your chips and moves to the next player.",
         Skill = SkillType.Deceive, Difficulty = CheckDifficulty.Moderate,
         TargetNumber = 12, CreditReward = 100, UpgradePointReward = 1,
-        Repeatable = true, CreditPenalty = 40,
+        Repeatable = true,
+        CreditPenalty = 40,
     };
+
     public static SkillCheckEvent CantinaDrunkDiplomat => new()
     {
         Id = "cantina_drunk_diplomat",
@@ -67,6 +67,7 @@ public static partial class SkillCheckData
         TargetNumber = 9, CreditReward = 35, UpgradePointReward = 1,
         CombatNpcOnFail = NPCData.PirateThugs,
     };
+
     public static SkillCheckEvent CantinaPickpocketMark => new()
     {
         Id = "cantina_pickpocket",
@@ -77,6 +78,7 @@ public static partial class SkillCheckData
         TargetNumber = 13, CreditReward = 80, UpgradePointReward = 1,
         CombatNpcOnFail = NPCData.BountyHunter,
     };
+
     public static SkillCheckEvent CantinaRumorMill => new()
     {
         Id = "cantina_rumors",
@@ -85,8 +87,10 @@ public static partial class SkillCheckData
         FailText = "You mispronounce a Huttese idiom. The regulars clam up and turn away.",
         Skill = SkillType.Streetwise, Difficulty = CheckDifficulty.Easy,
         TargetNumber = 8, CreditReward = 40, UpgradePointReward = 1,
-        Repeatable = true, CreditPenalty = 15,
+        Repeatable = true,
+        CreditPenalty = 15,
     };
+
     public static SkillCheckEvent CantinaBackroomBrawl => new()
     {
         Id = "cantina_backroom_brawl",
@@ -98,9 +102,6 @@ public static partial class SkillCheckData
         Repeatable = true,
     };
 
-    // =========================================================
-    // TATOOINE_ESPA_MARKET
-    // =========================================================
     public static SkillCheckEvent MarketHaggle => new()
     {
         Id = "market_haggle",
@@ -110,6 +111,7 @@ public static partial class SkillCheckData
         Skill = SkillType.Persuade, Difficulty = CheckDifficulty.Easy,
         TargetNumber = 8, CreditReward = 35, UpgradePointReward = 0,
     };
+
     public static SkillCheckEvent MarketForgedCoinScam => new()
     {
         Id = "market_forged_coin",
@@ -121,6 +123,7 @@ public static partial class SkillCheckData
         TargetNumber = 13, CreditReward = 55, UpgradePointReward = 1,
         CreditPenalty = 50,
     };
+
     public static SkillCheckEvent MarketCrowdSlip => new()
     {
         Id = "market_crowd_slip",
@@ -130,8 +133,10 @@ public static partial class SkillCheckData
         FailPenaltyText = "The shakedown costs you a bribe to avoid detention.",
         Skill = SkillType.Hide, Difficulty = CheckDifficulty.Moderate,
         TargetNumber = 14, CreditReward = 0, UpgradePointReward = 1,
-        CreditPenalty = 75, Repeatable = true,
+        Repeatable = true,
+        CreditPenalty = 75,
     };
+
     public static SkillCheckEvent MarketWarehouseSlice => new()
     {
         Id = "market_warehouse_slice",
@@ -142,6 +147,7 @@ public static partial class SkillCheckData
         TargetNumber = 16, CreditReward = 120, UpgradePointReward = 2,
         CombatNpcOnFail = NPCData.PirateThugs,
     };
+
     public static SkillCheckEvent MarketExoticAnimal => new()
     {
         Id = "market_exotic_animal",
@@ -153,6 +159,7 @@ public static partial class SkillCheckData
         TargetNumber = 13, CreditReward = 45, UpgradePointReward = 1,
         CreditPenalty = 30,
     };
+
     public static SkillCheckEvent MarketDroidAuction => new()
     {
         Id = "market_droid_auction",
@@ -163,9 +170,6 @@ public static partial class SkillCheckData
         TargetNumber = 12, CreditReward = 70, UpgradePointReward = 1,
     };
 
-    // =========================================================
-    // TATOOINE_ESPA_DOCKING_BAY
-    // =========================================================
     public static SkillCheckEvent DockingBaySmuggle => new()
     {
         Id = "docking_bay_smuggle",
@@ -177,6 +181,7 @@ public static partial class SkillCheckData
         TargetNumber = 12, CreditReward = 70, UpgradePointReward = 1,
         CreditPenalty = 100,
     };
+
     public static SkillCheckEvent DockingBayHotwireSpeeder => new()
     {
         Id = "docking_bay_hotwire",
@@ -187,6 +192,7 @@ public static partial class SkillCheckData
         TargetNumber = 16, CreditReward = 150, UpgradePointReward = 2,
         CombatNpcOnFail = NPCData.BountyHunter,
     };
+
     public static SkillCheckEvent DockingBayRepairBid => new()
     {
         Id = "docking_bay_repair_bid",
@@ -198,6 +204,7 @@ public static partial class SkillCheckData
         TargetNumber = 13, CreditReward = 65, UpgradePointReward = 1,
         CreditPenalty = 40,
     };
+
     public static SkillCheckEvent DockingBayCustomsOfficer => new()
     {
         Id = "docking_bay_customs_bribe",
@@ -209,6 +216,7 @@ public static partial class SkillCheckData
         CreditPenalty = 50,
         CombatNpcOnFail = NPCData.Stormtrooper,
     };
+
     public static SkillCheckEvent DockingBaySalvageCart => new()
     {
         Id = "docking_bay_salvage",
@@ -220,6 +228,7 @@ public static partial class SkillCheckData
         TargetNumber = 12, CreditReward = 80, UpgradePointReward = 1,
         CreditPenalty = 35,
     };
+
     public static SkillCheckEvent DockingBaySensorGhost => new()
     {
         Id = "docking_bay_sensor_ghost",
@@ -230,9 +239,6 @@ public static partial class SkillCheckData
         TargetNumber = 13, CreditReward = 55, UpgradePointReward = 1,
     };
 
-    // =========================================================
-    // TATOOINE_ESPA_ALLEY
-    // =========================================================
     public static SkillCheckEvent AlleyBrokenDroid => new()
     {
         Id = "alley_broken_droid",
@@ -242,6 +248,7 @@ public static partial class SkillCheckData
         Skill = SkillType.Droids, Difficulty = CheckDifficulty.Moderate,
         TargetNumber = 11, CreditReward = 40, UpgradePointReward = 1,
     };
+
     public static SkillCheckEvent AlleyMuggingAmbush => new()
     {
         Id = "alley_ambush_spot",
@@ -252,6 +259,7 @@ public static partial class SkillCheckData
         TargetNumber = 13, CreditReward = 0, UpgradePointReward = 1,
         CombatNpcOnFail = NPCData.PirateThugs,
     };
+
     public static SkillCheckEvent AlleyRebelCourier => new()
     {
         Id = "alley_rebel_courier",
@@ -261,6 +269,7 @@ public static partial class SkillCheckData
         Skill = SkillType.Streetwise, Difficulty = CheckDifficulty.Moderate,
         TargetNumber = 12, CreditReward = 150, UpgradePointReward = 2,
     };
+
     public static SkillCheckEvent AlleyGraffitiCipher => new()
     {
         Id = "alley_graffiti_cipher",
@@ -270,6 +279,7 @@ public static partial class SkillCheckData
         Skill = SkillType.Computers, Difficulty = CheckDifficulty.Difficult,
         TargetNumber = 16, CreditReward = 90, UpgradePointReward = 2,
     };
+
     public static SkillCheckEvent AlleyWoundedFugitive => new()
     {
         Id = "alley_wounded_fugitive",
@@ -281,6 +291,7 @@ public static partial class SkillCheckData
         TargetNumber = 13, CreditReward = 80, UpgradePointReward = 2,
         CombatNpcOnFail = NPCData.BountyHunter,
     };
+
     public static SkillCheckEvent AlleyStashRecovery => new()
     {
         Id = "alley_stash_recovery",
@@ -293,9 +304,6 @@ public static partial class SkillCheckData
         CreditPenalty = 20,
     };
 
-    // =========================================================
-    // TATOOINE_ESPA_TUNNELS
-    // =========================================================
     public static SkillCheckEvent TunnelsPoisonGas => new()
     {
         Id = "tunnels_poison_gas",
@@ -305,6 +313,7 @@ public static partial class SkillCheckData
         Skill = SkillType.Stamina, Difficulty = CheckDifficulty.Moderate,
         TargetNumber = 13, CreditReward = 30, UpgradePointReward = 1,
     };
+
     public static SkillCheckEvent TunnelsLooseGrate => new()
     {
         Id = "tunnels_loose_grate",
@@ -316,6 +325,7 @@ public static partial class SkillCheckData
         TargetNumber = 9, CreditReward = 45, UpgradePointReward = 1,
         CreditPenalty = 25,
     };
+
     public static SkillCheckEvent TunnelsRatKing => new()
     {
         Id = "tunnels_rat_king",
@@ -324,8 +334,10 @@ public static partial class SkillCheckData
         FailText = "The rat king lunges as one seething mass.",
         Skill = SkillType.Blasters, Difficulty = CheckDifficulty.Moderate,
         TargetNumber = 13, CreditReward = 55, UpgradePointReward = 1,
-        CombatNpcOnFail = NPCData.Diagnoga, Repeatable = true,
+        Repeatable = true,
+        CombatNpcOnFail = NPCData.Diagnoga,
     };
+
     public static SkillCheckEvent TunnelsSewageCurrent => new()
     {
         Id = "tunnels_sewage_current",
@@ -336,6 +348,7 @@ public static partial class SkillCheckData
         TargetNumber = 13, CreditReward = 75, UpgradePointReward = 1,
         CreditPenalty = 40,
     };
+
     public static SkillCheckEvent TunnelsFeralBeast => new()
     {
         Id = "tunnels_feral_beast",
@@ -346,6 +359,7 @@ public static partial class SkillCheckData
         TargetNumber = 16, CreditReward = 0, UpgradePointReward = 2,
         CombatNpcOnFail = NPCData.Diagnoga,
     };
+
     public static SkillCheckEvent TunnelsForgottenCache => new()
     {
         Id = "tunnels_forgotten_cache",
@@ -356,9 +370,6 @@ public static partial class SkillCheckData
         TargetNumber = 9, CreditReward = 50, UpgradePointReward = 1,
     };
 
-    // =========================================================
-    // TATOOINE_ESPA_REACTOR
-    // =========================================================
     public static SkillCheckEvent ReactorOverload => new()
     {
         Id = "reactor_overload",
@@ -370,6 +381,7 @@ public static partial class SkillCheckData
         TargetNumber = 17, CreditReward = 100, UpgradePointReward = 2,
         CreditPenalty = 60,
     };
+
     public static SkillCheckEvent ReactorForceTurbulence => new()
     {
         Id = "reactor_force_turbulence",
@@ -379,6 +391,7 @@ public static partial class SkillCheckData
         Skill = SkillType.Sense, Difficulty = CheckDifficulty.Difficult,
         TargetNumber = 17, CreditReward = 0, UpgradePointReward = 3,
     };
+
     public static SkillCheckEvent ReactorCoolantBreach => new()
     {
         Id = "reactor_coolant_breach",
@@ -390,6 +403,7 @@ public static partial class SkillCheckData
         TargetNumber = 14, CreditReward = 70, UpgradePointReward = 1,
         CreditPenalty = 45,
     };
+
     public static SkillCheckEvent ReactorSecurityTerminal => new()
     {
         Id = "reactor_security_terminal",
@@ -400,6 +414,7 @@ public static partial class SkillCheckData
         TargetNumber = 21, CreditReward = 0, UpgradePointReward = 3,
         CombatNpcOnFail = NPCData.Stormtrooper,
     };
+
     public static SkillCheckEvent ReactorSabotage => new()
     {
         Id = "reactor_sabotage",
@@ -412,6 +427,7 @@ public static partial class SkillCheckData
         CreditPenalty = 80,
         CombatNpcOnFail = NPCData.Stormtrooper,
     };
+
     public static SkillCheckEvent ReactorRadiationSurvey => new()
     {
         Id = "reactor_radiation_survey",
@@ -424,9 +440,6 @@ public static partial class SkillCheckData
         CreditPenalty = 50,
     };
 
-    // =========================================================
-    // TATOOINE_ESPA_COMMAND
-    // =========================================================
     public static SkillCheckEvent CommandTerminal => new()
     {
         Id = "command_terminal",
@@ -437,6 +450,7 @@ public static partial class SkillCheckData
         TargetNumber = 16, CreditReward = 120, UpgradePointReward = 2,
         CombatNpcOnFail = NPCData.Stormtrooper,
     };
+
     public static SkillCheckEvent CommandOfficerInterrogation => new()
     {
         Id = "command_officer_interrogation",
@@ -447,6 +461,7 @@ public static partial class SkillCheckData
         TargetNumber = 14, CreditReward = 0, UpgradePointReward = 1,
         CombatNpcOnFail = NPCData.Stormtrooper,
     };
+
     public static SkillCheckEvent CommandEavesdrop => new()
     {
         Id = "command_eavesdrop",
@@ -457,6 +472,7 @@ public static partial class SkillCheckData
         TargetNumber = 16, CreditReward = 100, UpgradePointReward = 2,
         CombatNpcOnFail = NPCData.ImperialOfficer,
     };
+
     public static SkillCheckEvent CommandSignalIntercept => new()
     {
         Id = "command_signal_intercept",
@@ -467,6 +483,7 @@ public static partial class SkillCheckData
         TargetNumber = 17, CreditReward = 150, UpgradePointReward = 2,
         CombatNpcOnFail = NPCData.Stormtrooper,
     };
+
     public static SkillCheckEvent CommandForcedEntry => new()
     {
         Id = "command_forced_entry",
@@ -477,6 +494,7 @@ public static partial class SkillCheckData
         TargetNumber = 21, CreditReward = 130, UpgradePointReward = 3,
         CombatNpcOnFail = NPCData.Stormtrooper,
     };
+
     public static SkillCheckEvent CommandTacticalMap => new()
     {
         Id = "command_tactical_map",
@@ -487,9 +505,6 @@ public static partial class SkillCheckData
         TargetNumber = 17, CreditReward = 160, UpgradePointReward = 2,
     };
 
-    // =========================================================
-    // TATOOINE_ESPA_UPPER_DISTRICT
-    // =========================================================
     public static SkillCheckEvent UpperDistrictForge => new()
     {
         Id = "upper_forged_docs",
@@ -501,6 +516,7 @@ public static partial class SkillCheckData
         TargetNumber = 13, CreditReward = 50, UpgradePointReward = 1,
         CreditPenalty = 60,
     };
+
     public static SkillCheckEvent UpperDistrictArtForge => new()
     {
         Id = "upper_art_forgery",
@@ -510,6 +526,7 @@ public static partial class SkillCheckData
         Skill = SkillType.Xenology, Difficulty = CheckDifficulty.Difficult,
         TargetNumber = 16, CreditReward = 110, UpgradePointReward = 2,
     };
+
     public static SkillCheckEvent UpperDistrictSocialClimb => new()
     {
         Id = "upper_social_climb",
@@ -521,6 +538,7 @@ public static partial class SkillCheckData
         TargetNumber = 16, CreditReward = 180, UpgradePointReward = 2,
         CreditPenalty = 40,
     };
+
     public static SkillCheckEvent UpperDistrictPickpocketAide => new()
     {
         Id = "upper_pickpocket_aide",
@@ -531,6 +549,7 @@ public static partial class SkillCheckData
         TargetNumber = 17, CreditReward = 200, UpgradePointReward = 2,
         CombatNpcOnFail = NPCData.Stormtrooper,
     };
+
     public static SkillCheckEvent UpperDistrictCorruptDroid => new()
     {
         Id = "upper_corrupt_droid",
@@ -541,6 +560,7 @@ public static partial class SkillCheckData
         TargetNumber = 21, CreditReward = 250, UpgradePointReward = 3,
         CombatNpcOnFail = NPCData.Stormtrooper,
     };
+
     public static SkillCheckEvent UpperDistrictDeceiveGuard => new()
     {
         Id = "upper_deceive_guard",
@@ -552,9 +572,6 @@ public static partial class SkillCheckData
         CombatNpcOnFail = NPCData.Stormtrooper,
     };
 
-    // =========================================================
-    // TATOOINE_ESPA_HANGAR
-    // =========================================================
     public static SkillCheckEvent HangarShipInspect => new()
     {
         Id = "hangar_ship_inspect",
@@ -564,6 +581,7 @@ public static partial class SkillCheckData
         Skill = SkillType.Vehicles, Difficulty = CheckDifficulty.Easy,
         TargetNumber = 8, CreditReward = 30, UpgradePointReward = 1,
     };
+
     public static SkillCheckEvent HangarBountyPoster => new()
     {
         Id = "hangar_bounty_poster",
@@ -574,6 +592,7 @@ public static partial class SkillCheckData
         TargetNumber = 12, CreditReward = 60, UpgradePointReward = 1,
         Repeatable = true,
     };
+
     public static SkillCheckEvent HangarGuardPayoff => new()
     {
         Id = "hangar_guard_payoff",
@@ -585,6 +604,7 @@ public static partial class SkillCheckData
         CreditPenalty = 40,
         CombatNpcOnFail = NPCData.BountyHunter,
     };
+
     public static SkillCheckEvent HangarStowaway => new()
     {
         Id = "hangar_stowaway",
@@ -595,6 +615,7 @@ public static partial class SkillCheckData
         TargetNumber = 16, CreditReward = 130, UpgradePointReward = 2,
         CombatNpcOnFail = NPCData.PirateThugs,
     };
+
     public static SkillCheckEvent HangarDroidRepair => new()
     {
         Id = "hangar_droid_repair",
@@ -606,6 +627,7 @@ public static partial class SkillCheckData
         TargetNumber = 13, CreditReward = 55, UpgradePointReward = 1,
         CreditPenalty = 30,
     };
+
     public static SkillCheckEvent HangarGravLiftMisaligned => new()
     {
         Id = "hangar_grav_lift",
@@ -616,9 +638,6 @@ public static partial class SkillCheckData
         TargetNumber = 12, CreditReward = 65, UpgradePointReward = 1,
     };
 
-    // =========================================================
-    // DERELICT_INTERIOR
-    // =========================================================
     public static SkillCheckEvent DerelictForceEcho => new()
     {
         Id = "derelict_force_echo",
@@ -628,6 +647,7 @@ public static partial class SkillCheckData
         Skill = SkillType.Sense, Difficulty = CheckDifficulty.Challenging,
         TargetNumber = 22, CreditReward = 0, UpgradePointReward = 3,
     };
+
     public static SkillCheckEvent DerelictDataCoreSalvage => new()
     {
         Id = "derelict_data_core",
@@ -639,6 +659,7 @@ public static partial class SkillCheckData
         TargetNumber = 17, CreditReward = 180, UpgradePointReward = 2,
         CreditPenalty = 70,
     };
+
     public static SkillCheckEvent DerelictSuitExposure => new()
     {
         Id = "derelict_suit_exposure",
@@ -650,6 +671,7 @@ public static partial class SkillCheckData
         TargetNumber = 21, CreditReward = 0, UpgradePointReward = 3,
         CreditPenalty = 100,
     };
+
     public static SkillCheckEvent DerelictCreatureTrack => new()
     {
         Id = "derelict_creature_track",
@@ -660,6 +682,7 @@ public static partial class SkillCheckData
         TargetNumber = 16, CreditReward = 0, UpgradePointReward = 2,
         CombatNpcOnFail = NPCData.Diagnoga,
     };
+
     public static SkillCheckEvent DerelictDarkArtifact => new()
     {
         Id = "derelict_dark_artifact",
@@ -670,6 +693,7 @@ public static partial class SkillCheckData
         Skill = SkillType.Control, Difficulty = CheckDifficulty.Challenging,
         TargetNumber = 22, CreditReward = 250, UpgradePointReward = 3,
     };
+
     public static SkillCheckEvent DerelictSurgicalBay => new()
     {
         Id = "derelict_surgical_bay",
@@ -680,9 +704,6 @@ public static partial class SkillCheckData
         TargetNumber = 17, CreditReward = 150, UpgradePointReward = 2,
     };
 
-    // =========================================================
-    // TATOOINE_ORBIT
-    // =========================================================
     public static SkillCheckEvent OrbitSensorSweep => new()
     {
         Id = "orbit_sensor_sweep",
@@ -692,6 +713,7 @@ public static partial class SkillCheckData
         Skill = SkillType.Sensors, Difficulty = CheckDifficulty.Moderate,
         TargetNumber = 14, CreditReward = 55, UpgradePointReward = 1,
     };
+
     public static SkillCheckEvent OrbitFuelScavenge => new()
     {
         Id = "orbit_fuel_scavenge",
@@ -701,8 +723,10 @@ public static partial class SkillCheckData
         FailPenaltyText = "You burn extra fuel recovering — and it costs you at resupply.",
         Skill = SkillType.Vehicles, Difficulty = CheckDifficulty.Moderate,
         TargetNumber = 13, CreditReward = 60, UpgradePointReward = 1,
-        CreditPenalty = 40, Repeatable = true,
+        Repeatable = true,
+        CreditPenalty = 40,
     };
+
     public static SkillCheckEvent OrbitImperialHailing => new()
     {
         Id = "orbit_imperial_hailing",
@@ -713,6 +737,7 @@ public static partial class SkillCheckData
         TargetNumber = 16, CreditReward = 0, UpgradePointReward = 2,
         CombatNpcOnFail = NPCData.ImperialOfficer,
     };
+
     public static SkillCheckEvent OrbitDebrisField => new()
     {
         Id = "orbit_debris_field",
@@ -722,8 +747,10 @@ public static partial class SkillCheckData
         FailPenaltyText = "Hull patch costs you dearly at the next dock.",
         Skill = SkillType.Pilot, Difficulty = CheckDifficulty.Moderate,
         TargetNumber = 14, CreditReward = 95, UpgradePointReward = 1,
-        CreditPenalty = 60, Repeatable = true,
+        Repeatable = true,
+        CreditPenalty = 60,
     };
+
     public static SkillCheckEvent OrbitCommArray => new()
     {
         Id = "orbit_comm_array",
@@ -733,6 +760,7 @@ public static partial class SkillCheckData
         Skill = SkillType.Computers, Difficulty = CheckDifficulty.Difficult,
         TargetNumber = 17, CreditReward = 140, UpgradePointReward = 2,
     };
+
     public static SkillCheckEvent OrbitSpaceWalker => new()
     {
         Id = "orbit_spacewalker",
@@ -743,9 +771,6 @@ public static partial class SkillCheckData
         TargetNumber = 14, CreditReward = 120, UpgradePointReward = 2,
     };
 
-    // =========================================================
-    // DEEP_SPACE
-    // =========================================================
     public static SkillCheckEvent DeepSpaceNavHazard => new()
     {
         Id = "deep_space_nav_hazard",
@@ -757,6 +782,7 @@ public static partial class SkillCheckData
         TargetNumber = 16, CreditReward = 80, UpgradePointReward = 2,
         CreditPenalty = 50,
     };
+
     public static SkillCheckEvent DeepSpacePirateSignal => new()
     {
         Id = "deep_space_pirate_signal",
@@ -765,8 +791,10 @@ public static partial class SkillCheckData
         FailText = "You answer the call. The 'civilian' ship is crewed by pirates.",
         Skill = SkillType.Sensors, Difficulty = CheckDifficulty.Moderate,
         TargetNumber = 14, CreditReward = 70, UpgradePointReward = 1,
-        CombatNpcOnFail = NPCData.PirateThugs, Repeatable = true,
+        Repeatable = true,
+        CombatNpcOnFail = NPCData.PirateThugs,
     };
+
     public static SkillCheckEvent DeepSpaceAncientWreck => new()
     {
         Id = "deep_space_ancient_wreck",
@@ -778,6 +806,7 @@ public static partial class SkillCheckData
         TargetNumber = 21, CreditReward = 300, UpgradePointReward = 3,
         CreditPenalty = 80,
     };
+
     public static SkillCheckEvent DeepSpaceRogueJump => new()
     {
         Id = "deep_space_rogue_jump",
@@ -789,6 +818,7 @@ public static partial class SkillCheckData
         TargetNumber = 21, CreditReward = 180, UpgradePointReward = 3,
         CreditPenalty = 70,
     };
+
     public static SkillCheckEvent DeepSpaceCreatureEncounter => new()
     {
         Id = "deep_space_creature",
@@ -797,8 +827,10 @@ public static partial class SkillCheckData
         FailText = "They eat through your shield generator's power coupling. You'll need replacement parts.",
         Skill = SkillType.Pilot, Difficulty = CheckDifficulty.Moderate,
         TargetNumber = 14, CreditReward = 0, UpgradePointReward = 1,
-        CreditPenalty = 100, Repeatable = true,
+        Repeatable = true,
+        CreditPenalty = 100,
     };
+
     public static SkillCheckEvent DeepSpaceSalvageBeacon => new()
     {
         Id = "deep_space_salvage_beacon",
@@ -807,12 +839,10 @@ public static partial class SkillCheckData
         FailText = "Another salvager arrives before you break in. They don't take kindly to competition.",
         Skill = SkillType.Pilot, Difficulty = CheckDifficulty.Moderate,
         TargetNumber = 13, CreditReward = 110, UpgradePointReward = 1,
-        CombatNpcOnFail = NPCData.BountyHunter, Repeatable = true,
+        Repeatable = true,
+        CombatNpcOnFail = NPCData.BountyHunter,
     };
 
-    // =========================================================
-    // MOS_ENTHA
-    // =========================================================
     public static SkillCheckEvent MosEnthaHuttTax => new()
     {
         Id = "mos_entha_hutt_tax",
@@ -823,6 +853,7 @@ public static partial class SkillCheckData
         TargetNumber = 13, CreditReward = 0, UpgradePointReward = 1,
         CreditPenalty = 75,
     };
+
     public static SkillCheckEvent MosEnthaSpiceRunner => new()
     {
         Id = "mos_entha_spice_run",
@@ -835,6 +866,7 @@ public static partial class SkillCheckData
         CreditPenalty = 120,
         CombatNpcOnFail = NPCData.PirateThugs,
     };
+
     public static SkillCheckEvent MosEnthaStreetFight => new()
     {
         Id = "mos_entha_street_fight",
@@ -844,8 +876,10 @@ public static partial class SkillCheckData
         FailPenaltyText = "Patching up costs extra.",
         Skill = SkillType.Brawl, Difficulty = CheckDifficulty.Moderate,
         TargetNumber = 13, CreditReward = 140, UpgradePointReward = 1,
-        CreditPenalty = 40, Repeatable = true,
+        Repeatable = true,
+        CreditPenalty = 40,
     };
+
     public static SkillCheckEvent MosEnthaRepoJob => new()
     {
         Id = "mos_entha_repo",
@@ -856,6 +890,7 @@ public static partial class SkillCheckData
         TargetNumber = 17, CreditReward = 180, UpgradePointReward = 2,
         CombatNpcOnFail = NPCData.PirateThugs,
     };
+
     public static SkillCheckEvent MosEnthaBrokenAC => new()
     {
         Id = "mos_entha_broken_cooling",
@@ -867,6 +902,7 @@ public static partial class SkillCheckData
         TargetNumber = 13, CreditReward = 85, UpgradePointReward = 1,
         CreditPenalty = 45,
     };
+
     public static SkillCheckEvent MosEnthaInformantMeet => new()
     {
         Id = "mos_entha_informant",
@@ -878,9 +914,6 @@ public static partial class SkillCheckData
         CreditPenalty = 50,
     };
 
-    // =========================================================
-    // TATOOINE_ENTHA_HUTT_COMPOUND
-    // =========================================================
     public static SkillCheckEvent HuttCompoundAudience => new()
     {
         Id = "hutt_compound_audience",
@@ -891,6 +924,7 @@ public static partial class SkillCheckData
         TargetNumber = 17, CreditReward = 0, UpgradePointReward = 2,
         CreditPenalty = 100,
     };
+
     public static SkillCheckEvent HuttCompoundSliceVault => new()
     {
         Id = "hutt_compound_slice_vault",
@@ -901,6 +935,7 @@ public static partial class SkillCheckData
         TargetNumber = 24, CreditReward = 500, UpgradePointReward = 3,
         CombatNpcOnFail = NPCData.BountyHunter,
     };
+
     public static SkillCheckEvent HuttCompoundRancorPen => new()
     {
         Id = "hutt_compound_rancor_pen",
@@ -911,6 +946,7 @@ public static partial class SkillCheckData
         TargetNumber = 22, CreditReward = 0, UpgradePointReward = 3,
         CombatNpcOnFail = NPCData.Diagnoga,
     };
+
     public static SkillCheckEvent HuttCompoundDebtSettle => new()
     {
         Id = "hutt_compound_debt_settle",
@@ -922,6 +958,7 @@ public static partial class SkillCheckData
         TargetNumber = 17, CreditReward = 0, UpgradePointReward = 1,
         CreditPenalty = 200,
     };
+
     public static SkillCheckEvent HuttCompoundEntertainerEscape => new()
     {
         Id = "hutt_compound_entertainer",
@@ -932,6 +969,7 @@ public static partial class SkillCheckData
         TargetNumber = 17, CreditReward = 300, UpgradePointReward = 3,
         CombatNpcOnFail = NPCData.BountyHunter,
     };
+
     public static SkillCheckEvent HuttCompoundPoisonTaste => new()
     {
         Id = "hutt_compound_poison_taste",
@@ -944,9 +982,6 @@ public static partial class SkillCheckData
         CreditPenalty = 70,
     };
 
-    // =========================================================
-    // BEGGARS_CANYON
-    // =========================================================
     public static SkillCheckEvent BeggarsCanyonDeadManTurn => new()
     {
         Id = "beggars_canyon_dead_man_turn",
@@ -958,6 +993,7 @@ public static partial class SkillCheckData
         TargetNumber = 11, CreditReward = 20, UpgradePointReward = 1,
         CreditPenalty = 40,
     };
+
     public static SkillCheckEvent BeggarsCanyonDiabloCut => new()
     {
         Id = "beggars_canyon_diablo_cut",
@@ -969,6 +1005,7 @@ public static partial class SkillCheckData
         TargetNumber = 16, CreditReward = 40, UpgradePointReward = 2,
         CreditPenalty = 60,
     };
+
     public static SkillCheckEvent BeggarsCanyonTuskenSnipe => new()
     {
         Id = "beggars_canyon_tusken_snipe",
@@ -977,8 +1014,10 @@ public static partial class SkillCheckData
         FailText = "You miss the glint. Gaderffii-slug fire rakes your hull.",
         Skill = SkillType.Search, Difficulty = CheckDifficulty.Moderate,
         TargetNumber = 14, CreditReward = 0, UpgradePointReward = 1,
-        CombatNpcOnFail = NPCData.TuskenRaider, Repeatable = true,
+        Repeatable = true,
+        CombatNpcOnFail = NPCData.TuskenRaider,
     };
+
     public static SkillCheckEvent BeggarsCanyonWreckDive => new()
     {
         Id = "beggars_canyon_wreck_dive",
@@ -990,6 +1029,7 @@ public static partial class SkillCheckData
         TargetNumber = 13, CreditReward = 110, UpgradePointReward = 1,
         CreditPenalty = 50,
     };
+
     public static SkillCheckEvent BeggarsCanyonUpdraftRide => new()
     {
         Id = "beggars_canyon_updraft",
@@ -999,8 +1039,10 @@ public static partial class SkillCheckData
         FailPenaltyText = "Repairs aren't cheap.",
         Skill = SkillType.Pilot, Difficulty = CheckDifficulty.Difficult,
         TargetNumber = 17, CreditReward = 90, UpgradePointReward = 2,
-        CreditPenalty = 80, Repeatable = true,
+        Repeatable = true,
+        CreditPenalty = 80,
     };
+
     public static SkillCheckEvent BeggarsCanyonHermitContract => new()
     {
         Id = "beggars_canyon_hermit",
@@ -1011,9 +1053,6 @@ public static partial class SkillCheckData
         TargetNumber = 13, CreditReward = 100, UpgradePointReward = 1,
     };
 
-    // =========================================================
-    // MOSPIC_HIGH_RANGE
-    // =========================================================
     public static SkillCheckEvent TatooineTuskenchasePilot => new()
     {
         Id = "tatooine_tuskenchase_pilot",
@@ -1025,6 +1064,7 @@ public static partial class SkillCheckData
         Repeatable = true,
         CombatNpcOnFail = NPCData.TuskenRaider,
     };
+
     public static SkillCheckEvent TatooineSarlaccAthletics => new()
     {
         Id = "tatooine_sarlacc_athletics",
@@ -1033,9 +1073,9 @@ public static partial class SkillCheckData
         FailText = "You slip on loose stone. The sarlacc tentacles stretch upward.",
         Skill = SkillType.Athletics, Difficulty = CheckDifficulty.Difficult,
         TargetNumber = 16, CreditReward = 0, UpgradePointReward = 2,
-        Repeatable = false,
         CombatNpcOnFail = NPCData.Diagnoga,
     };
+
     public static SkillCheckEvent TatooineSandstormSurvival => new()
     {
         Id = "tatooine_sandstorm_survival",
@@ -1045,8 +1085,10 @@ public static partial class SkillCheckData
         FailPenaltyText = "Some equipment is lost.",
         Skill = SkillType.Survival, Difficulty = CheckDifficulty.Difficult,
         TargetNumber = 16, CreditReward = 0, UpgradePointReward = 2,
-        Repeatable = true, CreditPenalty = 40,
+        Repeatable = true,
+        CreditPenalty = 40,
     };
+
     public static SkillCheckEvent MospicTuskenBurialRespect => new()
     {
         Id = "mospic_burial_respect",
@@ -1057,6 +1099,7 @@ public static partial class SkillCheckData
         TargetNumber = 16, CreditReward = 0, UpgradePointReward = 2,
         CombatNpcOnFail = NPCData.TuskenRaider,
     };
+
     public static SkillCheckEvent MospicAncientPictograph => new()
     {
         Id = "mospic_pictograph",
@@ -1066,6 +1109,7 @@ public static partial class SkillCheckData
         Skill = SkillType.Xenology, Difficulty = CheckDifficulty.Moderate,
         TargetNumber = 13, CreditReward = 90, UpgradePointReward = 1,
     };
+
     public static SkillCheckEvent MospicCliffClimb => new()
     {
         Id = "mospic_cliff_climb",
@@ -1078,9 +1122,6 @@ public static partial class SkillCheckData
         CreditPenalty = 60,
     };
 
-    // =========================================================
-    // RODIA_ORBIT
-    // =========================================================
     public static SkillCheckEvent RodiaOrbitDockingQueue => new()
     {
         Id = "rodia_orbit_docking_queue",
@@ -1091,6 +1132,7 @@ public static partial class SkillCheckData
         TargetNumber = 9, CreditReward = 30, UpgradePointReward = 1,
         Repeatable = true,
     };
+
     public static SkillCheckEvent RodiaOrbitBountyHandoff => new()
     {
         Id = "rodia_orbit_bounty_handoff",
@@ -1103,6 +1145,7 @@ public static partial class SkillCheckData
         CreditPenalty = 100,
         CombatNpcOnFail = NPCData.Diagnoga,
     };
+
     public static SkillCheckEvent RodiaOrbitCustomsSlip => new()
     {
         Id = "rodia_orbit_customs_slip",
@@ -1114,6 +1157,7 @@ public static partial class SkillCheckData
         TargetNumber = 13, CreditReward = 60, UpgradePointReward = 1,
         CreditPenalty = 80,
     };
+
     public static SkillCheckEvent RodiaOrbitSwampSensors => new()
     {
         Id = "rodia_orbit_swamp_sensors",
@@ -1125,6 +1169,7 @@ public static partial class SkillCheckData
         TargetNumber = 13, CreditReward = 80, UpgradePointReward = 1,
         CreditPenalty = 35,
     };
+
     public static SkillCheckEvent RodiaOrbitBountyHunterDuel => new()
     {
         Id = "rodia_orbit_hunter_duel",
@@ -1135,6 +1180,7 @@ public static partial class SkillCheckData
         TargetNumber = 16, CreditReward = 100, UpgradePointReward = 2,
         CombatNpcOnFail = NPCData.BountyHunter,
     };
+
     public static SkillCheckEvent RodiaOrbitTraderTip => new()
     {
         Id = "rodia_orbit_trader_tip",
@@ -1145,9 +1191,6 @@ public static partial class SkillCheckData
         TargetNumber = 12, CreditReward = 70, UpgradePointReward = 1,
     };
 
-    // =========================================================
-    // CORUSCANT
-    // =========================================================
     public static SkillCheckEvent CoruscantDockingCustoms => new()
     {
         Id = "coruscant_dock_customs",
@@ -1155,8 +1198,10 @@ public static partial class SkillCheckData
         SuccessText = "You speak the right phrases in the right tone. The droid stamps your manifest and waves you through.",
         FailText = "The droid flags your transponder for re-scan. A long, expensive delay follows.",
         Skill = SkillType.Persuade, Difficulty = CheckDifficulty.Moderate,
-        TargetNumber = 13, CreditReward = 80, UpgradePointReward = 1, CreditPenalty = 30,
+        TargetNumber = 13, CreditReward = 80, UpgradePointReward = 1,
+        CreditPenalty = 30,
     };
+
     public static SkillCheckEvent CoruscantDockingSliceManifest => new()
     {
         Id = "coruscant_dock_slice",
@@ -1167,6 +1212,7 @@ public static partial class SkillCheckData
         TargetNumber = 17, CreditReward = 120, UpgradePointReward = 2,
         CombatNpcOnFail = NPCData.Stormtrooper,
     };
+
     public static SkillCheckEvent CoruscantDockingScroungeParts => new()
     {
         Id = "coruscant_dock_scrounge",
@@ -1174,7 +1220,8 @@ public static partial class SkillCheckData
         SuccessText = "You quietly pocket a high-grade power cell. Worth a fortune on the gray market.",
         FailText = "A maintenance droid catches you mid-grab. You slink away empty-handed.",
         Skill = SkillType.Steal, Difficulty = CheckDifficulty.Moderate,
-        TargetNumber = 12, CreditReward = 60, UpgradePointReward = 1, Repeatable = true,
+        TargetNumber = 12, CreditReward = 60, UpgradePointReward = 1,
+        Repeatable = true,
     };
 
     public static SkillCheckEvent CoruscantVerityEavesdrop => new()
@@ -1186,6 +1233,7 @@ public static partial class SkillCheckData
         Skill = SkillType.Hide, Difficulty = CheckDifficulty.Moderate,
         TargetNumber = 13, CreditReward = 90, UpgradePointReward = 1,
     };
+
     public static SkillCheckEvent CoruscantVerityLoyaltyPledge => new()
     {
         Id = "coruscant_verity_pledge",
@@ -1196,6 +1244,7 @@ public static partial class SkillCheckData
         TargetNumber = 16, CreditReward = 100, UpgradePointReward = 2,
         CombatNpcOnFail = NPCData.ImperialOfficer,
     };
+
     public static SkillCheckEvent CoruscantVerityProbeDroid => new()
     {
         Id = "coruscant_verity_probedroid",
@@ -1216,6 +1265,7 @@ public static partial class SkillCheckData
         TargetNumber = 14, CreditReward = 50, UpgradePointReward = 1,
         CombatNpcOnFail = NPCData.ImperialOfficer,
     };
+
     public static SkillCheckEvent CoruscantArcologyCadetIntel => new()
     {
         Id = "coruscant_arcology_cadet",
@@ -1225,6 +1275,7 @@ public static partial class SkillCheckData
         Skill = SkillType.Persuade, Difficulty = CheckDifficulty.Difficult,
         TargetNumber = 16, CreditReward = 110, UpgradePointReward = 2,
     };
+
     public static SkillCheckEvent CoruscantArcologyForceWhispers => new()
     {
         Id = "coruscant_arcology_force",
@@ -1245,6 +1296,7 @@ public static partial class SkillCheckData
         TargetNumber = 18, CreditReward = 200, UpgradePointReward = 2,
         CombatNpcOnFail = NPCData.ImperialOfficer,
     };
+
     public static SkillCheckEvent CoruscantRegisterClerkBribe => new()
     {
         Id = "coruscant_register_bribe",
@@ -1252,8 +1304,10 @@ public static partial class SkillCheckData
         SuccessText = "The clerk pockets your chit and quietly purges three records. They never look up.",
         FailText = "The clerk stiffens and presses a silent alarm under the desk.",
         Skill = SkillType.Persuade, Difficulty = CheckDifficulty.Moderate,
-        TargetNumber = 14, CreditReward = 80, UpgradePointReward = 1, CreditPenalty = 50,
+        TargetNumber = 14, CreditReward = 80, UpgradePointReward = 1,
+        CreditPenalty = 50,
     };
+
     public static SkillCheckEvent CoruscantRegisterAuditTrail => new()
     {
         Id = "coruscant_register_audit",
@@ -1273,6 +1327,7 @@ public static partial class SkillCheckData
         Skill = SkillType.Willpower, Difficulty = CheckDifficulty.Difficult,
         TargetNumber = 17, CreditReward = 0, UpgradePointReward = 2,
     };
+
     public static SkillCheckEvent CoruscantFederalSenatorFavor => new()
     {
         Id = "coruscant_federal_senator",
@@ -1282,6 +1337,7 @@ public static partial class SkillCheckData
         Skill = SkillType.Persuade, Difficulty = CheckDifficulty.Moderate,
         TargetNumber = 14, CreditReward = 130, UpgradePointReward = 1,
     };
+
     public static SkillCheckEvent CoruscantFederalDroneIntercept => new()
     {
         Id = "coruscant_federal_drone",
@@ -1301,6 +1357,7 @@ public static partial class SkillCheckData
         Skill = SkillType.Sense, Difficulty = CheckDifficulty.Challenging,
         TargetNumber = 21, CreditReward = 0, UpgradePointReward = 3,
     };
+
     public static SkillCheckEvent CoruscantPalaceDataCourier => new()
     {
         Id = "coruscant_palace_courier",
@@ -1311,6 +1368,7 @@ public static partial class SkillCheckData
         TargetNumber = 17, CreditReward = 250, UpgradePointReward = 2,
         CombatNpcOnFail = NPCData.ImperialOfficer,
     };
+
     public static SkillCheckEvent CoruscantPalaceInquisitorAvoid => new()
     {
         Id = "coruscant_palace_inquisitor",
@@ -1321,9 +1379,6 @@ public static partial class SkillCheckData
         TargetNumber = 22, CreditReward = 0, UpgradePointReward = 3,
     };
 
-    // =========================================================
-    // BESTINE / JUNDLAND BRANCH (Tatooine)
-    // =========================================================
     public static SkillCheckEvent PikaOasisFermentedFruit => new()
     {
         Id = "pika_oasis_fermentedfruit",
@@ -1331,8 +1386,10 @@ public static partial class SkillCheckData
         SuccessText = "You time the harvest perfectly — half a dozen ripe fruits, prized as offworld delicacy.",
         FailText = "You misjudge the spore release; the fruit collapses into a pungent, useless mash.",
         Skill = SkillType.Survival, Difficulty = CheckDifficulty.Easy,
-        TargetNumber = 9, CreditReward = 35, UpgradePointReward = 1, Repeatable = true,
+        TargetNumber = 9, CreditReward = 35, UpgradePointReward = 1,
+        Repeatable = true,
     };
+
     public static SkillCheckEvent PikaOasisTuskenTruce => new()
     {
         Id = "pika_oasis_tusken",
@@ -1344,6 +1401,7 @@ public static partial class SkillCheckData
         TargetNumber = 13, CreditReward = 0, UpgradePointReward = 2,
         CombatNpcOnFail = NPCData.TuskenRaider,
     };
+
     public static SkillCheckEvent PikaOasisHiddenCache => new()
     {
         Id = "pika_oasis_cache",
@@ -1362,8 +1420,10 @@ public static partial class SkillCheckData
         FailText = "Your evasion comes off as suspicious. They scan your transponder.",
         FailPenaltyText = "A 'civic infraction' fine is debited from your account.",
         Skill = SkillType.Deceive, Difficulty = CheckDifficulty.Easy,
-        TargetNumber = 10, CreditReward = 20, UpgradePointReward = 1, CreditPenalty = 30,
+        TargetNumber = 10, CreditReward = 20, UpgradePointReward = 1,
+        CreditPenalty = 30,
     };
+
     public static SkillCheckEvent BestineOutskirtsSpeederSalvage => new()
     {
         Id = "bestine_outskirts_speeder",
@@ -1371,8 +1431,10 @@ public static partial class SkillCheckData
         SuccessText = "You ease a working power converter free without spilling fluids. A nice score.",
         FailText = "You snap a fuel line; coolant hisses everywhere and the kid in the cockpit yells.",
         Skill = SkillType.Vehicles, Difficulty = CheckDifficulty.Moderate,
-        TargetNumber = 12, CreditReward = 65, UpgradePointReward = 1, Repeatable = true,
+        TargetNumber = 12, CreditReward = 65, UpgradePointReward = 1,
+        Repeatable = true,
     };
+
     public static SkillCheckEvent BestineOutskirtsDroidHelp => new()
     {
         Id = "bestine_outskirts_droid",
@@ -1392,6 +1454,7 @@ public static partial class SkillCheckData
         Skill = SkillType.Search, Difficulty = CheckDifficulty.Moderate,
         TargetNumber = 13, CreditReward = 90, UpgradePointReward = 1,
     };
+
     public static SkillCheckEvent BestineMarketBothanDropoff => new()
     {
         Id = "bestine_market_bothan",
@@ -1403,6 +1466,7 @@ public static partial class SkillCheckData
         TargetNumber = 16, CreditReward = 150, UpgradePointReward = 2,
         CombatNpcOnFail = NPCData.Stormtrooper,
     };
+
     public static SkillCheckEvent BestineMarketHaggle => new()
     {
         Id = "bestine_market_haggle",
@@ -1410,7 +1474,8 @@ public static partial class SkillCheckData
         SuccessText = "You point out the alterations and the vendor's tone shifts. The price drops sharply.",
         FailText = "The vendor calls your bluff and ends the haggle. Word spreads to other stalls.",
         Skill = SkillType.Persuade, Difficulty = CheckDifficulty.Moderate,
-        TargetNumber = 13, CreditReward = 50, UpgradePointReward = 1, Repeatable = true,
+        TargetNumber = 13, CreditReward = 50, UpgradePointReward = 1,
+        Repeatable = true,
     };
 
     public static SkillCheckEvent GarrisonInfiltratePerimeter => new()
@@ -1424,6 +1489,7 @@ public static partial class SkillCheckData
         TargetNumber = 16, CreditReward = 0, UpgradePointReward = 2,
         CombatNpcOnFail = NPCData.Stormtrooper,
     };
+
     public static SkillCheckEvent GarrisonATSTSchematic => new()
     {
         Id = "garrison_atst",
@@ -1433,6 +1499,7 @@ public static partial class SkillCheckData
         Skill = SkillType.Sensors, Difficulty = CheckDifficulty.Difficult,
         TargetNumber = 17, CreditReward = 200, UpgradePointReward = 2,
     };
+
     public static SkillCheckEvent GarrisonForgedClearance => new()
     {
         Id = "garrison_clearance",
@@ -1452,8 +1519,10 @@ public static partial class SkillCheckData
         FailText = "The droid escalates to a human officer who orders a full search.",
         FailPenaltyText = "Inspection fees are levied.",
         Skill = SkillType.Persuade, Difficulty = CheckDifficulty.Moderate,
-        TargetNumber = 13, CreditReward = 60, UpgradePointReward = 1, CreditPenalty = 50,
+        TargetNumber = 13, CreditReward = 60, UpgradePointReward = 1,
+        CreditPenalty = 50,
     };
+
     public static SkillCheckEvent SpaceportRefuelScam => new()
     {
         Id = "spaceport_refuel",
@@ -1461,8 +1530,10 @@ public static partial class SkillCheckData
         SuccessText = "You spoof the meter long enough to top off your tanks for free.",
         FailText = "The system alerts the dockmaster of meter tampering. Better leave quickly.",
         Skill = SkillType.Computers, Difficulty = CheckDifficulty.Moderate,
-        TargetNumber = 14, CreditReward = 75, UpgradePointReward = 1, Repeatable = true,
+        TargetNumber = 14, CreditReward = 75, UpgradePointReward = 1,
+        Repeatable = true,
     };
+
     public static SkillCheckEvent SpaceportPilotIntel => new()
     {
         Id = "spaceport_pilot",
@@ -1482,6 +1553,7 @@ public static partial class SkillCheckData
         Skill = SkillType.Deceive, Difficulty = CheckDifficulty.Moderate,
         TargetNumber = 13, CreditReward = 0, UpgradePointReward = 1,
     };
+
     public static SkillCheckEvent JundlandEastFootprints => new()
     {
         Id = "jundland_east_tracks",
@@ -1491,6 +1563,7 @@ public static partial class SkillCheckData
         Skill = SkillType.Survival, Difficulty = CheckDifficulty.Moderate,
         TargetNumber = 12, CreditReward = 60, UpgradePointReward = 1,
     };
+
     public static SkillCheckEvent JundlandEastBanditAmbush => new()
     {
         Id = "jundland_east_ambush",
@@ -1511,6 +1584,7 @@ public static partial class SkillCheckData
         Skill = SkillType.Xenology, Difficulty = CheckDifficulty.Difficult,
         TargetNumber = 16, CreditReward = 100, UpgradePointReward = 2,
     };
+
     public static SkillCheckEvent JundlandCentralEchoNavigate => new()
     {
         Id = "jundland_central_echo",
@@ -1520,6 +1594,7 @@ public static partial class SkillCheckData
         Skill = SkillType.Search, Difficulty = CheckDifficulty.Moderate,
         TargetNumber = 13, CreditReward = 40, UpgradePointReward = 1,
     };
+
     public static SkillCheckEvent JundlandCentralJediScrap => new()
     {
         Id = "jundland_central_jediscrap",
@@ -1539,6 +1614,7 @@ public static partial class SkillCheckData
         Skill = SkillType.Athletics, Difficulty = CheckDifficulty.Moderate,
         TargetNumber = 14, CreditReward = 0, UpgradePointReward = 2,
     };
+
     public static SkillCheckEvent JundlandWestMeditationCairn => new()
     {
         Id = "jundland_west_cairn",
@@ -1548,6 +1624,7 @@ public static partial class SkillCheckData
         Skill = SkillType.Sense, Difficulty = CheckDifficulty.Difficult,
         TargetNumber = 16, CreditReward = 0, UpgradePointReward = 3,
     };
+
     public static SkillCheckEvent JundlandWestTuskenWatcher => new()
     {
         Id = "jundland_west_watcher",
@@ -1566,8 +1643,10 @@ public static partial class SkillCheckData
         SuccessText = "You win the bid for a song. The droid trills a thankful tune as it powers up under your control.",
         FailText = "The bidding spirals; you walk away with empty pockets and no droid.",
         Skill = SkillType.Persuade, Difficulty = CheckDifficulty.Moderate,
-        TargetNumber = 13, CreditReward = 0, UpgradePointReward = 2, CreditPenalty = 60,
+        TargetNumber = 13, CreditReward = 0, UpgradePointReward = 2,
+        CreditPenalty = 60,
     };
+
     public static SkillCheckEvent JawaTerritoriesSalvageStream => new()
     {
         Id = "jawa_territories_salvage",
@@ -1575,8 +1654,10 @@ public static partial class SkillCheckData
         SuccessText = "You pluck a working motivator off the belt without being seen. Resaleable, easily.",
         FailText = "A sharp Jawa elder catches your hand mid-grab and chitters furiously.",
         Skill = SkillType.Steal, Difficulty = CheckDifficulty.Moderate,
-        TargetNumber = 14, CreditReward = 70, UpgradePointReward = 1, Repeatable = true,
+        TargetNumber = 14, CreditReward = 70, UpgradePointReward = 1,
+        Repeatable = true,
     };
+
     public static SkillCheckEvent JawaTerritoriesPartIdentify => new()
     {
         Id = "jawa_territories_part",
@@ -1584,7 +1665,8 @@ public static partial class SkillCheckData
         SuccessText = "You point out the welded crack. The crowd murmurs; the Jawa lowers the price drastically.",
         FailText = "You bid high on a coil that won't last a single jump.",
         Skill = SkillType.Vehicles, Difficulty = CheckDifficulty.Moderate,
-        TargetNumber = 13, CreditReward = 60, UpgradePointReward = 1, CreditPenalty = 80,
+        TargetNumber = 13, CreditReward = 60, UpgradePointReward = 1,
+        CreditPenalty = 80,
     };
 
     public static SkillCheckEvent OldBenJournalRead => new()
@@ -1596,6 +1678,7 @@ public static partial class SkillCheckData
         Skill = SkillType.Galaxy, Difficulty = CheckDifficulty.Challenging,
         TargetNumber = 20, CreditReward = 0, UpgradePointReward = 3,
     };
+
     public static SkillCheckEvent OldBenForcePresence => new()
     {
         Id = "oldben_presence",
@@ -1605,6 +1688,7 @@ public static partial class SkillCheckData
         Skill = SkillType.Sense, Difficulty = CheckDifficulty.Challenging,
         TargetNumber = 21, CreditReward = 0, UpgradePointReward = 3,
     };
+
     public static SkillCheckEvent OldBenSaberCircle => new()
     {
         Id = "oldben_saber",
@@ -1615,9 +1699,6 @@ public static partial class SkillCheckData
         TargetNumber = 17, CreditReward = 0, UpgradePointReward = 2,
     };
 
-    // =========================================================
-    // TALK-TRIGGERED CHECKS (quest pool)
-    // =========================================================
     public static SkillCheckEvent TalkMedicineRequest => new()
     {
         Id = "talk_medicine",
@@ -1627,6 +1708,7 @@ public static partial class SkillCheckData
         Skill = SkillType.Medicine, Difficulty = CheckDifficulty.Easy,
         TargetNumber = 9, CreditReward = 25, UpgradePointReward = 1,
     };
+
     public static SkillCheckEvent TalkWillpowerInterrogation => new()
     {
         Id = "talk_willpower",
@@ -1638,6 +1720,7 @@ public static partial class SkillCheckData
         TargetNumber = 13, CreditReward = 0, UpgradePointReward = 1,
         CreditPenalty = 40,
     };
+
     public static SkillCheckEvent TalkXenologyIdentify => new()
     {
         Id = "talk_xenology",
@@ -1647,6 +1730,7 @@ public static partial class SkillCheckData
         Skill = SkillType.Xenology, Difficulty = CheckDifficulty.Moderate,
         TargetNumber = 12, CreditReward = 45, UpgradePointReward = 1,
     };
+
     public static SkillCheckEvent TalkGalaxyIntel => new()
     {
         Id = "talk_galaxy_intel",
@@ -1656,6 +1740,7 @@ public static partial class SkillCheckData
         Skill = SkillType.Galaxy, Difficulty = CheckDifficulty.Moderate,
         TargetNumber = 15, CreditReward = 75, UpgradePointReward = 2,
     };
+
     public static SkillCheckEvent TalkSurvivalGuide => new()
     {
         Id = "talk_survival",
@@ -1665,6 +1750,7 @@ public static partial class SkillCheckData
         Skill = SkillType.Survival, Difficulty = CheckDifficulty.Easy,
         TargetNumber = 9, CreditReward = 30, UpgradePointReward = 1,
     };
+
     public static SkillCheckEvent TalkControlCalm => new()
     {
         Id = "talk_control",
@@ -1675,9 +1761,16 @@ public static partial class SkillCheckData
         TargetNumber = 14, CreditReward = 20, UpgradePointReward = 2,
     };
 
-    // =========================================================
-    // LOCATION CHECKS MAPPING
-    // =========================================================
+    public static SkillCheckEvent PerceptionEdanTiger => new()
+    {
+        Id = "edan_notice_tiger",
+        Description = "",
+        SuccessText = "",
+        FailText = "",
+        Skill = SkillType.Persuade, Difficulty = CheckDifficulty.Moderate,
+        TargetNumber = 12, CreditReward = 0, UpgradePointReward = 0,
+    };
+
     public static Dictionary<string, List<SkillCheckEvent>> LocationChecks
     {
         get

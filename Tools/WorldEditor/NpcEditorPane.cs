@@ -10,12 +10,16 @@ public partial class MainWindow
     private List<NpcModel> _npcs = new();
     private NpcModel? _selectedNpc;
     private ListBox? _npcList;
-    private TextBox? _npcFilter, _npcMember, _npcName, _npcWeapon, _npcArmor;
+    private TextBox? _npcFilter, _npcMember, _npcName;
     private CheckBox? _npcIsPlayer;
-    private TextBox? _npcInventory;        // CSV editor for member-name list
-    private TextBox? _npcAttributes;       // "Dexterity:3D, Strength:2D+1, …"
-    private TextBox? _npcSkillBonuses;     // same format keyed by SkillType
+    private StackPanel? _npcAttrsRows, _npcSkillsRows, _npcInventoryRows;
+    private ComboBox? _npcWeapon, _npcArmor;
     private bool _npcBuilt, _npcSync;
+
+    // Available choices for the equipment / inventory dropdowns. Populated
+    // from the sibling Content/*.cs files when the NPC pane is loaded.
+    private List<string> _itemChoices = new();
+    private List<string> _armorChoices = new();
 
     private void BuildNpcViewIfNeeded()
     {
@@ -32,31 +36,40 @@ public partial class MainWindow
         _npcMember        = EditorHelpers.NewTextBox();
         _npcName          = EditorHelpers.NewTextBox();
         _npcIsPlayer      = EditorHelpers.NewCheck("IsPlayer");
-        _npcAttributes    = EditorHelpers.NewTextBox(multiline: true);
-        _npcSkillBonuses  = EditorHelpers.NewTextBox(multiline: true);
-        _npcInventory     = EditorHelpers.NewTextBox();
-        _npcWeapon        = EditorHelpers.NewTextBox(180);
-        _npcArmor         = EditorHelpers.NewTextBox(180);
+        _npcAttrsRows     = new StackPanel { Spacing = 3 };
+        _npcSkillsRows    = new StackPanel { Spacing = 3 };
+        _npcInventoryRows = new StackPanel { Spacing = 3 };
+        _npcWeapon        = EditorHelpers.NewCombo(Array.Empty<string>());
+        _npcArmor         = EditorHelpers.NewCombo(Array.Empty<string>());
+        _npcWeapon.HorizontalAlignment = HorizontalAlignment.Stretch;
+        _npcArmor.HorizontalAlignment  = HorizontalAlignment.Stretch;
 
         var form = new StackPanel { Margin = new Avalonia.Thickness(12), Spacing = 4 };
         form.Children.Add(new TextBlock { Text = "NPC", FontSize = 18, FontWeight = FontWeight.Bold, Foreground = new SolidColorBrush(Color.Parse("#F7FAFB")) });
         form.Children.Add(EditorHelpers.FormRow("Member name", _npcMember));
         form.Children.Add(EditorHelpers.FormRow("Display name", _npcName));
         form.Children.Add(EditorHelpers.FormRow("",             _npcIsPlayer));
-        form.Children.Add(EditorHelpers.FormRow("Attributes (Name:ND[+P], …)", _npcAttributes));
-        form.Children.Add(EditorHelpers.FormRow("Skill bonuses (Skill:ND[+P], …)", _npcSkillBonuses));
-        form.Children.Add(EditorHelpers.FormRow("Inventory (CSV of ItemData refs)", _npcInventory));
-        form.Children.Add(EditorHelpers.FormRow("Equipped weapon (ItemData ref)", _npcWeapon));
-        form.Children.Add(EditorHelpers.FormRow("Equipped armor (ArmorData ref)", _npcArmor));
+
+        var attrsLabel = new TextBlock { Text = "Attributes", FontWeight = FontWeight.Bold, Foreground = new SolidColorBrush(Color.Parse("#AAB6BF")), Margin = new Avalonia.Thickness(0, 8, 0, 4) };
+        form.Children.Add(attrsLabel);
+        form.Children.Add(_npcAttrsRows);
+
+        var skillsLabel = new TextBlock { Text = "Skill bonuses", FontWeight = FontWeight.Bold, Foreground = new SolidColorBrush(Color.Parse("#AAB6BF")), Margin = new Avalonia.Thickness(0, 8, 0, 4) };
+        form.Children.Add(skillsLabel);
+        form.Children.Add(_npcSkillsRows);
+
+        var invLabel = new TextBlock { Text = "Inventory", FontWeight = FontWeight.Bold, Foreground = new SolidColorBrush(Color.Parse("#AAB6BF")), Margin = new Avalonia.Thickness(0, 8, 0, 4) };
+        form.Children.Add(invLabel);
+        form.Children.Add(_npcInventoryRows);
+
+        form.Children.Add(EditorHelpers.FormRow("Equipped weapon", _npcWeapon));
+        form.Children.Add(EditorHelpers.FormRow("Equipped armor",  _npcArmor));
 
         _npcMember.TextChanged += (_, _) => SyncNpc(m => m.MemberName = _npcMember!.Text ?? "");
         _npcName.TextChanged   += (_, _) => SyncNpc(m => { m.DisplayName = _npcName!.Text ?? ""; RefreshNpcList(); });
         _npcIsPlayer.IsCheckedChanged += (_, _) => SyncNpc(m => m.IsPlayer = _npcIsPlayer!.IsChecked == true);
-        _npcAttributes.TextChanged += (_, _) => SyncNpc(m => m.Attributes = ParseDiceMap(_npcAttributes!.Text));
-        _npcSkillBonuses.TextChanged += (_, _) => SyncNpc(m => m.SkillBonuses = ParseDiceMap(_npcSkillBonuses!.Text));
-        _npcInventory.TextChanged += (_, _) => SyncNpc(m => m.Inventory = ParseCsv(_npcInventory!.Text));
-        _npcWeapon.TextChanged += (_, _) => SyncNpc(m => m.EquippedWeaponMember = _npcWeapon!.Text ?? "");
-        _npcArmor.TextChanged += (_, _) => SyncNpc(m => m.EquippedArmorMember = _npcArmor!.Text ?? "");
+        _npcWeapon.SelectionChanged += (_, _) => SyncNpc(m => m.EquippedWeaponMember = _npcWeapon!.SelectedItem as string ?? "");
+        _npcArmor.SelectionChanged  += (_, _) => SyncNpc(m => m.EquippedArmorMember  = _npcArmor!.SelectedItem  as string ?? "");
 
         var grid = new Grid { ColumnDefinitions = new ColumnDefinitions("260,*") };
         Grid.SetColumn(listPane, 0); grid.Children.Add(listPane);
@@ -83,18 +96,24 @@ public partial class MainWindow
 
     private void RefreshNpcForm()
     {
-        if (_selectedNpc == null) return;
+        if (_selectedNpc == null)
+        {
+            _npcAttrsRows?.Children.Clear();
+            _npcSkillsRows?.Children.Clear();
+            _npcInventoryRows?.Children.Clear();
+            return;
+        }
         _npcSync = true;
         try
         {
             _npcMember!.Text   = _selectedNpc.MemberName;
             _npcName!.Text     = _selectedNpc.DisplayName;
             _npcIsPlayer!.IsChecked = _selectedNpc.IsPlayer;
-            _npcAttributes!.Text   = FormatDiceMap(_selectedNpc.Attributes);
-            _npcSkillBonuses!.Text = FormatDiceMap(_selectedNpc.SkillBonuses);
-            _npcInventory!.Text    = string.Join(", ", _selectedNpc.Inventory);
-            _npcWeapon!.Text       = _selectedNpc.EquippedWeaponMember;
-            _npcArmor!.Text        = _selectedNpc.EquippedArmorMember;
+            BuildDiceMapEditor(_npcAttrsRows!, _selectedNpc.Attributes, AllAttributes);
+            BuildDiceMapEditor(_npcSkillsRows!, _selectedNpc.SkillBonuses, AllSkills);
+            BuildItemListEditor(_npcInventoryRows!, _selectedNpc.Inventory, _itemChoices);
+            _npcWeapon!.SelectedItem = string.IsNullOrEmpty(_selectedNpc.EquippedWeaponMember) ? null : _selectedNpc.EquippedWeaponMember;
+            _npcArmor!.SelectedItem  = string.IsNullOrEmpty(_selectedNpc.EquippedArmorMember)  ? null : _selectedNpc.EquippedArmorMember;
         }
         finally { _npcSync = false; }
     }
@@ -109,7 +128,20 @@ public partial class MainWindow
         _npcs = _npcParser.Npcs.ToList();
         _selectedNpc = null;
         if (_npcList != null) _npcList.SelectedItem = null;
+
+        // Populate equipment / inventory choices from sibling Content files.
+        var contentDir = System.IO.Path.GetDirectoryName(path)!;
+        _itemChoices  = SymbolScanner.ScanFactories(System.IO.Path.Combine(contentDir, "ItemData.cs"),  "Item");
+        _armorChoices = SymbolScanner.ScanFactories(System.IO.Path.Combine(contentDir, "ArmorData.cs"), "Armor");
+        var weaponItems = new List<string> { "" };
+        weaponItems.AddRange(_itemChoices);
+        var armorItems = new List<string> { "" };
+        armorItems.AddRange(_armorChoices);
+        if (_npcWeapon != null) _npcWeapon.ItemsSource = weaponItems;
+        if (_npcArmor  != null) _npcArmor.ItemsSource  = armorItems;
+
         RefreshNpcList();
+        RefreshNpcForm();
         Status($"loaded {_npcs.Count} NPCs");
     }
 
@@ -118,6 +150,67 @@ public partial class MainWindow
         if (_npcParser == null) { Status("nothing loaded", error: true); return; }
         try { NpcFileWriter.Save(_npcParser, _npcs); Status($"saved {_npcs.Count} NPCs"); LoadNpcs(); }
         catch (Exception ex) { Status($"save failed: {ex.Message}", error: true); }
+    }
+
+    /// Renders an editable list of factory-name picks (for Inventory). Each
+    /// row is [combo][✕]; a final add-row appends a new entry. Mutating the
+    /// rows updates `list` in place.
+    private static void BuildItemListEditor(StackPanel container, List<string> list, List<string> choices)
+    {
+        container.Children.Clear();
+
+        for (int i = 0; i < list.Count; i++)
+        {
+            var idx = i;
+            var combo = EditorHelpers.NewCombo(choices);
+            combo.SelectedItem = list[idx];
+            combo.Width = 220;
+            combo.SelectionChanged += (_, _) =>
+            {
+                if (idx >= list.Count) return;
+                if (combo.SelectedItem is string s) list[idx] = s;
+            };
+
+            var del = new Button
+            {
+                Content = "✕",
+                Padding = new Avalonia.Thickness(8, 2),
+                Margin = new Avalonia.Thickness(6, 0, 0, 0),
+            };
+            ToolTip.SetTip(del, "Remove from inventory");
+            del.Click += (_, _) =>
+            {
+                if (idx < list.Count) list.RemoveAt(idx);
+                BuildItemListEditor(container, list, choices);
+            };
+
+            var row = new StackPanel { Orientation = Orientation.Horizontal };
+            row.Children.Add(combo);
+            row.Children.Add(del);
+            container.Children.Add(row);
+        }
+
+        // Add row.
+        var addCombo = EditorHelpers.NewCombo(choices);
+        addCombo.PlaceholderText = "(add…)";
+        addCombo.Width = 220;
+        var add = new Button
+        {
+            Content = "Add",
+            Padding = new Avalonia.Thickness(10, 2),
+            Margin = new Avalonia.Thickness(6, 0, 0, 0),
+            IsEnabled = choices.Count > 0,
+        };
+        add.Click += (_, _) =>
+        {
+            if (addCombo.SelectedItem is not string s) return;
+            list.Add(s);
+            BuildItemListEditor(container, list, choices);
+        };
+        var addRow = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Avalonia.Thickness(0, 6, 0, 0) };
+        addRow.Children.Add(addCombo);
+        addRow.Children.Add(add);
+        container.Children.Add(addRow);
     }
 
     // Shared parsing helpers used by NPC + Role + Species panes ---------------

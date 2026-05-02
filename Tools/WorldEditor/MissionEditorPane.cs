@@ -12,13 +12,18 @@ public partial class MainWindow
     private List<MissionModel> _msns = new();
     private MissionModel? _selectedMsn;
     private ListBox? _msnList;
-    private TextBox? _msnFilter, _msnMember, _msnId, _msnTitle, _msnBriefing, _msnDest, _msnEscort,
+    private TextBox? _msnFilter, _msnMember, _msnId, _msnTitle, _msnBriefing, _msnEscort,
                      _msnSuccess, _msnFail;
-    private ComboBox? _msnType, _msnCheckSkill;
+    private ComboBox? _msnType, _msnCheckSkill, _msnDest, _msnItemDestId;
     private NumericUpDown? _msnTN, _msnReward, _msnUp;
     private CheckBox? _msnHasItem;
-    private TextBox? _msnItemName, _msnItemDesc, _msnItemDestId, _msnItemDestName;
+    private TextBox? _msnItemName, _msnItemDesc, _msnItemDestName;
     private bool _msnBuilt, _msnSync;
+
+    /// (Id, DisplayName) pairs scanned from sibling LocationData.cs so the
+    /// destination dropdowns offer real ids and we can auto-fill the
+    /// destination name from a chosen id.
+    private List<(string Id, string Name)> _msnLocations = new();
 
     private void BuildMissionViewIfNeeded()
     {
@@ -37,12 +42,14 @@ public partial class MainWindow
         _msnTitle = EditorHelpers.NewTextBox();
         _msnBriefing = EditorHelpers.NewTextBox(multiline: true);
         _msnType = EditorHelpers.NewCombo(MissionTypes);
-        _msnDest = EditorHelpers.NewTextBox();
+        _msnDest = EditorHelpers.NewCombo(Array.Empty<string>());
+        _msnDest.HorizontalAlignment = HorizontalAlignment.Stretch;
         _msnEscort = EditorHelpers.NewTextBox();
         _msnHasItem = EditorHelpers.NewCheck("Has MissionItem (Delivery)");
         _msnItemName = EditorHelpers.NewTextBox();
         _msnItemDesc = EditorHelpers.NewTextBox(multiline: true);
-        _msnItemDestId = EditorHelpers.NewTextBox();
+        _msnItemDestId = EditorHelpers.NewCombo(Array.Empty<string>());
+        _msnItemDestId.HorizontalAlignment = HorizontalAlignment.Stretch;
         _msnItemDestName = EditorHelpers.NewTextBox();
         _msnCheckSkill = EditorHelpers.NewCombo(AllSkills);
         _msnTN = EditorHelpers.NewNumeric(0, 99);
@@ -77,12 +84,28 @@ public partial class MainWindow
         _msnTitle.TextChanged += (_, _) => SyncMsn(m => { m.Title = _msnTitle!.Text ?? ""; RefreshMsnList(); });
         _msnBriefing.TextChanged += (_, _) => SyncMsn(m => m.BriefingText = _msnBriefing!.Text ?? "");
         _msnType.SelectionChanged += (_, _) => SyncMsn(m => { m.Type = _msnType!.SelectedItem as string ?? "Escort"; RefreshMsnList(); });
-        _msnDest.TextChanged += (_, _) => SyncMsn(m => m.DestinationLocationId = _msnDest!.Text ?? "");
+        _msnDest.SelectionChanged += (_, _) => SyncMsn(m => m.DestinationLocationId = _msnDest!.SelectedItem as string ?? "");
         _msnEscort.TextChanged += (_, _) => SyncMsn(m => m.EscortNpcName = _msnEscort!.Text ?? "");
         _msnHasItem.IsCheckedChanged += (_, _) => SyncMsn(m => m.HasMissionItem = _msnHasItem!.IsChecked == true);
         _msnItemName.TextChanged += (_, _) => SyncMsn(m => m.MissionItemName = _msnItemName!.Text ?? "");
         _msnItemDesc.TextChanged += (_, _) => SyncMsn(m => m.MissionItemDescription = _msnItemDesc!.Text ?? "");
-        _msnItemDestId.TextChanged += (_, _) => SyncMsn(m => m.MissionItemDestinationLocationId = _msnItemDestId!.Text ?? "");
+        // When the user picks an item destination id, auto-fill the destination
+        // name from the matching room's display Name. Skip during programmatic
+        // refreshes (handled by _msnSync) so we don't clobber a saved name.
+        _msnItemDestId.SelectionChanged += (_, _) => SyncMsn(m =>
+        {
+            var id = _msnItemDestId!.SelectedItem as string ?? "";
+            m.MissionItemDestinationLocationId = id;
+            if (!string.IsNullOrEmpty(id))
+            {
+                var match = _msnLocations.FirstOrDefault(p => p.Id == id);
+                if (!string.IsNullOrEmpty(match.Name))
+                {
+                    m.MissionItemDestinationName = match.Name;
+                    _msnItemDestName!.Text = match.Name;
+                }
+            }
+        });
         _msnItemDestName.TextChanged += (_, _) => SyncMsn(m => m.MissionItemDestinationName = _msnItemDestName!.Text ?? "");
         _msnCheckSkill.SelectionChanged += (_, _) => SyncMsn(m => m.CheckSkill = _msnCheckSkill!.SelectedItem as string ?? "");
         _msnTN.ValueChanged += (_, _) => SyncMsn(m => m.CheckTargetNumber = (int)(_msnTN!.Value ?? 0));
@@ -125,12 +148,12 @@ public partial class MainWindow
             _msnTitle!.Text = _selectedMsn.Title;
             _msnBriefing!.Text = _selectedMsn.BriefingText;
             _msnType!.SelectedItem = _selectedMsn.Type;
-            _msnDest!.Text = _selectedMsn.DestinationLocationId;
+            _msnDest!.SelectedItem = string.IsNullOrEmpty(_selectedMsn.DestinationLocationId) ? null : _selectedMsn.DestinationLocationId;
             _msnEscort!.Text = _selectedMsn.EscortNpcName;
             _msnHasItem!.IsChecked = _selectedMsn.HasMissionItem;
             _msnItemName!.Text = _selectedMsn.MissionItemName;
             _msnItemDesc!.Text = _selectedMsn.MissionItemDescription;
-            _msnItemDestId!.Text = _selectedMsn.MissionItemDestinationLocationId;
+            _msnItemDestId!.SelectedItem = string.IsNullOrEmpty(_selectedMsn.MissionItemDestinationLocationId) ? null : _selectedMsn.MissionItemDestinationLocationId;
             _msnItemDestName!.Text = _selectedMsn.MissionItemDestinationName;
             _msnCheckSkill!.SelectedItem = string.IsNullOrEmpty(_selectedMsn.CheckSkill) ? null : _selectedMsn.CheckSkill;
             _msnTN!.Value = _selectedMsn.CheckTargetNumber;
@@ -152,6 +175,23 @@ public partial class MainWindow
         _msns = _msnParser.Missions.ToList();
         _selectedMsn = null;
         if (_msnList != null) _msnList.SelectedItem = null;
+
+        // Populate the destination dropdowns from the sibling LocationData.cs.
+        // A blank first entry lets the user clear the selection.
+        var contentDir = System.IO.Path.GetDirectoryName(path)!;
+        var locPath = System.IO.Path.Combine(contentDir, "LocationData.cs");
+        _msnLocations = new List<(string, string)>();
+        if (File.Exists(locPath))
+        {
+            var lp = new LocationFileParser(locPath);
+            if (lp.TryLoad())
+                _msnLocations = lp.Rooms.Select(r => (r.Id, r.Name)).Where(p => !string.IsNullOrEmpty(p.Id)).OrderBy(p => p.Id).ToList();
+        }
+        var ids = new List<string> { "" };
+        ids.AddRange(_msnLocations.Select(p => p.Id));
+        if (_msnDest       != null) _msnDest.ItemsSource       = ids;
+        if (_msnItemDestId != null) _msnItemDestId.ItemsSource = ids;
+
         RefreshMsnList();
         Status($"loaded {_msns.Count} missions");
     }

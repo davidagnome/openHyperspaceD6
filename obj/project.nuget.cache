@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "IKX331I1gR0=",
+  "dgSpecHash": "f+5tFcOrlI4=",
   "success": true,
   "projectFilePath": "/Volumes/Data/Dev/terminalHyperspace/TerminalHyperspace.csproj",
   "expectedPackageFiles": [
@@ -22,16 +22,12 @@
     "/Users/dpeters911/.nuget/packages/harfbuzzsharp.nativeassets.webassembly/7.3.0.3-preview.2.2/harfbuzzsharp.nativeassets.webassembly.7.3.0.3-preview.2.2.nupkg.sha512",
     "/Users/dpeters911/.nuget/packages/harfbuzzsharp.nativeassets.win32/7.3.0.2/harfbuzzsharp.nativeassets.win32.7.3.0.2.nupkg.sha512",
     "/Users/dpeters911/.nuget/packages/microcom.runtime/0.11.0/microcom.runtime.0.11.0.nupkg.sha512",
-    "/Users/dpeters911/.nuget/packages/microsoft.net.illink.tasks/10.0.3/microsoft.net.illink.tasks.10.0.3.nupkg.sha512",
     "/Users/dpeters911/.nuget/packages/skiasharp/2.88.8/skiasharp.2.88.8.nupkg.sha512",
     "/Users/dpeters911/.nuget/packages/skiasharp.nativeassets.linux/2.88.8/skiasharp.nativeassets.linux.2.88.8.nupkg.sha512",
     "/Users/dpeters911/.nuget/packages/skiasharp.nativeassets.macos/2.88.8/skiasharp.nativeassets.macos.2.88.8.nupkg.sha512",
     "/Users/dpeters911/.nuget/packages/skiasharp.nativeassets.webassembly/2.88.8/skiasharp.nativeassets.webassembly.2.88.8.nupkg.sha512",
     "/Users/dpeters911/.nuget/packages/skiasharp.nativeassets.win32/2.88.8/skiasharp.nativeassets.win32.2.88.8.nupkg.sha512",
-    "/Users/dpeters911/.nuget/packages/tmds.dbus.protocol/0.92.0/tmds.dbus.protocol.0.92.0.nupkg.sha512",
-    "/Users/dpeters911/.nuget/packages/microsoft.netcore.app.runtime.linux-x64/10.0.3/microsoft.netcore.app.runtime.linux-x64.10.0.3.nupkg.sha512",
-    "/Users/dpeters911/.nuget/packages/microsoft.aspnetcore.app.runtime.linux-x64/10.0.3/microsoft.aspnetcore.app.runtime.linux-x64.10.0.3.nupkg.sha512",
-    "/Users/dpeters911/.nuget/packages/microsoft.netcore.app.host.linux-x64/10.0.3/microsoft.netcore.app.host.linux-x64.10.0.3.nupkg.sha512"
+    "/Users/dpeters911/.nuget/packages/tmds.dbus.protocol/0.92.0/tmds.dbus.protocol.0.92.0.nupkg.sha512"
   ],
   "logs": []
 }

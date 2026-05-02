@@ -4,6 +4,7 @@ namespace TerminalHyperspace.Content;
 
 public static partial class NPCData
 {
+
     public static Character Stormtrooper() => new()
     {
         Name = "Stormtrooper",
@@ -20,9 +21,8 @@ public static partial class NPCData
         },
         SkillBonuses = new()
         {
-            // Bonuses are added to parent attribute. Intended totals: Blasters 4D, Brawl 3D
-            [SkillType.Blasters] = new DiceCode(1), // Dex 3D + 1D = 4D
-            [SkillType.Brawl] = new DiceCode(1),    // Str 2D + 1D = 3D
+            [SkillType.Blasters] = new DiceCode(1),
+            [SkillType.Brawl] = new DiceCode(1),
         },
         Inventory = new() { ItemData.BlasterRifle },
         EquippedWeapon = ItemData.BlasterRifle,
@@ -45,13 +45,11 @@ public static partial class NPCData
         },
         SkillBonuses = new()
         {
-            // Bonuses are added to parent attribute. Intended totals: Blasters 5D,
-            // Armament 4D, Brawl 4D, Search 3D+1, Survival 4D (all attrs are 2D)
-            [SkillType.Blasters] = new DiceCode(3),    // Dex 2D + 3D = 5D
-            [SkillType.Armament] = new DiceCode(2),    // Tech 2D + 2D = 4D
-            [SkillType.Brawl] = new DiceCode(2),       // Str 2D + 2D = 4D
-            [SkillType.Search] = new DiceCode(1, 1),   // Per 2D + 1D+1 = 3D+1
-            [SkillType.Survival] = new DiceCode(2),    // Know 2D + 2D = 4D
+            [SkillType.Blasters] = new DiceCode(3),
+            [SkillType.Armament] = new DiceCode(2),
+            [SkillType.Brawl] = new DiceCode(2),
+            [SkillType.Search] = new DiceCode(1, 1),
+            [SkillType.Survival] = new DiceCode(2),
         },
         Inventory = new() { ItemData.BlasterRifle },
         EquippedWeapon = ItemData.BlasterRifle,
@@ -226,18 +224,17 @@ public static partial class NPCData
         },
         SkillBonuses = new()
         {
-            // Intended totals: Blasters 4D, Melee 4D, Hide 3D+2, Survival 3D, Search 3D+1
-            [SkillType.Blasters] = new DiceCode(1, 2),   // Dex 2D+1 + 1D+2 = 4D
-            [SkillType.Melee] = new DiceCode(1, 2),      // Dex 2D+1 + 1D+2 = 4D
-            [SkillType.Hide] = new DiceCode(1),           // Per 2D+2 + 1D = 3D+2
-            [SkillType.Survival] = new DiceCode(2),      // Know 1D + 2D = 3D
-            [SkillType.Search] = new DiceCode(0, 2),     // Per 2D+2 + 0D+2 = 3D+1
+            [SkillType.Blasters] = new DiceCode(1, 2),
+            [SkillType.Melee] = new DiceCode(1, 2),
+            [SkillType.Hide] = new DiceCode(1),
+            [SkillType.Survival] = new DiceCode(2),
+            [SkillType.Search] = new DiceCode(0, 2),
         },
         Inventory = new() { ItemData.BlasterRifle, ItemData.Vibroblade },
         EquippedWeapon = ItemData.BlasterRifle,
         EquippedArmor = ArmorData.PaddedFlightSuit,
     };
-    
+
     public static Character BobaFett() => new()
     {
         Name = "Boba Fett",
@@ -245,8 +242,8 @@ public static partial class NPCData
         Attributes = new()
         {
             [AttributeType.Dexterity] = new DiceCode(4),
-            [AttributeType.Knowledge] = new DiceCode(2,2),
-            [AttributeType.Mechanical] = new DiceCode(2,2),
+            [AttributeType.Knowledge] = new DiceCode(2, 2),
+            [AttributeType.Mechanical] = new DiceCode(2, 2),
             [AttributeType.Perception] = new DiceCode(3),
             [AttributeType.Strength] = new DiceCode(3, 2),
             [AttributeType.Technical] = new DiceCode(2),
@@ -254,22 +251,21 @@ public static partial class NPCData
         },
         SkillBonuses = new()
         {
-            // Intended totals: Blasters 4D, Melee 4D, Hide 3D+2, Survival 3D, Search 3D+1
-            [SkillType.Blasters] = new DiceCode(5),   // Dex 4D + 5D = 9D
-            [SkillType.Melee] = new DiceCode(2),      // Dex 4D + 2D = 6D
-            [SkillType.Agility] = new DiceCode(2),  // Dex 4D + 2D = 6D
-            [SkillType.Throw] = new DiceCode(3),  // Dex 4D + 3D = 7D
-            [SkillType.Xenology] = new DiceCode(2,1),  // Kno 2D+2 + 2D+1 = 6D
-            [SkillType.Galaxy] = new DiceCode(2,1),  // Kno 2D+2 + 2D+1 = 6D
-            [SkillType.Streetwise] = new DiceCode(2,1),  // Kno 2D+2 + 2D+1 = 6D
-            [SkillType.Survival] = new DiceCode(2,1),  // Kno 2D+2 + 2D+1 = 6D
-            [SkillType.Astrogation] = new DiceCode(2,2),           // Mec 2D+2  + 2D+2 = 6D+1
-            [SkillType.Pilot] = new DiceCode(4,1),           // Mec 2D+2  + 4D+1 = 7D
-            [SkillType.Gunnery] = new DiceCode(5,1),           // Mec 2D+2  + 5D+1 = 8D
-            [SkillType.Sensors] = new DiceCode(3,2),           // Mec 2D+2  + 3D+2 = 6D+1
-            [SkillType.Drive] = new DiceCode(2,1),           // Mec 2D+2  + 2D+1 = 5D
-            [SkillType.Hide] = new DiceCode(3),           // Per 3D  + 3D = 6D
-            [SkillType.Search] = new DiceCode(0, 2),     // Per 2D+2 + 0D+2 = 3D+1
+            [SkillType.Blasters] = new DiceCode(5),
+            [SkillType.Melee] = new DiceCode(2),
+            [SkillType.Agility] = new DiceCode(2),
+            [SkillType.Throw] = new DiceCode(3),
+            [SkillType.Xenology] = new DiceCode(2, 1),
+            [SkillType.Galaxy] = new DiceCode(2, 1),
+            [SkillType.Streetwise] = new DiceCode(2, 1),
+            [SkillType.Survival] = new DiceCode(2, 1),
+            [SkillType.Astrogation] = new DiceCode(2, 2),
+            [SkillType.Pilot] = new DiceCode(4, 1),
+            [SkillType.Gunnery] = new DiceCode(5, 1),
+            [SkillType.Sensors] = new DiceCode(3, 2),
+            [SkillType.Drive] = new DiceCode(2, 1),
+            [SkillType.Hide] = new DiceCode(3),
+            [SkillType.Search] = new DiceCode(0, 2),
         },
         Inventory = new() { ItemData.BlasterRifle, ItemData.Vibroblade },
         EquippedWeapon = ItemData.BlasterRifle,
@@ -297,4 +293,18 @@ public static partial class NPCData
             [SkillType.Stamina] = new DiceCode(0, 2),
         },
     };
+
+    public static Character EdanTiger() => new()
+    {
+        Name = "Edan Snowcat",
+        IsPlayer = false,
+        Attributes = new()
+        {
+            [AttributeType.Dexterity] = new DiceCode(3),
+            [AttributeType.Strength] = new DiceCode(4),
+            [AttributeType.Perception] = new DiceCode(2),
+        },
+        EquippedWeapon = ItemData.Claws,
+    };
+
 }

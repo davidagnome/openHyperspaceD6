@@ -10,6 +10,7 @@ public class SpaceEncounter
 
 public static partial class SpaceEncounterData
 {
+
     public static SpaceEncounter PirateInterceptor() => new()
     {
         Pilot = new Character
@@ -44,7 +45,7 @@ public static partial class SpaceEncounterData
             Shield = ShieldData.CivilianShields,
             Weapons = new()
             {
-                new() { Name = "Jury-rigged Laser Cannons", Damage = new DiceCode(3), AttackSkill = SkillType.Gunnery }
+                new() { Name = "Jury-rigged Laser Cannons", Damage = new DiceCode(3), AttackSkill = SkillType.Gunnery },
             },
         }
     };
@@ -83,7 +84,7 @@ public static partial class SpaceEncounterData
             Shield = ShieldData.Unshielded,
             Weapons = new()
             {
-                new() { Name = "Twin Laser Cannons", Damage = new DiceCode(3, 1), AttackSkill = SkillType.Gunnery }
+                new() { Name = "Twin Laser Cannons", Damage = new DiceCode(3, 1), AttackSkill = SkillType.Gunnery },
             },
         }
     };
@@ -128,7 +129,7 @@ public static partial class SpaceEncounterData
             },
             Equipment = new()
             {
-                new() { Name = "Targeting Computer", BonusSkill = SkillType.Gunnery, Bonus = new DiceCode(0, 2) }
+                new() { Name = "Targeting Computer", BonusSkill = SkillType.Gunnery, Bonus = new DiceCode(0, 2) },
             },
         }
     };
@@ -172,7 +173,7 @@ public static partial class SpaceEncounterData
             },
             Equipment = new()
             {
-                new() { Name = "Sensor Jammer", BonusSkill = SkillType.Pilot, Bonus = new DiceCode(0, 1) }
+                new() { Name = "Sensor Jammer", BonusSkill = SkillType.Pilot, Bonus = new DiceCode(0, 1) },
             },
         }
     };

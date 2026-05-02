@@ -31,6 +31,8 @@
           <ListBoxItem Content="Vehicle"    Tag="Vehicle"/>
           <ListBoxItem Content="Role"       Tag="Role"/>
           <ListBoxItem Content="Species"    Tag="Species"/>
+          <ListBoxItem Content="Armor"      Tag="Armor"/>
+          <ListBoxItem Content="SpaceEnc"   Tag="SpaceEncounter"/>
         </ListBox>
       </DockPanel>
     </Border>
@@ -52,7 +54,12 @@
     <Grid Name="ContentHost">
 
       <!-- Location view: existing 3-pane editor (active by default) -->
-      <Grid Name="LocationView" ColumnDefinitions="240,*,2*">
+      <Grid Name="LocationView">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="240"/>
+          <ColumnDefinition Width="*" MinWidth="580"/>
+          <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
 
         <!-- Room list -->
         <Border Grid.Column="0" Background="#101820" BorderBrush="#1F2A36" BorderThickness="0,0,1,0">
@@ -70,9 +77,9 @@
         </Border>
 
         <!-- Editor form -->
-        <Border Grid.Column="1" Background="#0E1418" BorderBrush="#1F2A36" BorderThickness="0,0,1,0">
-          <ScrollViewer Padding="10" VerticalScrollBarVisibility="Auto">
-            <StackPanel Name="EditorPanel" Spacing="6">
+        <Border Grid.Column="1" Background="#0E1418" BorderBrush="#1F2A36" BorderThickness="0,0,1,0" ClipToBounds="True">
+          <ScrollViewer Padding="14,12,0,12" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Disabled">
+            <StackPanel Name="EditorPanel" Spacing="6" Margin="0,0,28,0">
               <TextBlock Name="NoSelectionText"
                          Text="Select a room from the list to edit, or click + to create a new one."
                          Foreground="#888888" FontStyle="Italic"/>
@@ -93,7 +100,8 @@
                 <TextBlock Grid.Row="1" Grid.Column="0" Text="Name*"         VerticalAlignment="Center"/>
                 <TextBox   Grid.Row="1" Grid.Column="1" Name="EdName"/>
                 <TextBlock Grid.Row="2" Grid.Column="0" Text="Description"   VerticalAlignment="Top" Margin="0,6,0,0"/>
-                <TextBox   Grid.Row="2" Grid.Column="1" Name="EdDescription" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="80"/>
+                <TextBox   Grid.Row="2" Grid.Column="1" Name="EdDescription" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="80"
+                           ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>
 
                 <TextBlock Grid.Row="3" Grid.Column="0" Text="Planet"        VerticalAlignment="Center"/>
                 <TextBox   Grid.Row="3" Grid.Column="1" Name="EdPlanet"/>
@@ -128,7 +136,7 @@
 
                 <TextBlock Grid.Row="11" Grid.Column="0" Text="Possible Encounters" VerticalAlignment="Top" Margin="0,6,0,0"/>
                 <StackPanel Grid.Row="11" Grid.Column="1" Orientation="Vertical" Spacing="3">
-                  <ItemsControl Name="EdPossibleEncounters"/>
+                  <StackPanel Name="EdPossibleEncounters" Spacing="3"/>
                   <Grid ColumnDefinitions="*,Auto">
                     <ComboBox Grid.Column="0" Name="EdNpcPicker" HorizontalAlignment="Stretch"/>
                     <Button   Grid.Column="1" Content="Add"  Margin="6,0,0,0" Click="OnAddPossibleEncounterClick"/>
@@ -138,7 +146,7 @@
                 <TextBlock Grid.Row="12" Grid.Column="0" Text="Friendly NPCs"      VerticalAlignment="Top" Margin="0,6,0,0"/>
                 <StackPanel Grid.Row="12" Grid.Column="1" Orientation="Vertical" Spacing="3">
                   <CheckBox Name="EdFriendlyNPCsPresent" Content="Has FriendlyNPCs section" Click="OnFriendlyToggle"/>
-                  <ItemsControl Name="EdFriendlyNPCs"/>
+                  <StackPanel Name="EdFriendlyNPCs" Spacing="3"/>
                   <Grid ColumnDefinitions="*,Auto">
                     <ComboBox Grid.Column="0" Name="EdFriendlyPicker" HorizontalAlignment="Stretch"/>
                     <Button   Grid.Column="1" Content="Add" Margin="6,0,0,0" Click="OnAddFriendlyNpcClick"/>
@@ -147,7 +155,7 @@
 
                 <TextBlock Grid.Row="13" Grid.Column="0" Text="Space Encounters"   VerticalAlignment="Top" Margin="0,6,0,0"/>
                 <StackPanel Grid.Row="13" Grid.Column="1" Orientation="Vertical" Spacing="3">
-                  <ItemsControl Name="EdSpaceEncounters"/>
+                  <StackPanel Name="EdSpaceEncounters" Spacing="3"/>
                   <Grid ColumnDefinitions="*,Auto">
                     <ComboBox Grid.Column="0" Name="EdSpacePicker" HorizontalAlignment="Stretch"/>
                     <Button   Grid.Column="1" Content="Add" Margin="6,0,0,0" Click="OnAddSpaceEncounterClick"/>
@@ -159,7 +167,7 @@
 
                 <TextBlock Grid.Row="15" Grid.Column="0" Text="Exits"               VerticalAlignment="Top" Margin="0,6,0,0"/>
                 <StackPanel Grid.Row="15" Grid.Column="1" Orientation="Vertical" Spacing="3">
-                  <ItemsControl Name="EdExits"/>
+                  <StackPanel Name="EdExits" Spacing="3"/>
                   <Grid ColumnDefinitions="*,2*,Auto">
                     <ComboBox Grid.Column="0" Name="EdExitDir" PlaceholderText="direction" HorizontalAlignment="Stretch"/>
                     <ComboBox Grid.Column="1" Name="EdExitDest" HorizontalAlignment="Stretch"/>
@@ -251,6 +259,20 @@
           <TextBlock Text="Species Editor"    FontSize="22" Foreground="#F7FAFB" FontWeight="Bold"/>
           <TextBlock Foreground="#AAAAAA" TextWrapping="Wrap"
                      Text="Will edit Content/SpeciesData.cs — same shape as RoleData (list-elements-inside-All)."/>
+        </StackPanel>
+      </Border>
+      <Border Name="ArmorView"      IsVisible="False" Padding="40">
+        <StackPanel Spacing="10" MaxWidth="640" HorizontalAlignment="Left">
+          <TextBlock Text="Armor Editor"      FontSize="22" Foreground="#F7FAFB" FontWeight="Bold"/>
+          <TextBlock Foreground="#AAAAAA" TextWrapping="Wrap"
+                     Text="Edits Content/ArmorData.cs — `public static readonly Armor X = new() { ... };` plus the All / Purchasable aggregator lists."/>
+        </StackPanel>
+      </Border>
+      <Border Name="SpaceEncounterView" IsVisible="False" Padding="40">
+        <StackPanel Spacing="10" MaxWidth="640" HorizontalAlignment="Left">
+          <TextBlock Text="SpaceEncounter Editor" FontSize="22" Foreground="#F7FAFB" FontWeight="Bold"/>
+          <TextBlock Foreground="#AAAAAA" TextWrapping="Wrap"
+                     Text="Edits Content/SpaceEncounterData.cs — methods returning SpaceEncounter, with nested Pilot (Character) and Ship (Vehicle) initializers."/>
         </StackPanel>
       </Border>
 

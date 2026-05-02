@@ -12,8 +12,8 @@ public partial class MainWindow
     private List<SkillCheckModel> _scs = new();
     private SkillCheckModel? _selectedSc;
     private ListBox? _scList;
-    private TextBox? _scFilter, _scMember, _scId, _scDesc, _scSuccess, _scFail, _scPenaltyText, _scNpc;
-    private ComboBox? _scSkill, _scDifficulty;
+    private TextBox? _scFilter, _scMember, _scId, _scDesc, _scSuccess, _scFail, _scPenaltyText;
+    private ComboBox? _scSkill, _scDifficulty, _scNpc;
     private NumericUpDown? _scTN, _scReward, _scUp, _scPenalty;
     private CheckBox? _scRepeatable;
     private bool _scBuilt, _scSync;
@@ -43,7 +43,8 @@ public partial class MainWindow
         _scUp = EditorHelpers.NewNumeric(0, 9);
         _scRepeatable = EditorHelpers.NewCheck("Repeatable");
         _scPenalty = EditorHelpers.NewNumeric(0, 99999);
-        _scNpc = EditorHelpers.NewTextBox();
+        _scNpc = EditorHelpers.NewCombo(Array.Empty<string>());
+        _scNpc.HorizontalAlignment = HorizontalAlignment.Stretch;
 
         var form = new StackPanel { Margin = new Avalonia.Thickness(12), Spacing = 4 };
         form.Children.Add(new TextBlock { Text = "Skill Check", FontSize = 18, FontWeight = FontWeight.Bold, Foreground = new SolidColorBrush(Color.Parse("#F7FAFB")) });
@@ -75,7 +76,7 @@ public partial class MainWindow
         _scUp.ValueChanged += (_, _) => SyncSc(m => m.UpgradePointReward = (int)(_scUp!.Value ?? 0));
         _scRepeatable.IsCheckedChanged += (_, _) => SyncSc(m => m.Repeatable = _scRepeatable!.IsChecked == true);
         _scPenalty.ValueChanged += (_, _) => SyncSc(m => m.CreditPenalty = (int)(_scPenalty!.Value ?? 0));
-        _scNpc.TextChanged += (_, _) => SyncSc(m => m.CombatNpcOnFail = _scNpc!.Text ?? "");
+        _scNpc.SelectionChanged += (_, _) => SyncSc(m => m.CombatNpcOnFail = _scNpc!.SelectedItem as string ?? "");
 
         var grid = new Grid { ColumnDefinitions = new ColumnDefinitions("260,*") };
         Grid.SetColumn(listPane, 0); grid.Children.Add(listPane);
@@ -119,7 +120,7 @@ public partial class MainWindow
             _scUp!.Value = _selectedSc.UpgradePointReward;
             _scRepeatable!.IsChecked = _selectedSc.Repeatable;
             _scPenalty!.Value = _selectedSc.CreditPenalty;
-            _scNpc!.Text = _selectedSc.CombatNpcOnFail;
+            _scNpc!.SelectedItem = string.IsNullOrEmpty(_selectedSc.CombatNpcOnFail) ? null : _selectedSc.CombatNpcOnFail;
         }
         finally { _scSync = false; }
     }
@@ -134,6 +135,16 @@ public partial class MainWindow
         _scs = _scParser.Checks.ToList();
         _selectedSc = null;
         if (_scList != null) _scList.SelectedItem = null;
+
+        // Populate the "Combat NPC on fail" dropdown by scanning the sibling
+        // NPCData.cs for Character factory members. A blank first entry lets
+        // the user clear the selection.
+        var contentDir = System.IO.Path.GetDirectoryName(path)!;
+        var npcs = SymbolScanner.ScanFactories(System.IO.Path.Combine(contentDir, "NPCData.cs"), "Character");
+        var choices = new List<string> { "" };
+        choices.AddRange(npcs);
+        if (_scNpc != null) _scNpc.ItemsSource = choices;
+
         RefreshScList();
         Status($"loaded {_scs.Count} checks");
     }
