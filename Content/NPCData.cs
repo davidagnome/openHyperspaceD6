@@ -215,23 +215,23 @@ public static partial class NPCData
         Attributes = new()
         {
             [AttributeType.Dexterity] = new DiceCode(2, 1),
-            [AttributeType.Knowledge] = new DiceCode(1),
-            [AttributeType.Mechanical] = new DiceCode(1),
-            [AttributeType.Perception] = new DiceCode(2, 2),
-            [AttributeType.Strength] = new DiceCode(2, 1),
-            [AttributeType.Technical] = new DiceCode(1, 1),
+            [AttributeType.Knowledge] = new DiceCode(2),
+            [AttributeType.Mechanical] = new DiceCode(2),
+            [AttributeType.Perception] = new DiceCode(2),
+            [AttributeType.Strength] = new DiceCode(3, 2),
+            [AttributeType.Technical] = new DiceCode(2),
             [AttributeType.Force] = new DiceCode(0),
         },
         SkillBonuses = new()
         {
-            [SkillType.Blasters] = new DiceCode(1, 2),
+            [SkillType.Blasters] = new DiceCode(1),
             [SkillType.Melee] = new DiceCode(1, 2),
-            [SkillType.Hide] = new DiceCode(1),
-            [SkillType.Survival] = new DiceCode(2),
-            [SkillType.Search] = new DiceCode(0, 2),
+            [SkillType.Hide] = new DiceCode(1, 1),
+            [SkillType.Survival] = new DiceCode(3, 1),
+            [SkillType.Search] = new DiceCode(0, 1),
         },
-        Inventory = new() { ItemData.BlasterRifle, ItemData.Vibroblade },
-        EquippedWeapon = ItemData.BlasterRifle,
+        Inventory = new() { ItemData.BlasterRifle, ItemData.GaffiStick },
+        EquippedWeapon = ItemData.GaffiStick,
         EquippedArmor = ArmorData.PaddedFlightSuit,
     };
 
@@ -305,6 +305,56 @@ public static partial class NPCData
             [AttributeType.Perception] = new DiceCode(2),
         },
         EquippedWeapon = ItemData.Claws,
+    };
+
+    public static Character ImperialArmyTrooper() => new()
+    {
+        Name = "Imperial Army Trooper",
+        IsPlayer = false,
+        Attributes = new()
+        {
+            [AttributeType.Dexterity] = new DiceCode(3),
+            [AttributeType.Knowledge] = new DiceCode(2),
+            [AttributeType.Mechanical] = new DiceCode(2),
+            [AttributeType.Perception] = new DiceCode(2),
+            [AttributeType.Strength] = new DiceCode(3, 1),
+            [AttributeType.Technical] = new DiceCode(2),
+        },
+        SkillBonuses = new()
+        {
+            [SkillType.Blasters] = new DiceCode(1, 1),
+            [SkillType.Agility] = new DiceCode(1),
+            [SkillType.Survival] = new DiceCode(0, 2),
+            [SkillType.Drive] = new DiceCode(0, 1),
+        },
+        Inventory = new() { ItemData.BlasterRifle, ItemData.ThermalDetonator },
+        EquippedWeapon = ItemData.BlasterRifle,
+        EquippedArmor = ArmorData.LightArmor,
+    };
+
+    public static Character ImperialScoutTrooper() => new()
+    {
+        Name = "Imperial Scout Trooper",
+        IsPlayer = false,
+        Attributes = new()
+        {
+            [AttributeType.Dexterity] = new DiceCode(2),
+            [AttributeType.Knowledge] = new DiceCode(2),
+            [AttributeType.Mechanical] = new DiceCode(3),
+            [AttributeType.Perception] = new DiceCode(2),
+            [AttributeType.Strength] = new DiceCode(2),
+            [AttributeType.Technical] = new DiceCode(2),
+        },
+        SkillBonuses = new()
+        {
+            [SkillType.Agility] = new DiceCode(2),
+            [SkillType.Gunnery] = new DiceCode(1, 2),
+            [SkillType.Drive] = new DiceCode(1),
+            [SkillType.Brawl] = new DiceCode(1),
+        },
+        Inventory = new() { ItemData.BlasterPistol, ItemData.BlasterRifle, ItemData.ConcussionGrenades, ItemData.ThermalDetonator },
+        EquippedWeapon = ItemData.BlasterPistol,
+        EquippedArmor = ArmorData.MediumArmor,
     };
 
 }

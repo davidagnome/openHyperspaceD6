@@ -232,7 +232,8 @@ public partial class MainWindow
     private static void BuildDiceMapEditor(
         StackPanel container,
         Dictionary<string, (int Dice, int Pips)> map,
-        string[] availableKeys)
+        string[] availableKeys,
+        Action? onChange = null)
     {
         container.Children.Clear();
         // Render existing entries in a stable order using the canonical key list.
@@ -240,17 +241,18 @@ public partial class MainWindow
 
         foreach (var key in ordered)
         {
-            container.Children.Add(BuildDiceRow(container, map, availableKeys, key));
+            container.Children.Add(BuildDiceRow(container, map, availableKeys, key, onChange));
         }
 
-        container.Children.Add(BuildAddDiceRow(container, map, availableKeys));
+        container.Children.Add(BuildAddDiceRow(container, map, availableKeys, onChange));
     }
 
     private static Control BuildDiceRow(
         StackPanel container,
         Dictionary<string, (int Dice, int Pips)> map,
         string[] availableKeys,
-        string key)
+        string key,
+        Action? onChange)
     {
         var (dice, pips) = map[key];
 
@@ -293,6 +295,7 @@ public partial class MainWindow
             map.Remove(currentKey);
             map[newKey] = v;
             currentKey = newKey;
+            onChange?.Invoke();
         };
 
         diceBox.ValueChanged += (_, _) =>
@@ -300,6 +303,7 @@ public partial class MainWindow
             if (!map.ContainsKey(currentKey)) return;
             var v = map[currentKey];
             map[currentKey] = ((int)(diceBox.Value ?? 0), v.Pips);
+            onChange?.Invoke();
         };
 
         pipsBox.ValueChanged += (_, _) =>
@@ -307,12 +311,14 @@ public partial class MainWindow
             if (!map.ContainsKey(currentKey)) return;
             var v = map[currentKey];
             map[currentKey] = (v.Dice, (int)(pipsBox.Value ?? 0));
+            onChange?.Invoke();
         };
 
         del.Click += (_, _) =>
         {
             map.Remove(currentKey);
-            BuildDiceMapEditor(container, map, availableKeys);
+            BuildDiceMapEditor(container, map, availableKeys, onChange);
+            onChange?.Invoke();
         };
 
         var row = new StackPanel { Orientation = Orientation.Horizontal };
@@ -327,7 +333,8 @@ public partial class MainWindow
     private static Control BuildAddDiceRow(
         StackPanel container,
         Dictionary<string, (int Dice, int Pips)> map,
-        string[] availableKeys)
+        string[] availableKeys,
+        Action? onChange)
     {
         var unused = availableKeys.Where(k => !map.ContainsKey(k)).ToList();
         var combo = EditorHelpers.NewCombo(unused);
@@ -346,7 +353,8 @@ public partial class MainWindow
             if (combo.SelectedItem is not string newKey) return;
             if (map.ContainsKey(newKey)) return;
             map[newKey] = (1, 0);
-            BuildDiceMapEditor(container, map, availableKeys);
+            BuildDiceMapEditor(container, map, availableKeys, onChange);
+            onChange?.Invoke();
         };
 
         var row = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Avalonia.Thickness(0, 6, 0, 0) };

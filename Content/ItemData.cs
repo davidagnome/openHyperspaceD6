@@ -134,6 +134,17 @@ public static partial class ItemData
         Price = 5,
     };
 
+    public static Item GaffiStick => new()
+    {
+        Name = "Gaderffi Stick",
+        Description = "Bladed club used by the Tusken peoples of Tatooine.",
+        IsWeapon = true,
+        Damage = new DiceCode(5, 2),
+        AttackSkill = SkillType.Melee,
+        Range = 0,
+        Price = 10,
+    };
+
     public static List<Item> StarterWeapons => new() { BlasterPistol, Vibroblade };
 
     public static List<Item> AllWeapons => new()

@@ -224,6 +224,60 @@ public static partial class SpaceEncounterData
         }
     };
 
+    public static SpaceEncounter TieBomber() => new()
+    {
+        Pilot = new Character
+        {
+            Name = "Imperial Navy Pilot",
+            IsPlayer = false,
+            SkillBonuses = new()
+            {
+                [SkillType.Gunnery] = new DiceCode(5),
+                [SkillType.Pilot] = new DiceCode(4),
+            },
+            EquippedArmor = ArmorData.PaddedFlightSuit,
+        },
+        Ship = new Vehicle
+        {
+            Name = "TIE Bomber",
+            IsSpace = true,
+            Maneuverability = new DiceCode(0),
+            Resolve = 9,
+            Shield = ShieldData.Unshielded,
+        }
+    };
+
+    public static SpaceEncounter ImperialLamdaShuttle() => new()
+    {
+        Pilot = new Character
+        {
+            Name = "Imperial Navy Courier",
+            IsPlayer = false,
+            SkillBonuses = new()
+            {
+                [SkillType.Gunnery] = new DiceCode(5),
+                [SkillType.Sensors] = new DiceCode(5),
+                [SkillType.Pilot] = new DiceCode(4),
+            },
+            EquippedArmor = ArmorData.PaddedFlightSuit,
+        },
+        Ship = new Vehicle
+        {
+            Name = "Lamda Imperial Shuttle",
+            IsSpace = true,
+            Maneuverability = new DiceCode(1),
+            Resolve = 16,
+            Weapons = new()
+            {
+                new() { Name = "Double-Blaster Cannon", Damage = new DiceCode(4), AttackSkill = SkillType.Gunnery },
+            },
+            Equipment = new()
+            {
+                new() { Name = "Long Range Sensor", BonusSkill = SkillType.Sensors, Bonus = new DiceCode(1, 1) },
+            },
+        }
+    };
+
     public static List<Func<SpaceEncounter>> AllEncounters => new()
     {
         PirateInterceptor, ImperialPatrol, BountyHunterShip, SmugglerFreighter, ImperialGunboat
