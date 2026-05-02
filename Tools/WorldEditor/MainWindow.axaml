@@ -25,6 +25,7 @@
           <ListBoxItem Content="Location"   Tag="Location"   IsSelected="True"/>
           <ListBoxItem Content="NPC"        Tag="NPC"/>
           <ListBoxItem Content="SkillCheck" Tag="SkillCheck"/>
+          <ListBoxItem Content="LocChecks"  Tag="LocationChecks"/>
           <ListBoxItem Content="Missions"   Tag="Missions"/>
           <ListBoxItem Content="Item"       Tag="Item"/>
           <ListBoxItem Content="Vehicle"    Tag="Vehicle"/>
@@ -208,6 +209,13 @@
           <TextBlock Text="SkillCheck Editor" FontSize="22" Foreground="#F7FAFB" FontWeight="Bold"/>
           <TextBlock Foreground="#AAAAAA" TextWrapping="Wrap"
                      Text="Will edit Content/SkillCheckData.cs — properties returning SkillCheckEvent, plus the LocationChecks dictionary that wires checks to rooms."/>
+        </StackPanel>
+      </Border>
+      <Border Name="LocationChecksView" IsVisible="False" Padding="40">
+        <StackPanel Spacing="10" MaxWidth="640" HorizontalAlignment="Left">
+          <TextBlock Text="LocationChecks Editor" FontSize="22" Foreground="#F7FAFB" FontWeight="Bold"/>
+          <TextBlock Foreground="#AAAAAA" TextWrapping="Wrap"
+                     Text="Edits the LocationChecks dictionary in Content/SkillCheckData.cs — binds existing SkillCheckEvent members to Location ids."/>
         </StackPanel>
       </Border>
       <Border Name="MissionsView"   IsVisible="False" Padding="40">

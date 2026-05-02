@@ -86,37 +86,40 @@ public partial class MainWindow : Window
         // Lazily build each non-Location editor on first show.
         switch (key)
         {
-            case "Item":       BuildItemViewIfNeeded();       break;
-            case "NPC":        BuildNpcViewIfNeeded();        break;
-            case "SkillCheck": BuildSkillCheckViewIfNeeded(); break;
-            case "Missions":   BuildMissionViewIfNeeded();    break;
-            case "Vehicle":    BuildVehicleViewIfNeeded();    break;
-            case "Role":       BuildRoleViewIfNeeded();       break;
-            case "Species":    BuildSpeciesViewIfNeeded();    break;
+            case "Item":           BuildItemViewIfNeeded();            break;
+            case "NPC":            BuildNpcViewIfNeeded();             break;
+            case "SkillCheck":     BuildSkillCheckViewIfNeeded();      break;
+            case "LocationChecks": BuildLocationChecksViewIfNeeded();  break;
+            case "Missions":       BuildMissionViewIfNeeded();         break;
+            case "Vehicle":        BuildVehicleViewIfNeeded();         break;
+            case "Role":           BuildRoleViewIfNeeded();            break;
+            case "Species":        BuildSpeciesViewIfNeeded();         break;
         }
 
         // Hide every view, then show the selected one.
-        LocationView.IsVisible   = key == "Location";
-        NPCView.IsVisible        = key == "NPC";
-        SkillCheckView.IsVisible = key == "SkillCheck";
-        MissionsView.IsVisible   = key == "Missions";
-        ItemView.IsVisible       = key == "Item";
-        VehicleView.IsVisible    = key == "Vehicle";
-        RoleView.IsVisible       = key == "Role";
-        SpeciesView.IsVisible    = key == "Species";
+        LocationView.IsVisible       = key == "Location";
+        NPCView.IsVisible            = key == "NPC";
+        SkillCheckView.IsVisible     = key == "SkillCheck";
+        LocationChecksView.IsVisible = key == "LocationChecks";
+        MissionsView.IsVisible       = key == "Missions";
+        ItemView.IsVisible           = key == "Item";
+        VehicleView.IsVisible        = key == "Vehicle";
+        RoleView.IsVisible           = key == "Role";
+        SpeciesView.IsVisible        = key == "Species";
 
         // Top bar adapts to whichever Content/*.cs is implied by the selection so
         // the Load/Save buttons make sense even before the other parsers exist.
         var (label, defaultName) = key switch
         {
-            "NPC"        => ("NPCData.cs:",         "NPCData.cs"),
-            "SkillCheck" => ("SkillCheckData.cs:",  "SkillCheckData.cs"),
-            "Missions"   => ("MissionData.cs:",     "MissionData.cs"),
-            "Item"       => ("ItemData.cs:",        "ItemData.cs"),
-            "Vehicle"    => ("VehicleData.cs:",     "VehicleData.cs"),
-            "Role"       => ("RoleData.cs:",        "RoleData.cs"),
-            "Species"    => ("SpeciesData.cs:",     "SpeciesData.cs"),
-            _            => ("LocationData.cs:",   "LocationData.cs"),
+            "NPC"            => ("NPCData.cs:",         "NPCData.cs"),
+            "SkillCheck"     => ("SkillCheckData.cs:",  "SkillCheckData.cs"),
+            "LocationChecks" => ("SkillCheckData.cs:",  "SkillCheckData.cs"),
+            "Missions"       => ("MissionData.cs:",     "MissionData.cs"),
+            "Item"           => ("ItemData.cs:",        "ItemData.cs"),
+            "Vehicle"        => ("VehicleData.cs:",     "VehicleData.cs"),
+            "Role"           => ("RoleData.cs:",        "RoleData.cs"),
+            "Species"        => ("SpeciesData.cs:",     "SpeciesData.cs"),
+            _                => ("LocationData.cs:",   "LocationData.cs"),
         };
         TopBarLabel.Text = label;
         if (!string.IsNullOrEmpty(PathBox.Text))
@@ -145,14 +148,15 @@ public partial class MainWindow : Window
                 {
                     switch (capturedKey)
                     {
-                        case "Item":       LoadItems();       break;
-                        case "NPC":        LoadNpcs();        break;
-                        case "SkillCheck": LoadSkillChecks(); break;
-                        case "Missions":   LoadMissions();    break;
-                        case "Vehicle":    LoadVehicles();    break;
-                        case "Role":       LoadRoles();       break;
-                        case "Species":    LoadSpecies();     break;
-                        default:           Load();            break; // Location
+                        case "Item":           LoadItems();           break;
+                        case "NPC":            LoadNpcs();            break;
+                        case "SkillCheck":     LoadSkillChecks();     break;
+                        case "LocationChecks": LoadLocationChecks();  break;
+                        case "Missions":       LoadMissions();        break;
+                        case "Vehicle":        LoadVehicles();        break;
+                        case "Role":           LoadRoles();           break;
+                        case "Species":        LoadSpecies();         break;
+                        default:               Load();                break; // Location
                     }
                 }
                 catch (Exception ex)
@@ -170,14 +174,15 @@ public partial class MainWindow : Window
     /// being saved against a different file.
     private void UnloadAllParsers(string except)
     {
-        if (except != "Location")   { _parser = null; _rooms.Clear(); _selected = null; }
-        if (except != "Item")       { _itemParser = null; _items.Clear(); _selectedItem = null; }
-        if (except != "NPC")        { _npcParser = null; _npcs.Clear(); _selectedNpc = null; }
-        if (except != "SkillCheck") { _scParser = null; _scs.Clear(); _selectedSc = null; }
-        if (except != "Missions")   { _msnParser = null; _msns.Clear(); _selectedMsn = null; }
-        if (except != "Vehicle")    { _vhParser = null; _vhs.Clear(); _selectedVh = null; }
-        if (except != "Role")       { _roleParser = null; _roles.Clear(); _selectedRole = null; }
-        if (except != "Species")    { _speciesParser = null; _species.Clear(); _selectedSpecies = null; }
+        if (except != "Location")       { _parser = null; _rooms.Clear(); _selected = null; }
+        if (except != "Item")           { _itemParser = null; _items.Clear(); _selectedItem = null; }
+        if (except != "NPC")            { _npcParser = null; _npcs.Clear(); _selectedNpc = null; }
+        if (except != "SkillCheck")     { _scParser = null; _scs.Clear(); _selectedSc = null; }
+        if (except != "LocationChecks") { _lcParser = null; _lcEntries.Clear(); _selectedLc = null; _lcLocationIds.Clear(); _lcAvailableChecks.Clear(); }
+        if (except != "Missions")       { _msnParser = null; _msns.Clear(); _selectedMsn = null; }
+        if (except != "Vehicle")        { _vhParser = null; _vhs.Clear(); _selectedVh = null; }
+        if (except != "Role")           { _roleParser = null; _roles.Clear(); _selectedRole = null; }
+        if (except != "Species")        { _speciesParser = null; _species.Clear(); _selectedSpecies = null; }
     }
 
     // ---------- Loading / saving ----------
@@ -198,14 +203,15 @@ public partial class MainWindow : Window
     {
         switch (_activeView)
         {
-            case "Item":       LoadItems();       break;
-            case "NPC":        LoadNpcs();        break;
-            case "SkillCheck": LoadSkillChecks(); break;
-            case "Missions":   LoadMissions();    break;
-            case "Vehicle":    LoadVehicles();    break;
-            case "Role":       LoadRoles();       break;
-            case "Species":    LoadSpecies();     break;
-            default:           Load();            break; // Location
+            case "Item":           LoadItems();           break;
+            case "NPC":            LoadNpcs();            break;
+            case "SkillCheck":     LoadSkillChecks();     break;
+            case "LocationChecks": LoadLocationChecks();  break;
+            case "Missions":       LoadMissions();        break;
+            case "Vehicle":        LoadVehicles();        break;
+            case "Role":           LoadRoles();           break;
+            case "Species":        LoadSpecies();         break;
+            default:               Load();                break; // Location
         }
     }
 
@@ -213,14 +219,15 @@ public partial class MainWindow : Window
     {
         switch (_activeView)
         {
-            case "Item":       SaveItems();       break;
-            case "NPC":        SaveNpcs();        break;
-            case "SkillCheck": SaveSkillChecks(); break;
-            case "Missions":   SaveMissions();    break;
-            case "Vehicle":    SaveVehicles();    break;
-            case "Role":       SaveRoles();       break;
-            case "Species":    SaveSpecies();     break;
-            default:           Save();            break; // Location
+            case "Item":           SaveItems();           break;
+            case "NPC":            SaveNpcs();            break;
+            case "SkillCheck":     SaveSkillChecks();     break;
+            case "LocationChecks": SaveLocationChecks();  break;
+            case "Missions":       SaveMissions();        break;
+            case "Vehicle":        SaveVehicles();        break;
+            case "Role":           SaveRoles();           break;
+            case "Species":        SaveSpecies();         break;
+            default:               Save();                break; // Location
         }
     }
 
