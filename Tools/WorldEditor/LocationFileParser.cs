@@ -149,6 +149,17 @@ public class LocationFileParser
                 case "SpaceEncounters":
                     foreach (var s in ReadFactoryList(rhs, "SpaceEncounterData")) room.SpaceEncounters.Add(s);
                     break;
+
+                case "DialoguePool":
+                    // Two forms accepted:
+                    //   DialoguePool = DialogueData.Default,
+                    //   DialoguePool = new() { DialogueData.X, DialogueData.Y, ... },
+                    if (rhs is MemberAccessExpressionSyntax dpRef
+                        && dpRef.Expression is IdentifierNameSyntax { Identifier.Text: "DialogueData" })
+                        room.DialoguePool.Add(dpRef.Name.Identifier.Text);
+                    else
+                        foreach (var s in ReadFactoryList(rhs, "DialogueData")) room.DialoguePool.Add(s);
+                    break;
             }
         }
     }

@@ -357,4 +357,25 @@ public static partial class NPCData
         EquippedArmor = ArmorData.MediumArmor,
     };
 
+        public static Character BartenderNarShadaa() => new()
+        {
+            Name = "Rimmer's Rest Bartender",
+            IsPlayer = false,
+            Attributes = new()
+            {
+                [AttributeType.Dexterity] = new DiceCode(2),
+                [AttributeType.Knowledge] = new DiceCode(2),
+                [AttributeType.Mechanical] = new DiceCode(2),
+                [AttributeType.Perception] = new DiceCode(2),
+                [AttributeType.Strength] = new DiceCode(2),
+                [AttributeType.Technical] = new DiceCode(2),
+            },
+            SkillBonuses = new()
+            {
+                [SkillType.Computers] = new DiceCode(0, 1),
+                [SkillType.Streetwise] = new DiceCode(1),
+                [SkillType.Persuade] = new DiceCode(1),
+            },
+        };
+
 }

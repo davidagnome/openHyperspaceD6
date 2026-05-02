@@ -1,0 +1,62 @@
+[CHARACTER]
+Name=Kyle Katarn
+Species=Human
+Role=Pilot
+CurrentResolve=8
+[ATTRIBUTES]
+Dexterity=3,2
+Knowledge=3,0
+Mechanical=3,1
+Perception=3,2
+Strength=3,1
+Technical=3,1
+Force=1,0
+[SKILLS]
+Persuade=0,1
+Willpower=0,1
+Pilot=2,0
+Gunnery=0,1
+Astrogation=0,1
+Sensors=0,1
+Blasters=1,1
+Stamina=0,1
+Streetwise=0,1
+[INVENTORY]
+Item=Blaster Pistol|Standard-issue sidearm. Reliable and common across the galaxy.|True|3,0|Blasters|30
+Item=Medpack|Restores some Resolve when used. Requires a Medicine check.|False|0,0||0
+Item=Sealed Spice Crate|A heavy, locked durasteel crate. Contents tightly regulated.|False|0,0||0
+EquippedWeapon=Blaster Pistol
+EquippedArmor=Padded Flight Suit
+[VEHICLES]
+Space_Name=Viper-class Starfighter
+Space_Desc=A nimble single-seat starfighter built for speed and dogfighting.
+Space_IsSpace=True
+Space_Maneuver=2,1
+Space_Resolve=16
+Space_CurrentResolve=16
+Space_ShieldName=Civilian Shields
+Space_ShieldDice=1,0
+Space_WeaponCount=2
+Space_Weapon0=Laser Cannons|3,1|Gunnery
+Space_Weapon1=Proton Torpedoes|5,0|Gunnery
+Space_EquipCount=1
+Space_Equip0=Basic Targeting Computer|0,1|Gunnery
+InVehicle=False
+InSpaceVehicle=False
+[STANDINGS]
+Empire=0
+Rebellion=0
+Mandalore=0
+BlackSun=0
+HuttCartel=0
+Jedi=0
+[GAMESTATE]
+Location=nar_shadaa_rimmers_rest_bar
+TurnCount=9
+Credits=39
+EnemiesDefeated=0
+Visited=tatooine_espa_cantina,tatooine_espa_docking_bay,tatooine_orbit,deep_space,nar_shadaa_orbit,nar_shadaa_landing_pad_5,nar_shadaa_rimmers_rest_bar
+Cleared=
+UpgradePoints=0
+ForcePoints=0
+CompletedChecks=talk_medicine,talk_willpower,talk_survival

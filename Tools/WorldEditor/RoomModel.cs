@@ -32,6 +32,13 @@ public class RoomModel
     public bool FriendlyNPCsPresent { get; set; }
     public List<string> SpaceEncounters { get; set; } = new();
 
+    /// Per-location dialogue factories from Content/DialogueData.cs. Each entry
+    /// is a factory member name like "WorkOpportunity". The literal string
+    /// "Default" is a sentinel for the `DialogueData.Default` shortcut — the
+    /// writer collapses a `["Default"]` list back into that single reference
+    /// to preserve idiomatic source.
+    public List<string> DialoguePool { get; set; } = new();
+
     /// SourceSpan of the original `world["id"] = new Location { ... };` statement
     /// in LocationData.cs. Null for rooms added in the editor — those get inserted
     /// before the RegisterImported(world); call on save.

@@ -42,6 +42,26 @@ public static class Program
             var src = args.Length >= 2 ? args[1] : "Content/SpaceEncounterData.cs";
             return RunSpaceEncounterProbe(src);
         }
+        if (args.Length >= 1 && args[0] == "--probe-dialoguepool")
+        {
+            var src = args.Length >= 2 ? args[1] : "Content/LocationData.cs";
+            return RunDialoguePoolProbe(src);
+        }
+        if (args.Length >= 1 && args[0] == "--ensure-location-defaults")
+        {
+            var src = args.Length >= 2 ? args[1] : "Content/LocationData.cs";
+            return RunEnsureLocationDefaults(src);
+        }
+        if (args.Length >= 1 && args[0] == "--probe-dialogue")
+        {
+            var src = args.Length >= 2 ? args[1] : "Content/DialogueData.cs";
+            return RunDialogueProbe(src);
+        }
+        if (args.Length >= 1 && args[0] == "--probe-dialoguepools-file")
+        {
+            var src = args.Length >= 2 ? args[1] : "Content/DialogueData.cs";
+            return RunDialoguePoolFileProbe(src);
+        }
         return BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
     }
 
@@ -287,6 +307,271 @@ public static class Program
                 Console.WriteLine($"KEEP: {tmp}");
             else
                 try { File.Delete(tmp); } catch { }
+        }
+    }
+
+    private static int RunDialoguePoolProbe(string src)
+    {
+        if (!File.Exists(src)) { Console.Error.WriteLine($"file not found: {src}"); return 1; }
+        var tmp = Path.Combine(Path.GetTempPath(), $"dialoguepool_probe_{Guid.NewGuid():N}.cs");
+        File.Copy(src, tmp, overwrite: true);
+        try
+        {
+            // READ
+            var p1 = new LocationFileParser(tmp);
+            if (!p1.TryLoad()) { Console.Error.WriteLine($"initial parse failed: {p1.Error}"); return 1; }
+            Console.WriteLine($"READ: {p1.Rooms.Count} rooms");
+
+            // Find a room that has DialoguePool = DialogueData.Default (cantina seed).
+            var defaultRoom = p1.Rooms.FirstOrDefault(r => r.DialoguePool.Count == 1 && r.DialoguePool[0] == "Default");
+            if (defaultRoom == null) { Console.Error.WriteLine("FAIL: no room with DialoguePool=Default"); return 1; }
+            Console.WriteLine($"  found Default-pool room: {defaultRoom.Id}");
+
+            // UPDATE: replace Default with two explicit factories (round-trip the long form).
+            var rooms = p1.Rooms.ToList();
+            var target = rooms.First(r => r.Id == defaultRoom.Id);
+            target.DialoguePool.Clear();
+            target.DialoguePool.Add("WorkOpportunity");
+            target.DialoguePool.Add("ImperialPatrols");
+
+            // CREATE: pick a room with no DialoguePool, add one.
+            var emptyRoom = rooms.FirstOrDefault(r => r.DialoguePool.Count == 0 && !r.IsNew);
+            if (emptyRoom == null) { Console.Error.WriteLine("FAIL: no empty-pool room available"); return 1; }
+            emptyRoom.DialoguePool.Add("TunnelCreatures");
+            var createdRoomId = emptyRoom.Id;
+
+            // DELETE: pick another Default-pool room (if any) and clear its pool entirely.
+            var anotherDefault = rooms.FirstOrDefault(r =>
+                r.Id != defaultRoom.Id && r.DialoguePool.Count == 1 && r.DialoguePool[0] == "Default");
+            string? clearedRoomId = null;
+            if (anotherDefault != null)
+            {
+                anotherDefault.DialoguePool.Clear();
+                clearedRoomId = anotherDefault.Id;
+            }
+
+            // WRITE
+            LocationFileWriter.Save(p1, rooms);
+            Console.WriteLine("WRITE: saved temp copy");
+
+            // REPARSE + ASSERT
+            var p2 = new LocationFileParser(tmp);
+            if (!p2.TryLoad()) { Console.Error.WriteLine($"reparse failed: {p2.Error}"); return 1; }
+            var reTarget = p2.Rooms.FirstOrDefault(r => r.Id == defaultRoom.Id);
+            if (reTarget == null || reTarget.DialoguePool.Count != 2
+                || reTarget.DialoguePool[0] != "WorkOpportunity"
+                || reTarget.DialoguePool[1] != "ImperialPatrols")
+            { Console.Error.WriteLine($"FAIL: update wrong: [{string.Join(",", reTarget?.DialoguePool ?? new())}]"); return 1; }
+            Console.WriteLine($"  OK update: {defaultRoom.Id} now has [{string.Join(",", reTarget.DialoguePool)}]");
+
+            var reCreated = p2.Rooms.FirstOrDefault(r => r.Id == createdRoomId);
+            if (reCreated == null || reCreated.DialoguePool.Count != 1 || reCreated.DialoguePool[0] != "TunnelCreatures")
+            { Console.Error.WriteLine($"FAIL: create wrong: [{string.Join(",", reCreated?.DialoguePool ?? new())}]"); return 1; }
+            // TunnelCreatures is a Dialogue factory (not a pool), so the writer
+            // must wrap it in `new() { … }` rather than using the shortcut form
+            // — `DialoguePool = DialogueData.TunnelCreatures,` would not compile.
+            var saved = File.ReadAllText(tmp);
+            if (!saved.Contains("DialoguePool = new() { DialogueData.TunnelCreatures }"))
+            { Console.Error.WriteLine("FAIL: factory entry not wrapped in list"); return 1; }
+            if (saved.Contains("DialoguePool = DialogueData.TunnelCreatures,"))
+            { Console.Error.WriteLine("FAIL: writer emitted invalid shortcut for factory entry"); return 1; }
+            Console.WriteLine($"  OK create: {createdRoomId} has [TunnelCreatures] (wrapped form)");
+
+            if (clearedRoomId != null)
+            {
+                var reCleared = p2.Rooms.FirstOrDefault(r => r.Id == clearedRoomId);
+                if (reCleared == null || reCleared.DialoguePool.Count != 0)
+                { Console.Error.WriteLine($"FAIL: delete didn't clear pool on {clearedRoomId}"); return 1; }
+                Console.WriteLine($"  OK delete: {clearedRoomId} pool cleared");
+            }
+
+            Console.WriteLine("DialoguePool CRUD probe PASSED");
+            return 0;
+        }
+        catch (Exception ex) { Console.Error.WriteLine($"probe crashed: {ex}"); return 1; }
+        finally
+        {
+            if (Environment.GetEnvironmentVariable("LC_PROBE_KEEP") == "1")
+                Console.WriteLine($"KEEP: {tmp}");
+            else try { File.Delete(tmp); } catch { }
+        }
+    }
+
+    /// One-shot: parse LocationData.cs, write it back via the new always-emit
+    /// writer so every room ends up with explicit FriendlyNPCs and DialoguePool
+    /// declarations. Operates in place on the given path.
+    private static int RunEnsureLocationDefaults(string src)
+    {
+        if (!File.Exists(src)) { Console.Error.WriteLine($"file not found: {src}"); return 1; }
+        var p = new LocationFileParser(src);
+        if (!p.TryLoad()) { Console.Error.WriteLine($"parse failed: {p.Error}"); return 1; }
+        var rooms = p.Rooms.ToList();
+        Console.WriteLine($"loaded {rooms.Count} rooms");
+        try
+        {
+            LocationFileWriter.Save(p, rooms);
+            Console.WriteLine($"rewrote {src} — every location now declares FriendlyNPCs + DialoguePool");
+
+            // Re-parse and report how many rooms had each property populated, just
+            // as a sanity check the file still parses.
+            var p2 = new LocationFileParser(src);
+            if (!p2.TryLoad()) { Console.Error.WriteLine($"reparse failed: {p2.Error}"); return 1; }
+            var withNpcs = p2.Rooms.Count(r => r.FriendlyNPCs.Count > 0);
+            var withPool = p2.Rooms.Count(r => r.DialoguePool.Count > 0);
+            Console.WriteLine($"  {withNpcs}/{p2.Rooms.Count} rooms have FriendlyNPCs populated");
+            Console.WriteLine($"  {withPool}/{p2.Rooms.Count} rooms have DialoguePool populated");
+            return 0;
+        }
+        catch (Exception ex) { Console.Error.WriteLine($"save failed: {ex.Message}"); return 1; }
+    }
+
+    private static int RunDialogueProbe(string src)
+    {
+        if (!File.Exists(src)) { Console.Error.WriteLine($"file not found: {src}"); return 1; }
+        var tmp = Path.Combine(Path.GetTempPath(), $"dialogue_probe_{Guid.NewGuid():N}.cs");
+        File.Copy(src, tmp, overwrite: true);
+        try
+        {
+            var p1 = new DialogueFileParser(tmp);
+            if (!p1.TryLoad()) { Console.Error.WriteLine($"initial parse failed: {p1.Error}"); return 1; }
+            Console.WriteLine($"READ: {p1.Dialogues.Count} dialogues, {p1.Pools.Count} pools");
+            if (p1.Dialogues.Count < 2) { Console.Error.WriteLine("need at least 2 dialogues"); return 1; }
+
+            var dialogues = p1.Dialogues.ToList();
+            var firstName = dialogues[0].MemberName;
+            var lastName  = dialogues[^1].MemberName;
+            var beforeLineCount = dialogues[0].Lines.Count;
+
+            // UPDATE: append a new line to the first dialogue.
+            dialogues[0].Lines.Add(new DialogueLineModel { Speaker = "playerName", Line = "Probe injected line." });
+            // DELETE: remove the last dialogue (writer should also strip it from any pool body).
+            dialogues.RemoveAt(dialogues.Count - 1);
+            // CREATE: brand-new dialogue.
+            dialogues.Add(new DialogueModel
+            {
+                MemberName = "ProbeTestDialogue",
+                Lines = new()
+                {
+                    new DialogueLineModel { Speaker = "npcName",    Line = "Probe greeting." },
+                    new DialogueLineModel { Speaker = "playerName", Line = "Probe response." },
+                },
+            });
+
+            DialogueFileWriter.Save(p1, dialogues);
+            Console.WriteLine("WRITE: saved temp copy");
+
+            var p2 = new DialogueFileParser(tmp);
+            if (!p2.TryLoad()) { Console.Error.WriteLine($"reparse failed: {p2.Error}"); return 1; }
+            Console.WriteLine($"REREAD: {p2.Dialogues.Count} dialogues, {p2.Pools.Count} pools");
+
+            var firstAfter = p2.Dialogues.FirstOrDefault(d => d.MemberName == firstName);
+            if (firstAfter == null) { Console.Error.WriteLine($"FAIL: {firstName} missing"); return 1; }
+            if (firstAfter.Lines.Count != beforeLineCount + 1)
+            { Console.Error.WriteLine($"FAIL: {firstName} expected {beforeLineCount + 1} lines, got {firstAfter.Lines.Count}"); return 1; }
+            if (firstAfter.Lines[^1].Speaker != "playerName" || firstAfter.Lines[^1].Line != "Probe injected line.")
+            { Console.Error.WriteLine("FAIL: appended line wrong"); return 1; }
+            Console.WriteLine($"  OK update: {firstName} now has {firstAfter.Lines.Count} lines");
+
+            if (p2.Dialogues.Any(d => d.MemberName == lastName))
+            { Console.Error.WriteLine($"FAIL: {lastName} should have been deleted"); return 1; }
+            // Pool body must have been scrubbed of the deleted name too.
+            var saved = File.ReadAllText(tmp);
+            foreach (var pool in p2.Pools)
+                if (pool.FactoryNames.Contains(lastName))
+                { Console.Error.WriteLine($"FAIL: pool {pool.PoolName} still references deleted {lastName}"); return 1; }
+            Console.WriteLine($"  OK delete: {lastName} pruned (and removed from pool bodies)");
+
+            var newAfter = p2.Dialogues.FirstOrDefault(d => d.MemberName == "ProbeTestDialogue");
+            if (newAfter == null) { Console.Error.WriteLine("FAIL: new dialogue missing"); return 1; }
+            if (newAfter.Lines.Count != 2 || newAfter.Lines[0].Speaker != "npcName" || newAfter.Lines[1].Speaker != "playerName")
+            { Console.Error.WriteLine("FAIL: new dialogue lines wrong"); return 1; }
+            Console.WriteLine($"  OK create: ProbeTestDialogue written with 2 lines");
+
+            Console.WriteLine("Dialogue CRUD probe PASSED");
+            return 0;
+        }
+        catch (Exception ex) { Console.Error.WriteLine($"probe crashed: {ex}"); return 1; }
+        finally
+        {
+            if (Environment.GetEnvironmentVariable("LC_PROBE_KEEP") == "1")
+                Console.WriteLine($"KEEP: {tmp}");
+            else try { File.Delete(tmp); } catch { }
+        }
+    }
+
+    private static int RunDialoguePoolFileProbe(string src)
+    {
+        if (!File.Exists(src)) { Console.Error.WriteLine($"file not found: {src}"); return 1; }
+        var tmp = Path.Combine(Path.GetTempPath(), $"dlgpool_probe_{Guid.NewGuid():N}.cs");
+        File.Copy(src, tmp, overwrite: true);
+        try
+        {
+            var p1 = new DialogueFileParser(tmp);
+            if (!p1.TryLoad()) { Console.Error.WriteLine($"initial parse failed: {p1.Error}"); return 1; }
+            Console.WriteLine($"READ: {p1.Pools.Count} pools, {p1.Dialogues.Count} dialogues");
+            if (p1.Pools.Count == 0) { Console.Error.WriteLine("no pools to test against"); return 1; }
+
+            var pools = p1.Pools.ToList();
+            var firstName = pools[0].PoolName;
+            var beforeFirstCount = pools[0].FactoryNames.Count;
+            var anyDialogue = p1.Dialogues[0].MemberName;
+            var anotherDialogue = p1.Dialogues.Count > 1 ? p1.Dialogues[1].MemberName : anyDialogue;
+
+            // UPDATE: append a member to the first pool.
+            pools[0].FactoryNames.Add(anyDialogue);
+            // CREATE: brand-new pool referencing two dialogues.
+            pools.Add(new DialoguePoolModel
+            {
+                PoolName = "ProbeTestPool",
+                FactoryNames = new() { anyDialogue, anotherDialogue },
+            });
+            // DELETE: only safe if there's a second pool to remove. We won't
+            // drop Default here to keep the file well-formed; the writer's
+            // delete logic is exercised via the "remove span" path below if a
+            // second pool exists in the original file. Otherwise we skip.
+            string? deletedPoolName = null;
+            if (pools.Count > 2)
+            {
+                deletedPoolName = pools[1].PoolName;
+                pools.RemoveAt(1);
+            }
+
+            DialoguePoolFileWriter.Save(p1, pools);
+            Console.WriteLine("WRITE: saved temp copy");
+
+            var p2 = new DialogueFileParser(tmp);
+            if (!p2.TryLoad()) { Console.Error.WriteLine($"reparse failed: {p2.Error}"); return 1; }
+            Console.WriteLine($"REREAD: {p2.Pools.Count} pools");
+
+            var firstAfter = p2.Pools.FirstOrDefault(x => x.PoolName == firstName);
+            if (firstAfter == null) { Console.Error.WriteLine($"FAIL: {firstName} missing"); return 1; }
+            if (firstAfter.FactoryNames.Count != beforeFirstCount + 1 || firstAfter.FactoryNames[^1] != anyDialogue)
+            { Console.Error.WriteLine($"FAIL: {firstName} update wrong: [{string.Join(",", firstAfter.FactoryNames)}]"); return 1; }
+            Console.WriteLine($"  OK update: {firstName} now has {firstAfter.FactoryNames.Count} members");
+
+            var newAfter = p2.Pools.FirstOrDefault(x => x.PoolName == "ProbeTestPool");
+            if (newAfter == null) { Console.Error.WriteLine("FAIL: new pool missing"); return 1; }
+            if (newAfter.FactoryNames.Count != 2 || newAfter.FactoryNames[0] != anyDialogue || newAfter.FactoryNames[1] != anotherDialogue)
+            { Console.Error.WriteLine($"FAIL: new pool wrong: [{string.Join(",", newAfter.FactoryNames)}]"); return 1; }
+            Console.WriteLine($"  OK create: ProbeTestPool with [{string.Join(",", newAfter.FactoryNames)}]");
+
+            if (deletedPoolName != null)
+            {
+                if (p2.Pools.Any(x => x.PoolName == deletedPoolName))
+                { Console.Error.WriteLine($"FAIL: {deletedPoolName} should have been deleted"); return 1; }
+                Console.WriteLine($"  OK delete: {deletedPoolName} pruned");
+            }
+            else Console.WriteLine("  (skipped delete: only one pool in source)");
+
+            Console.WriteLine("DialoguePool CRUD probe PASSED");
+            return 0;
+        }
+        catch (Exception ex) { Console.Error.WriteLine($"probe crashed: {ex}"); return 1; }
+        finally
+        {
+            if (Environment.GetEnvironmentVariable("LC_PROBE_KEEP") == "1")
+                Console.WriteLine($"KEEP: {tmp}");
+            else try { File.Delete(tmp); } catch { }
         }
     }
 

@@ -22,6 +22,10 @@ public partial class MainWindow : Window
     private RoomModel? _selected;
     private List<string> _npcChoices = new();
     private List<string> _spaceChoices = new();
+    /// Members of Content/DialogueData.cs that return a `Dialogue`. Includes the
+    /// magic literal "Default" — the writer collapses a sole `["Default"]` pool
+    /// back to the `DialogueData.Default` shortcut on save.
+    private List<string> _dialogueChoices = new();
     private bool _suppressEditorSync;
 
     private static readonly string[] Climates = { "Normal", "Hot", "Cold", "Aquatic" };
@@ -97,6 +101,8 @@ public partial class MainWindow : Window
             case "Species":        BuildSpeciesViewIfNeeded();         break;
             case "Armor":          BuildArmorViewIfNeeded();           break;
             case "SpaceEncounter": BuildSpaceEncounterViewIfNeeded();  break;
+            case "Dialogue":       BuildDialogueViewIfNeeded();        break;
+            case "DialoguePool":   BuildDialoguePoolViewIfNeeded();    break;
         }
 
         // Hide every view, then show the selected one.
@@ -111,6 +117,17 @@ public partial class MainWindow : Window
         SpeciesView.IsVisible        = key == "Species";
         ArmorView.IsVisible          = key == "Armor";
         SpaceEncounterView.IsVisible = key == "SpaceEncounter";
+        DialogueView.IsVisible       = key == "Dialogue";
+        DialoguePoolView.IsVisible   = key == "DialoguePool";
+        SummaryView.IsVisible        = key == "Summary";
+
+        if (key == "Summary")
+        {
+            // Summary is read-only: skip the path-bar rename, parser unload, and
+            // auto-load that the editor modes use. Just refresh and return.
+            RefreshSummary();
+            return;
+        }
 
         // Top bar adapts to whichever Content/*.cs is implied by the selection so
         // the Load/Save buttons make sense even before the other parsers exist.
@@ -126,6 +143,8 @@ public partial class MainWindow : Window
             "Species"        => ("SpeciesData.cs:",     "SpeciesData.cs"),
             "Armor"          => ("ArmorData.cs:",       "ArmorData.cs"),
             "SpaceEncounter" => ("SpaceEncounterData.cs:", "SpaceEncounterData.cs"),
+            "Dialogue"       => ("DialogueData.cs:",    "DialogueData.cs"),
+            "DialoguePool"   => ("DialogueData.cs:",    "DialogueData.cs"),
             _                => ("LocationData.cs:",   "LocationData.cs"),
         };
         TopBarLabel.Text = label;
@@ -165,6 +184,8 @@ public partial class MainWindow : Window
                         case "Species":        LoadSpecies();         break;
                         case "Armor":          LoadArmors();          break;
                         case "SpaceEncounter": LoadSpaceEncounters(); break;
+                        case "Dialogue":       LoadDialogues();       break;
+                        case "DialoguePool":   LoadDialoguePools();   break;
                         default:               Load();                break; // Location
                     }
                 }
@@ -194,6 +215,8 @@ public partial class MainWindow : Window
         if (except != "Species")        { _speciesParser = null; _species.Clear(); _selectedSpecies = null; }
         if (except != "Armor")          { _armorParser = null; _armors.Clear(); _selectedArmor = null; }
         if (except != "SpaceEncounter") { _seParser = null; _ses.Clear(); _selectedSe = null; }
+        if (except != "Dialogue")       { _dlgParser = null; _dlgs.Clear(); _selectedDlg = null; }
+        if (except != "DialoguePool")   { _dlgPoolParser = null; _dlgPools.Clear(); _selectedDlgPool = null; }
     }
 
     // ---------- Loading / saving ----------
@@ -224,6 +247,9 @@ public partial class MainWindow : Window
             case "Species":        LoadSpecies();         break;
             case "Armor":          LoadArmors();          break;
             case "SpaceEncounter": LoadSpaceEncounters(); break;
+            case "Dialogue":       LoadDialogues();       break;
+            case "DialoguePool":   LoadDialoguePools();   break;
+            case "Summary":        RefreshSummary();      break;
             default:               Load();                break; // Location
         }
     }
@@ -242,6 +268,9 @@ public partial class MainWindow : Window
             case "Species":        SaveSpecies();         break;
             case "Armor":          SaveArmors();          break;
             case "SpaceEncounter": SaveSpaceEncounters(); break;
+            case "Dialogue":       SaveDialogues();       break;
+            case "DialoguePool":   SaveDialoguePools();   break;
+            case "Summary":        Status("Summary is read-only");   break;
             default:               Save();                break; // Location
         }
     }
@@ -264,9 +293,16 @@ public partial class MainWindow : Window
         var contentDir = Path.GetDirectoryName(path)!;
         _npcChoices   = SymbolScanner.ScanFactories(Path.Combine(contentDir, "NPCData.cs"), "Character");
         _spaceChoices = SymbolScanner.ScanFactories(Path.Combine(contentDir, "SpaceEncounterData.cs"), "SpaceEncounter");
+        // DialogueData factories take parameters (npcName, playerName), so pass
+        // allowParameters: true. Prepend "Default" so the user can pick the
+        // pool-shortcut from the dropdown.
+        var dialogues = SymbolScanner.ScanFactories(Path.Combine(contentDir, "DialogueData.cs"), "Dialogue", allowParameters: true);
+        _dialogueChoices = new List<string> { "Default" };
+        _dialogueChoices.AddRange(dialogues);
         EdNpcPicker.ItemsSource      = _npcChoices;
         EdFriendlyPicker.ItemsSource = _npcChoices;
         EdSpacePicker.ItemsSource    = _spaceChoices;
+        EdDialoguePicker.ItemsSource = _dialogueChoices;
 
         RefreshRoomList();
         DrawWorldMap();
@@ -287,6 +323,76 @@ public partial class MainWindow : Window
         {
             Status($"save failed: {ex.Message}", error: true);
         }
+    }
+
+    /// Reads every Content/*.cs file via its parser and emits a one-line count
+    /// for each entity kind. Errors per-file are surfaced inline so partial
+    /// content directories still produce a useful summary.
+    private void RefreshSummary()
+    {
+        SummaryRows.Children.Clear();
+
+        var path = PathBox.Text ?? "";
+        var contentDir = Path.GetDirectoryName(path);
+        if (string.IsNullOrEmpty(contentDir) || !Directory.Exists(contentDir))
+        {
+            SummaryPathHint.Text = "Set the path bar to a Content/*.cs file first.";
+            return;
+        }
+        SummaryPathHint.Text = $"Scanned: {contentDir}";
+
+        AddSummaryRow("Locations",         CountSafe(() => { var p = new LocationFileParser(Path.Combine(contentDir, "LocationData.cs")); return p.TryLoad() ? p.Rooms.Count : -1; }));
+        AddSummaryRow("NPCs",              CountSafe(() => { var p = new NpcFileParser(Path.Combine(contentDir, "NPCData.cs")); return p.TryLoad() ? p.Npcs.Count : -1; }));
+        AddSummaryRow("Skill Checks",      CountSafe(() => { var p = new SkillCheckFileParser(Path.Combine(contentDir, "SkillCheckData.cs")); return p.TryLoad() ? p.Checks.Count : -1; }));
+        AddSummaryRow("Location Checks",   CountSafe(() => { var p = new LocationChecksFileParser(Path.Combine(contentDir, "SkillCheckData.cs")); return p.TryLoad() ? p.Entries.Count : -1; }));
+        AddSummaryRow("Missions",          CountSafe(() => { var p = new MissionFileParser(Path.Combine(contentDir, "MissionData.cs")); return p.TryLoad() ? p.Missions.Count : -1; }));
+        AddSummaryRow("Items",             CountSafe(() => { var p = new ItemFileParser(Path.Combine(contentDir, "ItemData.cs")); return p.TryLoad() ? p.Items.Count : -1; }));
+        AddSummaryRow("Vehicles",          CountSafe(() => { var p = new VehicleFileParser(Path.Combine(contentDir, "VehicleData.cs")); return p.TryLoad() ? p.Vehicles.Count : -1; }));
+        AddSummaryRow("Roles",             CountSafe(() => { var p = new RoleSpeciesFileParser(Path.Combine(contentDir, "RoleData.cs"), "Role"); return p.TryLoad() ? p.Entries.Count : -1; }));
+        AddSummaryRow("Species",           CountSafe(() => { var p = new RoleSpeciesFileParser(Path.Combine(contentDir, "SpeciesData.cs"), "Species"); return p.TryLoad() ? p.Entries.Count : -1; }));
+        AddSummaryRow("Armor",             CountSafe(() => { var p = new ArmorFileParser(Path.Combine(contentDir, "ArmorData.cs")); return p.TryLoad() ? p.Armors.Count : -1; }));
+        AddSummaryRow("Space Encounters",  CountSafe(() => { var p = new SpaceEncounterFileParser(Path.Combine(contentDir, "SpaceEncounterData.cs")); return p.TryLoad() ? p.Encounters.Count : -1; }));
+
+        // Dialogues + Pools share DialogueData.cs, so parse once.
+        var dlgPath = Path.Combine(contentDir, "DialogueData.cs");
+        DialogueFileParser? dlg = null;
+        if (File.Exists(dlgPath))
+        {
+            dlg = new DialogueFileParser(dlgPath);
+            if (!dlg.TryLoad()) dlg = null;
+        }
+        AddSummaryRow("Dialogues",         dlg?.Dialogues.Count ?? -1);
+        AddSummaryRow("Dialogue Pools",    dlg?.Pools.Count     ?? -1);
+    }
+
+    private static int CountSafe(Func<int> get)
+    {
+        try { return get(); } catch { return -1; }
+    }
+
+    /// Renders one summary row: bold label on the left, count or "—" on the
+    /// right when the source file is missing or unparseable.
+    private void AddSummaryRow(string label, int count)
+    {
+        var grid = new Grid { ColumnDefinitions = new ColumnDefinitions("220,*") };
+        var name = new TextBlock
+        {
+            Text = label,
+            Foreground = new SolidColorBrush(Color.Parse("#C8D2DA")),
+            VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center,
+        };
+        var value = new TextBlock
+        {
+            Text = count < 0 ? "— (missing or unparseable)" : count.ToString(),
+            Foreground = count < 0
+                ? new SolidColorBrush(Color.Parse("#7A6A55"))
+                : new SolidColorBrush(Color.Parse("#FFCA3A")),
+            FontWeight = FontWeight.Bold,
+            VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center,
+        };
+        Grid.SetColumn(name, 0); grid.Children.Add(name);
+        Grid.SetColumn(value, 1); grid.Children.Add(value);
+        SummaryRows.Children.Add(grid);
     }
 
     private void Status(string text, bool error = false)
@@ -408,6 +514,7 @@ public partial class MainWindow : Window
         RefreshEncounterList(EdPossibleEncounters, room.PossibleEncounters, _npcChoices);
         RefreshEncounterList(EdFriendlyNPCs,       room.FriendlyNPCs,       _npcChoices);
         RefreshEncounterList(EdSpaceEncounters,    room.SpaceEncounters,    _spaceChoices);
+        RefreshEncounterList(EdDialoguePool,       room.DialoguePool,       _dialogueChoices);
 
         EdExitDest.ItemsSource = _rooms.Select(r => r.Id).OrderBy(s => s).ToList();
     }
@@ -578,6 +685,13 @@ public partial class MainWindow : Window
         if (_selected == null || EdSpacePicker.SelectedItem is not string s) return;
         _selected.SpaceEncounters.Add(s);
         RefreshEncounterList(EdSpaceEncounters, _selected.SpaceEncounters, _spaceChoices);
+    }
+
+    private void OnAddDialogueClick(object? sender, RoutedEventArgs e)
+    {
+        if (_selected == null || EdDialoguePicker.SelectedItem is not string s) return;
+        _selected.DialoguePool.Add(s);
+        RefreshEncounterList(EdDialoguePool, _selected.DialoguePool, _dialogueChoices);
     }
 
     private void OnAddExitClick(object? sender, RoutedEventArgs e)

@@ -8,7 +8,7 @@ namespace TerminalHyperspace.WorldEditor;
 /// hardcode lists that drift out of sync).
 public static class SymbolScanner
 {
-    public static List<string> ScanFactories(string filePath, string returnTypeName)
+    public static List<string> ScanFactories(string filePath, string returnTypeName, bool allowParameters = false)
     {
         var names = new List<string>();
         if (!File.Exists(filePath)) return names;
@@ -16,12 +16,14 @@ public static class SymbolScanner
         var tree = CSharpSyntaxTree.ParseText(File.ReadAllText(filePath));
         var root = (CompilationUnitSyntax)tree.GetRoot();
 
-        // Methods: `public static T Foo() => new() { ... }`
+        // Methods: `public static T Foo() => new() { ... }`. Set allowParameters
+        // when the consumer treats parameterized factories as first-class (e.g.
+        // DialogueData factories take an NPC + player name).
         foreach (var method in root.DescendantNodes().OfType<MethodDeclarationSyntax>())
         {
             if (!method.Modifiers.Any(m => m.Text == "public")) continue;
             if (!method.Modifiers.Any(m => m.Text == "static")) continue;
-            if (method.ParameterList.Parameters.Count > 0) continue;
+            if (!allowParameters && method.ParameterList.Parameters.Count > 0) continue;
             if (method.ReturnType is IdentifierNameSyntax id && id.Identifier.Text == returnTypeName)
                 names.Add(method.Identifier.Text);
         }

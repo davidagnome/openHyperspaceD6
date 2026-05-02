@@ -22,6 +22,7 @@
         </StackPanel>
         <ListBox Name="MainPanel" BorderThickness="0" Background="Transparent"
                  SelectionChanged="OnMainPanelSelected" Margin="0,4,0,0">
+          <ListBoxItem Content="Summary"    Tag="Summary"/>
           <ListBoxItem Content="Location"   Tag="Location"   IsSelected="True"/>
           <ListBoxItem Content="NPC"        Tag="NPC"/>
           <ListBoxItem Content="SkillCheck" Tag="SkillCheck"/>
@@ -33,6 +34,8 @@
           <ListBoxItem Content="Species"    Tag="Species"/>
           <ListBoxItem Content="Armor"      Tag="Armor"/>
           <ListBoxItem Content="SpaceEnc"   Tag="SpaceEncounter"/>
+          <ListBoxItem Content="Dialogue"   Tag="Dialogue"/>
+          <ListBoxItem Content="DlgPools"   Tag="DialoguePool"/>
         </ListBox>
       </DockPanel>
     </Border>
@@ -183,6 +186,15 @@
                     <Button  Grid.Column="1" Content="Add" Margin="6,0,0,0" Click="OnAddAmbientClick"/>
                   </Grid>
                 </StackPanel>
+
+                <TextBlock Grid.Row="17" Grid.Column="0" Text="Dialogue Pool"      VerticalAlignment="Top" Margin="0,6,0,0"/>
+                <StackPanel Grid.Row="17" Grid.Column="1" Orientation="Vertical" Spacing="3">
+                  <StackPanel Name="EdDialoguePool" Spacing="3"/>
+                  <Grid ColumnDefinitions="*,Auto">
+                    <ComboBox Grid.Column="0" Name="EdDialoguePicker" HorizontalAlignment="Stretch"/>
+                    <Button   Grid.Column="1" Content="Add" Margin="6,0,0,0" Click="OnAddDialogueClick"/>
+                  </Grid>
+                </StackPanel>
               </Grid>
             </StackPanel>
           </ScrollViewer>
@@ -273,6 +285,29 @@
           <TextBlock Text="SpaceEncounter Editor" FontSize="22" Foreground="#F7FAFB" FontWeight="Bold"/>
           <TextBlock Foreground="#AAAAAA" TextWrapping="Wrap"
                      Text="Edits Content/SpaceEncounterData.cs — methods returning SpaceEncounter, with nested Pilot (Character) and Ship (Vehicle) initializers."/>
+        </StackPanel>
+      </Border>
+      <Border Name="DialogueView"      IsVisible="False" Padding="40">
+        <StackPanel Spacing="10" MaxWidth="640" HorizontalAlignment="Left">
+          <TextBlock Text="Dialogue Editor"     FontSize="22" Foreground="#F7FAFB" FontWeight="Bold"/>
+          <TextBlock Foreground="#AAAAAA" TextWrapping="Wrap"
+                     Text="Edits Content/DialogueData.cs — `public static Dialogue X(string npcName, string playerName) => new() { Lines = ... }`. Each line has a Speaker (npcName / playerName) and a Line text."/>
+        </StackPanel>
+      </Border>
+      <Border Name="SummaryView"       IsVisible="False" Padding="0">
+        <ScrollViewer Padding="32,24,32,24">
+          <StackPanel Spacing="6" MaxWidth="520" HorizontalAlignment="Left">
+            <TextBlock Text="Content Summary" FontSize="22" Foreground="#F7FAFB" FontWeight="Bold"/>
+            <TextBlock Name="SummaryPathHint" Foreground="#7A8A98" FontStyle="Italic" Margin="0,0,0,12"/>
+            <StackPanel Name="SummaryRows" Spacing="2"/>
+          </StackPanel>
+        </ScrollViewer>
+      </Border>
+      <Border Name="DialoguePoolView"  IsVisible="False" Padding="40">
+        <StackPanel Spacing="10" MaxWidth="640" HorizontalAlignment="Left">
+          <TextBlock Text="Dialogue Pools Editor" FontSize="22" Foreground="#F7FAFB" FontWeight="Bold"/>
+          <TextBlock Foreground="#AAAAAA" TextWrapping="Wrap"
+                     Text="Edits Content/DialogueData.cs — `public static List&lt;Func&lt;string, string, Dialogue&gt;&gt; X => new() { ... }` properties that group Dialogue factories into named pools."/>
         </StackPanel>
       </Border>
 

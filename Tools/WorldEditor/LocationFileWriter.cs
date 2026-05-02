@@ -8,10 +8,37 @@ namespace TerminalHyperspace.WorldEditor;
 /// RegisterImported(world); call.
 public static class LocationFileWriter
 {
+    /// Pool-property names from sibling DialogueData.cs. Populated at the start
+    /// of Save() and consulted by RenderRoomStatement when deciding whether the
+    /// `DialoguePool = DialogueData.X,` shortcut is type-safe.
+    private static HashSet<string> _knownDialoguePoolNames = new();
+
+    private static HashSet<string> DiscoverDialoguePoolNames(string locationDataPath)
+    {
+        try
+        {
+            var dir = Path.GetDirectoryName(locationDataPath);
+            if (string.IsNullOrEmpty(dir)) return new HashSet<string>();
+            var dlgPath = Path.Combine(dir, "DialogueData.cs");
+            if (!File.Exists(dlgPath)) return new HashSet<string>();
+            var dp = new DialogueFileParser(dlgPath);
+            if (!dp.TryLoad()) return new HashSet<string>();
+            return dp.Pools.Select(p => p.PoolName).ToHashSet();
+        }
+        catch { return new HashSet<string>(); }
+    }
+
     public static void Save(LocationFileParser parser, IEnumerable<RoomModel> rooms)
     {
         var ordered = rooms.ToList();
         var text = parser.SourceText;
+
+        // Discover which DialogueData.* members are pool *properties* (lists of
+        // dialogue factories) vs single Dialogue *factories*. The shortcut form
+        // `DialoguePool = DialogueData.X,` only compiles when X is a pool, so we
+        // need this distinction to avoid emitting an invalid C# expression for
+        // single-factory pools.
+        _knownDialoguePoolNames = DiscoverDialoguePoolNames(parser.FilePath);
 
         // Build a unified edit list across the original source: each edit is
         // either a replacement (existing room kept and edited) or a deletion
@@ -121,15 +148,13 @@ public static class LocationFileWriter
             sb.Append(inner).Append("},\n");
         }
 
-        if (r.FriendlyNPCsPresent)
-        {
-            if (r.FriendlyNPCs.Count > 0)
-                sb.Append(inner).Append("FriendlyNPCs = new() { ")
-                  .Append(string.Join(", ", r.FriendlyNPCs.Select(n => $"NPCData.{n}")))
-                  .Append(" },\n");
-            else
-                sb.Append(inner).Append("FriendlyNPCs = new(),\n");
-        }
+        // Always emit FriendlyNPCs so every location explicitly declares one.
+        if (r.FriendlyNPCs.Count > 0)
+            sb.Append(inner).Append("FriendlyNPCs = new() { ")
+              .Append(string.Join(", ", r.FriendlyNPCs.Select(n => $"NPCData.{n}")))
+              .Append(" },\n");
+        else
+            sb.Append(inner).Append("FriendlyNPCs = new(),\n");
 
         if (r.SpaceEncounters.Count > 0)
         {
@@ -139,6 +164,19 @@ public static class LocationFileWriter
             sb.Append(inner).Append("SpaceEncounterChance = ")
               .Append(r.SpaceEncounterChance.ToString("0.0##", CultureInfo.InvariantCulture)).Append(",\n");
         }
+
+        // Always emit DialoguePool so every location explicitly declares one.
+        // The `DialoguePool = DialogueData.X,` shortcut is only legal when X is
+        // a pool property (List<Func<string, string, Dialogue>>); for single
+        // Dialogue factories we must wrap in `new() { ... }`.
+        if (r.DialoguePool.Count == 1 && _knownDialoguePoolNames.Contains(r.DialoguePool[0]))
+            sb.Append(inner).Append("DialoguePool = DialogueData.").Append(r.DialoguePool[0]).Append(",\n");
+        else if (r.DialoguePool.Count > 0)
+            sb.Append(inner).Append("DialoguePool = new() { ")
+              .Append(string.Join(", ", r.DialoguePool.Select(n => $"DialogueData.{n}")))
+              .Append(" },\n");
+        else
+            sb.Append(inner).Append("DialoguePool = new(),\n");
 
         if (!string.IsNullOrEmpty(r.PlanetName))     sb.Append(inner).Append("PlanetName = \"").Append(Escape(r.PlanetName)).Append("\",\n");
         if (!string.IsNullOrEmpty(r.StarSystemName)) sb.Append(inner).Append("StarSystemName = \"").Append(Escape(r.StarSystemName)).Append("\",\n");

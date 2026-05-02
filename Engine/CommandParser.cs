@@ -1232,9 +1232,9 @@ public class CommandParser
         var npc = loc.FriendlyNPCs[_rng.Next(loc.FriendlyNPCs.Count)]();
         _term.Narrative($"You approach a {npc.Name}.");
 
-        var dialogues = GetDialogue(npc.Name, loc.Id);
-        foreach (var (speaker, line) in dialogues)
-            _term.Dialogue(speaker, line);
+        var dialogue = PickDialogue(loc, npc.Name);
+        foreach (var dl in dialogue.Lines)
+            _term.Dialogue(dl.Speaker, dl.Line);
 
         // Roll the conversation outcome: skill-check, mission offer, or small reward.
         var outcome = _rng.NextDouble();
@@ -1268,43 +1268,15 @@ public class CommandParser
         }
     }
 
-    private List<(string speaker, string line)> GetDialogue(string npcName, string locationId)
+    /// Pulls a random dialogue from the location's per-location pool, falling
+    /// back to DialogueData.Default if the location author hasn't curated one.
+    private Dialogue PickDialogue(Location loc, string npcName)
     {
-        var lines = new List<(string, string)[]>
-        {
-            new[]
-            {
-                (npcName, "You look like someone who can handle themselves. Interested in work?"),
-                (_state.Player.Name, "Depends on the pay."),
-                (npcName, "Smart answer. The Outer Sectors are crawling with opportunity... and danger."),
-            },
-            new[]
-            {
-                (npcName, "Imperial patrols have been getting bolder. Bad for business, if you catch my meaning."),
-                (_state.Player.Name, "I've noticed."),
-                (npcName, "Word of advice—keep your head down in the Upper District. Eyes everywhere up there."),
-            },
-            new[]
-            {
-                (npcName, "I've got goods from a dozen systems. What are you looking for?"),
-                (_state.Player.Name, "Information, mostly."),
-                (npcName, "That's the most expensive commodity in the galaxy, friend. But I like your face. There's a derelict station out in the Rift Expanse. Salvagers keep disappearing near it."),
-            },
-            new[]
-            {
-                (npcName, "Careful down in the tunnels. Something's been breeding down there."),
-                (_state.Player.Name, "What kind of something?"),
-                (npcName, "The kind that doesn't show up on sensors until it's already too close."),
-            },
-            new[]
-            {
-                (npcName, "You a pilot? I've got a lead on a ship for sale in the hangar. Previous owner... won't be needing it anymore."),
-                (_state.Player.Name, "What happened to the previous owner?"),
-                (npcName, "Let's just say he made the jump to hyperspace without a ship. Gambling debts are ugly business."),
-            },
-        };
-
-        return lines[_rng.Next(lines.Count)].ToList();
+        var pool = loc.DialoguePool != null && loc.DialoguePool.Count > 0
+            ? loc.DialoguePool
+            : DialogueData.Default;
+        var factory = pool[_rng.Next(pool.Count)];
+        return factory(npcName, _state.Player.Name);
     }
 
     private void SearchArea()

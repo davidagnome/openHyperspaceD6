@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("th-worldeditor")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bce3922a91792497a9967862e5dae960c4e08b06")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+228e7f338d5fa3e573c7a54ed37087911d36bccf")]
 [assembly: System.Reflection.AssemblyProductAttribute("th-worldeditor")]
 [assembly: System.Reflection.AssemblyTitleAttribute("th-worldeditor")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
